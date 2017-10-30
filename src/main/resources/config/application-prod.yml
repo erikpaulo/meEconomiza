@@ -37,4 +37,5 @@ application:
             clientId: 316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com
             clientSecret: hcx0OxU-i2xMHYnr7Cbc3JF2
     security: 
-        secureChannel: http        key: meEconomiza
+            secureChannel: http
+            key: meEconomiza
