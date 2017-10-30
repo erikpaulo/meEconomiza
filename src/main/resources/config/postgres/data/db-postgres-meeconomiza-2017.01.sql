@@ -2,7 +2,7 @@
 * Changeset 2017.01
 * Criação da aplicação.
 * heroku pg:psql --app meeconomiza < /Users/eriklacerda/Projects/meEconomiza/src/main/resources/config/postgres/db-postgres-meeconomiza-2017.01.sql
-* Localhost  -- \i /Users/eriklacerda/Dev-Projects/meEconomiza/src/main/resources/config/postgres/db-postgres-meeconomiza-2017.01.sql
+* Localhost  -- \i /Users/eriklacerda/Dev-Projects/meEconomiza/src/main/resources/config/postgres/data/db-postgres-meeconomiza-2017.01.sql
 */
 
 DROP TABLE IF EXISTS user_role;

@@ -3,6 +3,7 @@ package com.softb.system;
 import com.softb.system.cache.config.CacheConfig;
 import com.softb.system.config.Constants;
 import com.softb.system.config.ServiceConfig;
+import com.softb.system.repository.config.RepositoryConfig;
 import com.softb.system.security.config.SecurityConfig;
 import com.softb.system.web.config.WebMvcConfig;
 import org.slf4j.Logger;
@@ -28,7 +29,7 @@ import java.util.Arrays;
 @Configuration
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-@Import(value={WebMvcConfig.class, ServiceConfig.class, SecurityConfig.class, CacheConfig.class})
+@Import(value={WebMvcConfig.class, ServiceConfig.class, SecurityConfig.class, CacheConfig.class, RepositoryConfig.class})
 public class Application {
 
     private final Logger log = LoggerFactory.getLogger(Application.class);
