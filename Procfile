@@ -1,1 +1,1 @@
-web: java -Djdbc.drivers=org.postgresql.Driver -Dserver.port=$PORT --spring.profiles.active=prod-jar target/meEconomiza-2017.01.jar
+web: java -Djdbc.drivers=org.postgresql.Driver -Dserver.port=$PORT --spring.profiles.active=prod -jar target/meEconomiza-2017.01.jar
