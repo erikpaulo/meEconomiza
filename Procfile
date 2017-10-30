@@ -1,0 +1,1 @@
+web: java -Djdbc.drivers=org.postgresql.Driver -Dserver.port=$PORT -jar target/ipocket-0.0.1.jar --spring.profiles.active=prod

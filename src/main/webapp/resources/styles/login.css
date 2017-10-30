@@ -1,0 +1,51 @@
+.login {
+    height: 100%;
+    background-image: url('../static/images/me-economiza-login-bg.jpg');
+    background-repeat:no-repeat;
+    -webkit-background-size:cover;
+    -moz-background-size:cover;
+    -o-background-size:cover;
+    background-size:cover;
+    background-position:center;
+}
+
+.login .content {
+    margin-top: 35px;
+}
+
+.login .error {
+    color: red;
+}
+
+.google-signin {
+    margin-top: 5px;
+}
+
+.login .google-signin .abcRioButton {
+    max-width: 100%;
+    border-radius: 3px;
+}
+
+.login md-checkbox {
+    margin-top: 15px;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+md-checkbox.md-checked.indigo .md-icon {
+    background-color: #3949AB;
+}
+
+.front-welcome  {
+    text-shadow: 1px 2px rgba(0,0,0,0.7);
+    font-family: 'Raleway', sans-serif;
+}
+.front-welcome > div > h3  {
+    color: darkgreen;
+}
+.front-welcome > div > h2  {
+    color: white;
+}
+.front-welcome > h4 {
+    color: lightgray ;
+
+}

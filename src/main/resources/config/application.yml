@@ -1,0 +1,45 @@
+server:
+    port: 8080
+    contextPath: /meEconomiza
+    tomcat:
+        access_log_enabled: true
+        basedir: target/tomcat
+
+DATABASE_URL: postgres://eriklacerda@localhost:5432/eriklacerda
+
+spring:
+    application:
+        name: meEconomiza
+        version: 2017.1
+
+    jpa:
+        database: HSQL
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        openInView: true
+        show_sql: true
+        generate-ddl: false
+        hibernate:
+            ddl-auto: false
+        properties:
+            hibernate.cache.use_second_level_cache: true
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: true
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+
+    messageSource:
+        cacheSeconds: 1    
+
+cache:
+    timeToLiveSeconds: 3600
+    ehcache:
+        maxBytesLocalHeap: 16M
+
+application:
+    social:
+        google:
+            clientId: 316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com
+            clientSecret: otHjsiw9GrRL4uRtwSnsG2_A
+    security: 
+        secureChannel: http
+        key: meEconomiza
+

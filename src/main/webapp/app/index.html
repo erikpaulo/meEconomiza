@@ -1,0 +1,98 @@
+<html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-signin-client_id" content="316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com">
+
+<head >
+    <title>meEconomiza</title>
+    <link rel="shortcut icon" href="resources/static/images/me-economiza-icon.png">
+
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!--TODO: Retirar referência para material design-->
+    <link rel="stylesheet" href="resources/lib/material-design-lite/material.min.css">
+    <link rel="stylesheet" href="resources/lib/angular-material/angular-material.min.css">
+
+    <link rel="stylesheet" href="resources/styles/style.css">
+
+    <script type="text/javascript" src="resources/lib/requirejs/require.js" data-main="system/main.js"></script>
+
+    <style type="text/css">
+			[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+				display: none !important;
+			}
+		</style>
+</head>
+
+<body>
+    <section ng-controller="IndexController"  ng-cloak class="ng-cloak">
+        <section layout="column" ng-if="appContext.currentUser.authenticated" layout-fill>
+            <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+                <md-toolbar class="">
+                    <span flex></span>
+                    <div layout="row" class="md-toolbar-tools-bottom inset">
+                        <img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />
+                        <div layout="column">
+                            <h4 class="md-display-1">Bem-Vindo</h4>
+                            <div class="md-title">{{appContext.currentUser.displayName}}</div>
+                            <div class="md-body-1">{{appContext.currentUser.email}}</div>
+                        </div>
+                    </div>
+                </md-toolbar>
+                <md-list>
+                    <md-list-item ng-repeat="module in modules" ng-click="appContext.sidebarMenu.handleClick(module.originalPath)">
+                        <md-icon class="material-icons">{{module.icon}}</md-icon>
+                        <p>{{module.name}}</p>
+                    </md-list-item>
+                </md-list>
+            </md-sidenav>
+
+            <md-toolbar class="header" >
+                <div class="md-toolbar-tools">
+                    <md-button ng-click="appContext.sidebarMenu.toggleSidenav('left')" aria-label="Menu">
+                        <ng-md-icon icon="menu"></ng-md-icon>
+                    </md-button>
+                    <h3>
+                        {{appContext.contextPage}}
+                    </h3>
+                    <span flex></span>
+                    <md-button class="md-icon-button" aria-label="Message">
+                        <ng-md-icon icon="mail"></ng-md-icon>
+                    </md-button>
+                    <md-button class="md-icon-button" aria-label="logout" ng-click="logout()">
+                        <md-icon class="material-icons">power_settings_new</md-icon>
+                    </md-button>
+                </div>
+            </md-toolbar>
+
+            <md-progress-linear ng-show="!ajaxCompleted" md-mode="indeterminate"></md-progress-linear>
+            <md-fab-speed-dial md-open="appContext.contextMenu.isOpen" md-direction="up" class="md-fling md-fab-bottom-right"  ng-if="appContext.contextMenu.actions.length > 0" ng-cloak>
+                <md-fab-trigger >
+                    <md-button aria-label="menu" class="md-fab md-primary md-whiteframe-7dp">
+                        <ng-md-icon icon="{{appContext.contextMenu.icon}}" aria-label="{{appContext.contextMenu.name}}" options='{"duration": 375}'></ng-md-icon>
+                    </md-button>
+                </md-fab-trigger>
+                <md-fab-actions>
+                    <div ng-repeat="action in appContext.contextMenu.actions">
+                        <md-tooltip md-direction="left">
+                            {{action.tooltip}}
+                        </md-tooltip>
+                        <md-button aria-label="{{action.icon}}" class="md-fab md-mini md-hue-3" ng-click="handleClick(action)">
+                            <md-icon class="material-icons"> {{action.icon}} </md-icon>
+                        </md-button>
+                    </div>
+                </md-fab-actions>
+            </md-fab-speed-dial>
+            <md-content layout="column" class="relative mdl-color--blue-grey-50" role="main" id="main-content">
+                <div ng-if="appContext.currentUser.authenticated" ng-view></div>
+            </md-content>
+        </section>
+
+        <div ng-if="!appContext.currentUser.authenticated">
+            <div ng-if="!appContext.currentUser.authenticated" ng-view class="view"></div>
+        </div>
+    </section>
+
+</body>
+</html>

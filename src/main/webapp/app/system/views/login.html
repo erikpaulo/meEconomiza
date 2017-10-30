@@ -1,0 +1,55 @@
+<link rel="stylesheet" href="resources/styles/login.css">
+
+<section id="AuthController" ng-controller="AuthController" class="ng-cloak login mdl-layout mdl-js-layout mdl-layout--fixed-header">
+	<div layout="row" class="content" flex>
+		<div flex="15" layout="colun" flex-xs="10" flex-sm="25" >
+		</div>
+		<div layout="column" flex="50" class="front-welcome" hide-xs>
+			<div layout="row" layout-align="start end">
+				<h2>Bem Vindo ao&nbsp;</h2> <h3>me</h3><h2><strong>Economiza</strong></h2>
+            </div>
+            <h4>Porque tempo é dinheiro! #maistempo #maisdinheiro</h4>
+        </div>
+		<div layout="column" flex="25" flex-xs="80" flex-sm="50">
+            <div class="front-welcome" hide-gt-xs>
+                <div layout="row" layout-align="start end">
+                    <h3>me</h3><h2><strong>Economiza</strong></h2>
+                </div>
+            </div>
+			<md-card class="mdl-color--white md-card-border-radius-6" layout-padding>
+                <form name="loginForm" ng-submit="appAuthenticate()" novalidate>
+					<md-card-content>
+						<md-input-container class="md-block">
+							<label>E-mail</label>
+							<input required type="email" name="email" ng-model="user.email"
+								   minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+							<div ng-messages="loginForm.email.$error" role="alert">
+								<div ng-message-exp="['required', 'minlength', 'maxlength', 'pattern']">
+									Entre com um e-mail válido.
+								</div>
+							</div>
+						</md-input-container>
+						<md-input-container class="md-block">
+							<label>Senha</label>
+							<input required type="password" name="password" ng-model="user.password" />
+						</md-input-container>
+                        <ng-messages for="user.$error" role="alert" class="error">
+                            <ng-message when="login">Usuário/Senha Inválidos.</ng-message>
+                        </ng-messages>
+						<md-card-actions>
+							<div layout="row">
+								<md-button class="md-raised md-primary" flex type="submit">Login</md-button>
+							</div>
+                            <div id="google-signin" class="google-signin"></div>
+
+							<md-checkbox ng-model="user.rememberMe" name="remember-me" class="indigo">
+								Lembrar meu usuário
+							</md-checkbox>
+						</md-card-actions>
+					</md-card-content>
+				</form>
+            </md-card>
+		</div>
+		<div flex></div>
+	</div>
+</section>
