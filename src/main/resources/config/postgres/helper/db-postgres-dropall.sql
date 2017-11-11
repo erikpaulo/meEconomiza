@@ -1,5 +1,5 @@
 /**
-* heroku pg:psql --app meeconomiza < /Users/eriklacerda/Documents/Personal/Projetos/meEconomiza/src/main/resources/config/postgres/db-postgres-dropall.sql
+* heroku pg:psql --app meEconomiza < /Users/eriklacerda/Documents/Personal/Projetos/meEconomiza/src/main/resources/config/postgres/db-postgres-dropall.sql
 */
 
 DROP TABLE IF EXISTS user_role;

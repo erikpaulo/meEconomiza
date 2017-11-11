@@ -1,6 +1,6 @@
 /********** >>> INDEX <<< ***********/
 body{
-    font-family: Roboto,"Helvetica Neue",sans-serif;
+    font-family: Roboto,Helvetica Neue,sans-serif !important;
 }
 
 
@@ -12,8 +12,39 @@ md-toolbar.header {
 md-toolbar.header button.md-icon-button:hover{
     background-color: rgba(158,158,158,0.2) !important;
 }
+md-toolbar.subheader{
+    min-height: 25px;
+}
 
-/* Navegação Lateral */
+md-toolbar:not(.md-hue-1),
+.md-fab {
+  fill: #fff;
+}
+
+md-toolbar.subheader button.md-button{
+    min-height: 0;
+    margin: 3px;
+    height: 26px;
+    line-height: 26px;
+}
+
+md-toolbar.subheader md-menu-content{
+    background-color: #22262e
+}
+
+.top-menu-link {
+    position: relative;
+    font-weight: bold;
+    color: #b1b3b4;
+    font-size: 12px;
+    padding: 0 25px 0 20px;
+}
+
+.menu-link {
+    color: #b1b3b4;
+}
+
+/* Navegação Lateral
 md-sidenav md-toolbar {
     background-color: #22262e !important;
 }
@@ -30,13 +61,9 @@ md-sidenav md-list md-list-item:hover {
   height: 85px;
   margin: 10px;
 }
-md-toolbar:not(.md-hue-1),
-.md-fab {
-  fill: #fff;
-}
+*/
 
-
-/********** >>> GERAL <<< ***********/
+/********** >>> GERAL <<< **********
 .border-radius-5 {
     border-radius: 5px;
 }
@@ -71,8 +98,9 @@ md-toolbar:not(.md-hue-1),
 .c-caption{
     color: #7A7A7A;
 }
+*/
 
-/********** >>> CARDS <<< ***********/
+/********** >>> CARDS <<< **********
 
 md-card.mdl-color--green-600 {
     color: #fff;
@@ -109,7 +137,7 @@ md-card.card-hover:hover{
     font-size: x-large;
     letter-spacing: 0.08em;
 }
-
+*/
 
 /********** >>> ICONS <<< ***********/
 .material-icons.md-18 {
@@ -134,7 +162,7 @@ md-card.card-hover:hover{
 }
 
 
-/********** >>> TO-DO LIST <<< ***********/
+/********** >>> TO-DO LIST <<< **********
 md-card.to-do-list md-card-header{
     color: white;
 }
@@ -166,15 +194,18 @@ md-card.to-do-list md-card-actions md-input-container.md-has-icon>label{
 md-card.to-do-list md-card-actions md-input-container.md-has-icon>md-icon{
     cursor:pointer;
 }
-
+*/
 
 /********** >>> DIVIDER <<< ***********/
 md-divider.blue{
     background-color:rgb(63,81,181);
 }
+md-divider.thin{
+    border-top: 1px solid grey;
+}
 
 
-/********** >>> INPUT <<< ***********/
+/********** >>> INPUT <<< **********
 md-input-container.md-input-invalid md-select md-select-value{
     border-color: rgb(221,44,0);
 }
@@ -209,9 +240,9 @@ fieldset{
     padding-bottom: 0 !important;
     margin-bottom: 0;
 }
+*/
 
-
-/********** >>> AUTOCOMPLETE <<< ***********/
+/********** >>> AUTOCOMPLETE <<< **********
 md-autocomplete {
     background: white;
 }
@@ -227,14 +258,14 @@ md-autocomplete input:not(.md-input) {
 md-autocomplete-wrap{
     box-shadow: none !important;
 }
-
-/********** >>> TOAST <<< ***********/
+*/
+/********** >>> TOAST <<< **********
 md-toast.md-error-toast-theme .md-toast-content {
     background-color: red;
 }
+*/
 
-
-/********** >>> FILE UPLOAD <<< ***********/
+/********** >>> FILE UPLOAD <<< **********
 .file-drop-box{
     border: 1px dashed rgba(0,0,0,0.12);
     padding: 15px;
@@ -249,9 +280,9 @@ md-toast.md-error-toast-theme .md-toast-content {
 .file-drop-box-dragover md-icon{
     color:rgb(63,81,181);
 }
+*/
 
-
-/********** >>> CALENDAR <<< ***********/
+/********** >>> CALENDAR <<< **********
 calendar-md{
     margin-top: 8px;
 }
@@ -259,9 +290,9 @@ calendar-md md-content{
     min-height:0 !important;
     height:425px !important;
 }
+*/
 
-
-/********** >>> TABLES <<< ***********/
+/********** >>> TABLES <<< **********
 .table-head{
     background-color: #90a4ae !important;
     color:white;
@@ -273,8 +304,8 @@ calendar-md md-content{
     padding: 8px;
     min-height:34px;
 }
-
-/********** >>> ACCORDION <<< ***********/
+*/
+/********** >>> ACCORDION <<< **********
 div.c-card-accordion-header{
     margin-top: 15px;
 }
@@ -288,18 +319,16 @@ div.c-card-accordion-header.opened{
     border-bottom: 2px solid rgb(124, 181, 236);
 }
 div.c-card-accordion{
-    /*margin: 10px 10px;*/
     padding: 8px 8px 0px 8px;
 }
 div.c-card-accordion.opened{
     display: inherit;
-    /*background: rgba(124, 181, 236, 0.0470588);*/
     border: 1px solid #ddf;
 }
 div.c-card-accordion.closed{
     display:none;
 }
-
+*/
 /********** >>> TOOLBAR <<< ***********/
 md-toolbar.thin{
     min-height:0;
@@ -315,10 +344,11 @@ md-progress-linear{
     z-index: 2;
 }
 
-/********** >>> BILL <<< ***********/
+/********** >>> BILL <<< **********
 .bill-item{
     overflow:auto;
 }
 .bill-item.open{
     min-height:221px;
 }
+*/

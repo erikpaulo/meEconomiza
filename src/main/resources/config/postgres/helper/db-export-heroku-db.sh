@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-heroku pg:psql --app meeconomiza
+heroku pg:psql --app meEconomiza
 \copy (SELECT * FROM CATEGORY) TO CATEGORY.csv CSV DELIMITER ','
 \copy (SELECT * FROM SUBCATEGORY) TO SUBCATEGORY.csv CSV DELIMITER ','
 \copy (SELECT * FROM ACCOUNT_ENTRY) TO ACCOUNT_ENTRY.csv CSV DELIMITER ','

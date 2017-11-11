@@ -5,7 +5,7 @@
 
 <head >
     <title>meEconomiza</title>
-    <link rel="shortcut icon" href="resources/static/images/me-economiza-icon.png">
+    <link rel="shortcut icon" href="resources/static/images/meEco-icon.svg">
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500,700" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -28,34 +28,36 @@
 <body>
     <section ng-controller="IndexController"  ng-cloak class="ng-cloak">
         <section layout="column" ng-if="appContext.currentUser.authenticated" layout-fill>
-            <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
-                <md-toolbar class="">
-                    <span flex></span>
-                    <div layout="row" class="md-toolbar-tools-bottom inset">
-                        <img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />
-                        <div layout="column">
-                            <h4 class="md-display-1">Bem-Vindo</h4>
-                            <div class="md-title">{{appContext.currentUser.displayName}}</div>
-                            <div class="md-body-1">{{appContext.currentUser.email}}</div>
-                        </div>
-                    </div>
-                </md-toolbar>
-                <md-list>
-                    <md-list-item ng-repeat="module in modules" ng-click="appContext.sidebarMenu.handleClick(module.originalPath)">
-                        <md-icon class="material-icons">{{module.icon}}</md-icon>
-                        <p>{{module.name}}</p>
-                    </md-list-item>
-                </md-list>
-            </md-sidenav>
+            <!--<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">-->
+                <!--<md-toolbar class="">-->
+                    <!--<span flex></span>-->
+                    <!--<div layout="row" class="md-toolbar-tools-bottom inset">-->
+                        <!--<img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />-->
+                        <!--<div layout="column">-->
+                            <!--<h4 class="md-display-1">Bem-Vindo</h4>-->
+                            <!--<div class="md-title">{{appContext.currentUser.displayName}}</div>-->
+                            <!--<div class="md-body-1">{{appContext.currentUser.email}}</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</md-toolbar>-->
+                <!--<md-list>-->
+                    <!--<md-list-item ng-repeat="module in modules" ng-click="appContext.sidebarMenu.handleClick(module.originalPath)">-->
+                        <!--<md-icon class="material-icons">{{module.icon}}</md-icon>-->
+                        <!--<p>{{module.name}}</p>-->
+                    <!--</md-list-item>-->
+                <!--</md-list>-->
+            <!--</md-sidenav>-->
 
             <md-toolbar class="header" >
                 <div class="md-toolbar-tools">
-                    <md-button ng-click="appContext.sidebarMenu.toggleSidenav('left')" aria-label="Menu">
-                        <ng-md-icon icon="menu"></ng-md-icon>
-                    </md-button>
-                    <h3>
-                        {{appContext.contextPage}}
-                    </h3>
+                    <img src="resources/static/images/meEco-icon.svg" style="margin: 0px 10px 0 5px;" height="42" width="42"/>
+                    <!--<md-button ng-click="appContext.sidebarMenu.toggleSidenav('left')" aria-label="Menu">-->
+                        <!--<ng-md-icon icon="menu"></ng-md-icon>-->
+                    <!--</md-button>-->
+                    <!--<h3>-->
+                        <!--{{appContext.contextPage}}-->
+                    <!--</h3>-->
+                    <span>meEconomiza</span>
                     <span flex></span>
                     <md-button class="md-icon-button" aria-label="Message">
                         <ng-md-icon icon="mail"></ng-md-icon>
@@ -63,6 +65,29 @@
                     <md-button class="md-icon-button" aria-label="logout" ng-click="logout()">
                         <md-icon class="material-icons">power_settings_new</md-icon>
                     </md-button>
+                </div>
+            </md-toolbar>
+            <md-divider class="thin"></md-divider>
+            <md-toolbar class="header subheader">
+                <div layout="row" layout-align="start center">
+                    <md-menu-bar>
+                        <md-menu ng-repeat="module in modules">
+                            <md-button ng-click="$mdMenu.open()">
+                                <div class="top-menu-link" layout-align="center center">
+                                    <span>{{module.name}}</span>
+                                    <md-icon style="font-size:18px;" class="material-icons">{{module.icon}}</md-icon>
+                                </div>
+                            </md-button>
+
+                            <md-menu-content style="background-color: #22262e">
+                                <md-menu-item ng-repeat="submodule in module.submodules">
+                                    <md-button class="menu-link" ng-click="">
+                                        {{submodule.name}}
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </md-menu-bar>
                 </div>
             </md-toolbar>
 

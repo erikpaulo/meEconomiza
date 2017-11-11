@@ -1,12 +1,71 @@
 [
-//  {
-//    "id": "dashboard",
-//    "name": "Dashboard",
-//    "icon": "dashboard",
-//    "originalPath": "/dashboard",
-//    "templateUrl": "modules/dashboard/views/dashboard.html",
-//    "dependencies": [
-//      "modules/dashboard/controllers/index"
-//    ]
-//  }
+  {
+    "id": "plan",
+    "name": "Planeje",
+    "icon": "expand_more",
+    "originalPath": "/plan",
+    "templateUrl": "modules/dashboard/views/plan.html",
+    "dependencies": [
+      "modules/dashboard/controllers/index"
+    ],
+    "submodules": [
+      {
+        "id": "budget",
+        "name": "Orçamento"
+      }
+    ]
+  },
+  {
+    "id": "do",
+    "name": "Faça",
+    "icon": "expand_more",
+    "originalPath": "/plan",
+    "templateUrl": "modules/dashboard/views/do.html",
+    "dependencies": [
+      "modules/dashboard/controllers/index"
+    ],
+    "submodules": [
+      {
+        "id": "conciliation",
+        "name": "Conciliar Contas",
+        "originalPath": "/conciliation",
+        "templateUrl": "modules/dashboard/views/do.html",
+        "dependencies": [
+          "modules/dashboard/controllers/index"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "check",
+    "name": "Verifique",
+    "icon": "expand_more",
+    "originalPath": "/plan",
+    "templateUrl": "modules/dashboard/views/check.html",
+    "dependencies": [
+      "modules/dashboard/controllers/index"
+    ],
+    "submodules": [
+      {
+        "id": "conciliation",
+        "name": "Conciliar Contas"
+      }
+    ]
+  },
+  {
+    "id": "adapt",
+    "name": "Aprenda",
+    "icon": "expand_more",
+    "originalPath": "/plan",
+    "templateUrl": "modules/dashboard/views/do.html",
+    "dependencies": [
+      "modules/dashboard/controllers/index"
+    ],
+    "submodules": [
+      {
+        "id": "conciliation",
+        "name": "Conciliar Contas"
+      }
+    ]
+  }
 ]
