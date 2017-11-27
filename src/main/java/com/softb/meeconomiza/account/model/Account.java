@@ -1,4 +1,4 @@
-package com.softb.save4me.account.model;
+package com.softb.meeconomiza.account.model;
 
 import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -47,9 +47,9 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<AccountEntry> entries;
 
-    @Column(name="CREATE_DATE")
-    @NotNull
-    protected Date createDate;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+    protected List<Conciliation> conciliations;
 
     @Column(name="ACTIVATED")
     @NotNull
@@ -82,5 +82,4 @@ public class Account extends BaseEntity<Integer> implements Serializable {
             return this.name;
         }
     }
-
 }

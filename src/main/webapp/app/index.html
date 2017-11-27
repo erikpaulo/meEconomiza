@@ -28,36 +28,10 @@
 <body>
     <section ng-controller="IndexController"  ng-cloak class="ng-cloak">
         <section layout="column" ng-if="appContext.currentUser.authenticated" layout-fill>
-            <!--<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">-->
-                <!--<md-toolbar class="">-->
-                    <!--<span flex></span>-->
-                    <!--<div layout="row" class="md-toolbar-tools-bottom inset">-->
-                        <!--<img ng-src="{{appContext.currentUser.imageUrl}}" class="user-avatar" />-->
-                        <!--<div layout="column">-->
-                            <!--<h4 class="md-display-1">Bem-Vindo</h4>-->
-                            <!--<div class="md-title">{{appContext.currentUser.displayName}}</div>-->
-                            <!--<div class="md-body-1">{{appContext.currentUser.email}}</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</md-toolbar>-->
-                <!--<md-list>-->
-                    <!--<md-list-item ng-repeat="module in modules" ng-click="appContext.sidebarMenu.handleClick(module.originalPath)">-->
-                        <!--<md-icon class="material-icons">{{module.icon}}</md-icon>-->
-                        <!--<p>{{module.name}}</p>-->
-                    <!--</md-list-item>-->
-                <!--</md-list>-->
-            <!--</md-sidenav>-->
-
             <md-toolbar class="header" >
                 <div class="md-toolbar-tools">
                     <img src="resources/static/images/meEco-icon.svg" style="margin: 0px 10px 0 5px;" height="42" width="42"/>
-                    <!--<md-button ng-click="appContext.sidebarMenu.toggleSidenav('left')" aria-label="Menu">-->
-                        <!--<ng-md-icon icon="menu"></ng-md-icon>-->
-                    <!--</md-button>-->
-                    <!--<h3>-->
-                        <!--{{appContext.contextPage}}-->
-                    <!--</h3>-->
-                    <span>meEconomiza</span>
+                    <span>Save</span><span>4</span><span>Me</span>
                     <span flex></span>
                     <md-button class="md-icon-button" aria-label="Message">
                         <ng-md-icon icon="mail"></ng-md-icon>
@@ -80,9 +54,9 @@
                             </md-button>
 
                             <md-menu-content style="background-color: #22262e">
-                                <md-menu-item ng-repeat="submodule in module.submodules">
-                                    <md-button class="menu-link" ng-click="">
-                                        {{submodule.name}}
+                                <md-menu-item ng-repeat="item in module.items">
+                                    <md-button class="menu-link" ng-click="appContext.menu.handleClick(item.originalPath)">
+                                        {{item.name}}
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>
@@ -109,7 +83,7 @@
                     </div>
                 </md-fab-actions>
             </md-fab-speed-dial>
-            <md-content layout="column" class="relative mdl-color--blue-grey-50" role="main" id="main-content">
+            <md-content layout="column" role="main" id="main-content" style="height:10000px;">
                 <div ng-if="appContext.currentUser.authenticated" ng-view></div>
             </md-content>
         </section>

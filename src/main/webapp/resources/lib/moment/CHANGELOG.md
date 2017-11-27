@@ -697,7 +697,7 @@ Fixed [issue 31](https://github.com/timrwood/moment/pull/31).
 
 Added `moment.version` to get the current version.
 
-Removed `window !== undefined` when checking if module exists to support browserify. [issue 25](https://github.com/timrwood/moment/pull/25)
+Removed `window !== undefined` when checking if module imported to support browserify. [issue 25](https://github.com/timrwood/moment/pull/25)
 
 ### 1.0.0
 

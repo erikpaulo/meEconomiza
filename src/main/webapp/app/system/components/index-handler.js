@@ -70,14 +70,14 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                 icon: 'add',
                 isOpen: false
             },
-            sidebarMenu: {
+            menu: {
                 handleClick: function(url){
-                    sideBarService('left').close();
+//                    sideBarService('left').close();
                     location.path(url);
-                },
+                }/*,
                 toggleSidenav: function(menuId) {
                    sideBarService(menuId).toggle();
-                }
+                }*/
             },
             toast: {
                 $warnings: [],

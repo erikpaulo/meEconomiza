@@ -24,14 +24,16 @@
     "dependencies": [
       "modules/dashboard/controllers/index"
     ],
-    "submodules": [
+    "hasSubMenu": true,
+    "items" : [
       {
         "id": "conciliation",
-        "name": "Conciliar Contas",
+        "name":"Conciliar Lançamentos",
         "originalPath": "/conciliation",
-        "templateUrl": "modules/dashboard/views/do.html",
+        "templateUrl": "modules/account/views/conciliation.html",
+        "visible": true,
         "dependencies": [
-          "modules/dashboard/controllers/index"
+          "modules/account/controllers/conciliation-controller"
         ]
       }
     ]

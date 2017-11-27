@@ -16,31 +16,21 @@ import java.net.URISyntaxException;
 @Configuration
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository"
+		,"com.softb.meeconomiza.account.repository"
+		,"com.softb.meeconomiza.categorization.repository"
+		,"com.softb.meeconomiza.preferences.repository"
 })
 @EntityScan(basePackages = { 
 		"com.softb.system.security.model"
+		,"com.softb.meeconomiza.account.model"
+		,"com.softb.meeconomiza.categorization.model"
+		,"com.softb.meeconomiza.preferences.model"
 })
 public class RepositoryConfig  {
 
     private final Logger logger = LoggerFactory.getLogger(RepositoryConfig.class);
     @Autowired
     private Environment environment;
-    
-//    @Bean
-//    public SpringLiquibase liquibase(DataSource datasource) {
-//    	SpringLiquibase liquibase = null;
-//
-////    	if (!environment.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-////	        logger.debug("Configuring Liquibase");
-////	        liquibase = new SpringLiquibase();
-////	        liquibase.setDataSource(datasource);
-////	        liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-////	        liquibase.setContexts("development");
-////    	}
-//
-//        return liquibase;
-//    }
-    
     
     @Bean
     public BasicDataSource dataSource() throws URISyntaxException {

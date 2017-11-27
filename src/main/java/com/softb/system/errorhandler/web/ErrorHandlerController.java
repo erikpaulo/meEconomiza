@@ -84,7 +84,7 @@ public class ErrorHandlerController {
                     break;
                 }
                 else {
-                	logger.debug(String.format("message %s not exists in resource file", fieldErrorCode));
+                	logger.debug(String.format("message %s not imported in resource file", fieldErrorCode));
                     if (isLastFieldErrorCode(index, fieldErrorCodes)) {
                         dto.addFieldError(fieldError.getField(), String.format("Erro de validacao %s.%s.%s", fieldErrorCode, fieldError.getObjectName(), fieldError.getField()));
                     }

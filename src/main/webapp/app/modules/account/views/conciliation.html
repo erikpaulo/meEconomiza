@@ -1,63 +1,175 @@
-<section ng-controller="AccountController" ng-cloak>
-    <div layout="row" layout-xs="column" class="ng-cloak" ng-cloak>
-        <div layout="column" flex="50" flex-xs="100">
-            <md-card>
-                <md-card-content style="min-height:517px;overflow:auto;">
-                    <md-list ng-repeat="group in summary.groups">
-                        <span class="md-subhead">{{group.id | accountTypeName}}</span>
-                        <md-divider class="blue"></md-divider>
-                        <md-list-item ng-if="group.accounts.length<=0">
-                            <span class="c-caption">Não há contas cadastradas.</span>
-                        </md-list-item>
-                        <md-list-item style="padding-left: 15px;" ng-repeat="account in group.accounts" class="">
-                            <span flex>{{ account.name }}</span>
-                            <span class="md-subhead secondary-button-padding" layout="row" layout-align="end center" flex>{{ account.balance | currency }}</span>
-                            <md-button aria-label="Account Details" class="md-icon-button c-hover" style="margin-left: 10px;">
-                                <md-icon class="material-icons" ng-click="detail(account)">open_in_browser</md-icon>
-                            </md-button>
-                            <md-button aria-label="Account Details" class="md-icon-button md-warn c-hover">
-                                <md-icon class="material-icons" ng-click="delete(account)">delete</md-icon>
-                            </md-button>
-                        </md-list-item>
-                    </md-list>
-                </md-card-content>
-            </md-card>
-        </div>
-        <div layout="column" flex="50" hide-xs>
-            <md-card>
+<section ng-controller="ConciliationController">
+    <div layout="row">
+        <div layout="column" flex="30" flex-offset="5">
+            <md-card class="flat no-border no-bg">
                 <md-card-header>
-                    <md-card-header-text>
-                        <span class="md-title">Resumo</span>
-                    </md-card-header-text>
-                </md-card-header>
-                <md-content>
-                    <md-list>
-                        <div layout="row">
-                            <div layout="column" flex="60">
-                                <md-list-item ng-repeat="group in summary.groups" style="min-height:30px;margin-right:10px;">
-                                    <span layout="row" flex>{{group.id | accountTypeName}}</span>
-                                    <span layout="row" flex="30" layout-align="end center">{{group.balance | currency}}</span>
-                                </md-list-item>
-                            </div>
-                            <md-divider class="blue"></md-divider>
-                            <div layout="column" flex layout-align="center center">
-                                <span class="md-headline">{{summary.balance | currency}}</span>
-                                <span class="md-subhead c-caption">Total Geral</span>
-                            </div>
-                        </div>
-                    </md-list>
-                </md-content>
-            </md-card>
-            <md-card>
-                <md-card-header>
-                    <md-card-header-text>
-                        <span class="md-title">Meu Dinheiro</span>
-                    </md-card-header-text>
+                    <span class="md-title highlighted c-padding-5">Conciliação com Extrato do Banco</span>
                 </md-card-header>
                 <md-card-content>
-                    <highchart id="moneyDistribution" config="moneyDistributionChartConfig"></highchart>
+                    <div layout="row">
+                        <md-input-container class="md-block" flex>
+                            <label>Conta para conciliar</label>
+                            <md-select ng-model="selectedAccount" ng-change="handleAccountSelection()">
+                                <md-option ng-repeat="account in accounts" ng-value="account">
+                                    {{account.name}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
                 </md-card-content>
             </md-card>
+            <md-card ng-show="account != null" class="no-bg flat">
+                <md-card-content layout-padding>
+                    <div layout="row" class="c-padding-5">
+                        <div layout="column" flex="50">
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;" class="md-headline">{{account.lastUpdate | date: 'dd/MM/yyyy'}}</div>
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;">Ultima atualização</div>
+                        </div>
+                        <md-divider></md-divider>
+                        <div layout="column" flex="50">
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;" class="md-headline">{{account.balance | currency}}</div>
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;">Saldo Corrente</div>
+                        </div>
+                    </div>
+                    <md-divider></md-divider>
+                    <div layout="row">
+                        <div layout="column" flex>
+                            <div ngf-drop="upload($file)" class="file-drop-box" ngf-drag-over-class="{accept:'file-drop-box-dragover'}"
+                                 ngf-multiple="false" ngf-pattern="'text/csv'"
+                                 ng-controller="UploadFileController">
+
+                                <div layout="row" layout-align="center center">
+                                    <md-icon class="material-icons step md-36">backup</md-icon>
+                                </div>
+                                <div layout="row" layout-align="center center">
+                                    <span style="color: #7A7A7A;">Solte seu CSV aqui!</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div layout="column" flex="50" layout-align="center center" ng-if="conciliation != null">
+                            <div layout="row" layout-align="center center" class="md-headline">{{finalBalance | currency}}</div>
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;">Saldo Final</div>
+                        </div>
+
+                    </div>
+                </md-card-content>
+            </md-card>
+            <div ng-if="account.conciliations.length > 0">
+                <div layout layout-align="start end" class="md-body-2 padding-5" style="margin-top:10px">Conciliações Associadas</div>
+                <md-card class="flat no-bg">
+                    <md-card-content style="padding: 0px;">
+                        <md-list style="padding:0px;">
+                            <md-list-item ng-repeat="prevConciliation in account.conciliations" ng-class="{'line-selection': prevConciliation.id==conciliation.id}">
+                                <div layout="row" layout-align="start center" flex>
+                                    <md-icon class="material-icons md-18" ng-click="detail(account)" ng-if="prevConciliation.id==conciliation.id">label</md-icon>
+                                    <div layout="column" flex="40" layout-align="center center">{{prevConciliation.date | date: 'dd/MM/yyyy'}}</div>
+                                    <div layout="column" flex="35" layout-align="center center" ng-if="prevConciliation.imported">Importado</div>
+                                    <div layout="column" flex="35" layout-align="center center" ng-if="!prevConciliation.imported">Rascunho</div>
+                                    <div layout="column" flex="15">
+                                        <md-button aria-label="Carregar" ng-if="prevConciliation.imported != null" class="md-icon-button c-hover">
+                                            <md-tooltip md-direction="left">Abrir</md-tooltip>
+                                            <md-icon class="material-icons" ng-click="open(prevConciliation)">open_in_new</md-icon>
+                                        </md-button>
+                                    </div>
+                                    <div layout="column" flex="15">
+                                        <md-button ng-if="prevConciliation.imported" aria-label="Desfazer" ng-if="prevConciliation.imported != null" class="md-icon-button c-hover">
+                                            <md-tooltip md-direction="left">Desfazer</md-tooltip>
+                                            <md-icon class="material-icons" ng-click="rollback(prevConciliation)">restore</md-icon>
+                                        </md-button>
+                                        <md-button ng-if="!prevConciliation.imported" aria-label="Remover" ng-if="prevConciliation.imported != null" class="md-icon-button c-hover">
+                                            <md-tooltip md-direction="left">Remover</md-tooltip>
+                                            <md-icon class="material-icons" ng-click="delete(prevConciliation)">delete</md-icon>
+                                        </md-button>
+                                    </div>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+        <div layout="column" flex="60">
+            <md-card class="flat" ng-if="conciliation.entries.length > 0">
+                <md-card-content>
+                    <div layout="column" flex style="margin-bottom:3px;">
+                        <div layout="row">
+                            <div layout="column" flex="70" layout-align="center start" class="md-body-2 padding-5" style="min-height:40px">
+                                Lançamentos para Sincronizar
+                            </div>
+                            <div layout="column" flex="30" layout-align="center end">
+                                <div layout="row" ng-show="!conciliation.imported">
+                                    <md-button  aria-label="Sincronizar" class="md-icon-button c-hover c-no-padding">
+                                        <md-tooltip md-direction="left">Sincronizar Lançamentos</md-tooltip>
+                                        <md-icon class="material-icons" ng-click="sync()">move_to_inbox</md-icon>
+                                    </md-button>
+                                    <md-button  aria-label="Sincronizar" class="md-icon-button c-hover">
+                                        <md-tooltip md-direction="left">Salvar e sincronizar depois</md-tooltip>
+                                        <md-icon class="material-icons" ng-click="save()">save</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div layout="row">
+                        <table layout="column" flex="100" class="table-striped">
+                            <thead>
+                                <tr layout="row">
+                                    <th flex="10">Data</th>
+                                    <th flex="25">Descrição</th>
+                                    <th flex="40">Categoria</th>
+                                    <th flex="15">Valor</th>
+                                    <th flex="10">Importar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr layout="row" ng-repeat="item in conciliation.entries" layout-align="center center">
+                                    <td flex="10">{{ item.date | date: 'dd/MM/yyyy' }}</td>
+                                    <td flex="25" md-truncate>{{ item.description }}</td>
+                                    <td flex="40">
+                                        <md-autocomplete
+                                                md-selected-item="item.subCategory"
+                                                md-search-text="searchText"
+                                                md-items="subcategory in querySearch(searchText)"
+                                                md-min-length="0"
+                                                md-autoselect="true"
+                                                md-no-cache="true"
+                                                md-item-text="subcategory.fullName"
+                                                ng-disabled="conciliation.imported">
+                                            <md-item-template>
+                                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{subcategory.fullName}}</span>
+                                            </md-item-template>
+                                            <md-not-found>
+                                                Categoria não encontrada.
+                                                <a ng-click="newSubcategory(searchText)">Criar nova!</a>
+                                            </md-not-found>
+                                        </md-autocomplete>
+                                        <div class="errors" ng-messages="myForm.investType.$error" ng-if="myForm.$dirty">
+                                            <div ng-message="required">Obrigatório</div>
+                                        </div>
+                                    </td>
+                                    <td flex="15">{{ item.amount | currency }}</td>
+                                    <td flex="10">
+                                        <md-button class="md-icon-button" ng-click="updateRejection(item, !item.reject)" aria-label="Rejeitar" ng-disabled="conciliation.imported">
+                                            <md-tooltip ng-if="item.exists" md-direction="left">Existe um lançamento na mesma data e com mesmo valor</md-tooltip>
+                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step" ng-if="!item.reject">thumb_up</md-icon>
+                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step" ng-if="item.reject">thumb_down</md-icon>
+                                        </md-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </md-card-content>
+            </md-card>
+
+            <!--<div layout="row" layout-align="center center">-->
+                <!--<div layout="column">-->
+                    <!--<md-icon class="material-icons" ng-click="save()" style="color:#93c47d; font-size: -webkit-xxx-large;">tag_faces</md-icon>-->
+                    <!--<span>Sucesso!!!</span>-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 </section>

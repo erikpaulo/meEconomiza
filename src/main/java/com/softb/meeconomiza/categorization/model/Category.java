@@ -1,4 +1,4 @@
-package com.softb.save4me.categorization.model;
+package com.softb.meeconomiza.categorization.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.softb.system.repository.BaseEntity;

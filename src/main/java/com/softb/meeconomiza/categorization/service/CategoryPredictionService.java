@@ -1,119 +1,90 @@
-package com.softb.meeconomiza.account.service;
+package com.softb.meeconomiza.categorization.service;
 
-import com.softb.meeconomiza.account.model.AccountEntry;
-import com.softb.meeconomiza.account.model.Conciliation;
-import com.softb.meeconomiza.account.model.ConciliationEntry;
-import com.softb.meeconomiza.account.repository.AccountEntryRepository;
-import com.softb.system.errorhandler.exception.SystemException;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.lang.time.DateUtils;
-import org.apache.tomcat.util.http.fileupload.FileItemIterator;
-import org.apache.tomcat.util.http.fileupload.FileItemStream;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
-import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import com.softb.meeconomiza.categorization.model.CategoryPrediction;
+import com.softb.meeconomiza.categorization.model.SanitizePattern;
+import com.softb.meeconomiza.categorization.model.SubCategory;
+import com.softb.meeconomiza.categorization.repository.CategoryPredictionRepository;
+import com.softb.meeconomiza.categorization.repository.SanitizePatternRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
- * Created by eriklacerda on 3/1/16.
+ * Put together all services for related to predicting category
  */
 @Service
-public class ConciliationService {
+public class CategoryPredictionService {
 
-//    public static final String GROUP_ENTRIES_BY_MONTH = "MONTH";
 
     @Autowired
-    private AccountEntryRepository accountEntryRepository;
+    private CategoryPredictionRepository categoryPredictionRepository;
 
-    public Conciliation uploadEntries(Integer accountId, final HttpServletRequest request, final HttpServletResponse response, Integer groupId)
-            throws SystemException, DataAccessException, FileUploadException, IOException, ParseException {
 
-        Conciliation conciliation = new Conciliation();
-
-        request.setCharacterEncoding("utf-8");
-        if (request.getHeader("Content-Type") != null){
-            if  (request.getHeader("Content-Type").startsWith("multipart/form-data")) {
-
-                // open file stream and prepare the file to be manipulated.
-                ServletFileUpload upload = new ServletFileUpload();
-                FileItemIterator fileIterator = upload.getItemIterator(request);
-                conciliation.setEntries(csvImport(accountId, fileIterator, groupId));
-            } else {
-                throw new SystemException("Invalid Content-Type: "+ request.getHeader("Content-Type"));
-            }
-        }
-
-        return conciliation;
-    }
+    @Autowired
+    private SanitizePatternRepository sanitizePatternRepository;
 
     /**
-     * Responsável por processar arquivos com lançamentos do tipo CSV separados por ;.
-     * @param accountId Número da conta onde os lançamentos serão feitos.
-     * @param fileIterator Arquivo.
+     * Predict the correct category for the informed description
+     * @param description Description to be categorized
+     * @param groupId Category's owner
      * @return
-     * @throws ParseException
-     * @throws IOException
-     * @throws FileUploadException
-     * @throws DataAccessException
      */
-    public List<ConciliationEntry> csvImport(Integer accountId, FileItemIterator fileIterator, Integer groupId) throws DataAccessException, FileUploadException, IOException, ParseException{
-        List<ConciliationEntry> entriesToImport = new ArrayList<>();
-        ConciliationEntry entryToImport = null;
-        String[] dateFormat = {"dd/MM/yyyy'T'HH:mm:ss"};
-        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt","BR"));
-
-        // Caso tenha sido enviado mais de um arquivo, itera por eles.
-        while (fileIterator.hasNext()) {
-            FileItemStream stream = fileIterator.next();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream.openStream()));
-
-            // Recupera o delimitador do arquivo.
-            char delimiter = defineDelimiter(reader);
-
-            for(CSVRecord record : CSVFormat.EXCEL.withDelimiter(delimiter).parse(reader).getRecords()) {
-                entryToImport = new ConciliationEntry(  DateUtils.parseDate(record.get(0)+"T03:00:00", dateFormat),
-                                                        record.get(1), null, nf.parse(record.get(2)).doubleValue(), false,
-                                                        null, groupId);
-
-                // Verifica se existe um lançamento na conta com mesma data e valor. Se existir aponta como provável conflito.
-                List<AccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entryToImport.getDate(), entryToImport.getAmount());
-                if (conflicts.size() > 0) {
-                    entryToImport.setExists(true);
-                }
-
-                entriesToImport.add(entryToImport);
-            }
-            reader.close();
-        }
-
-        return entriesToImport;
+    public SubCategory getCategoryForDescription(String description, Integer groupId){
+        CategoryPrediction prediction = categoryPredictionRepository.getByDescription(sanitize(description), groupId);
+        return (prediction != null ? prediction.getSubCategory() : null);
     }
 
     /**
-     * Verifica se o delimintador do arquivo CSV é ; ou ,.
-     * @param reader Stream do arquivo
-     * @return Delimitador do arquivo
-     * @throws IOException
+     * Register a use or rejection of a category's prediction.
+     * @param description
+     * @param subCategory
+     * @param groupId
      */
-    private char defineDelimiter(BufferedReader reader) throws IOException {
-        reader.mark(1000);
-        char delimiter = (reader.readLine().split(";").length > 1 ? ';' : ',');
-        reader.reset();
+    public void register(String description, SubCategory subCategory, Integer groupId){
+        String sanitizedDescription = sanitize(description);
 
-        return delimiter;
+        CategoryPrediction categoryPrediction = categoryPredictionRepository.getByDescription(sanitizedDescription, groupId);
+
+        if (categoryPrediction == null){
+            categoryPrediction = new CategoryPrediction(sanitizedDescription, subCategory, 1, 0, groupId);
+        } else {
+            if (categoryPrediction.getSubCategory().equals(subCategory)){
+                categoryPrediction.setTimesUsed(categoryPrediction.getTimesUsed()+1);
+            } else {
+                categoryPrediction.setTimesRejected(categoryPrediction.getTimesRejected()+1);
+                categoryPrediction.setSubCategory(subCategory);
+                categoryPredictionRepository.save(categoryPrediction);
+            }
+
+        }
+
+        categoryPredictionRepository.save(categoryPrediction);
+    }
+
+    /**
+     * Tries to sanitize the informed string, keeping just what is relevant to predict the
+     * correct category.
+     * @param description
+     * @return
+     */
+    private String sanitize(String description){
+
+        // Get all pattern that need to be applied.
+        List<SanitizePattern> patterns = sanitizePatternRepository.findAll();
+        for (SanitizePattern pattern: patterns) {
+            description = description.replaceAll(pattern.getPattern(), pattern.getReplaceFor()).trim();
+        }
+
+//        // Elimina padrão de prestação da descrição da despesa (00/00)
+//        description = description.replaceAll("\d{2}/\d{2}", "").trim();
+//
+//        // Elimina diferenciação de lançamento do Uber
+//        if (description.startsWith("Uber UBER")){
+//            description = "Uber UBER";
+//        }
+
+        return description;
     }
 
 }

@@ -1,155 +1,250 @@
 define(['./module',
-        '../services/account-resources',
-        '../../shared/services/utils-service'], function (app) {
+        '../../categorization/services/subcategory-resources',
+        '../../categorization/services/category-service',
+        '../services/conciliation-resources',
+        'modules/preferences/services/userpreferences-resources',
+        '../services/account-resources'], function (app) {
 
-	app.controller('AccountController', ['$rootScope', '$scope', '$location', '$filter', '$timeout', '$mdDialog', 'AccountResource', 'Utils', 'Constants',
-        function($rootScope, $scope, $location, $filter, $timeout, $mdDialog, Account, Utils, Constants) {
-            $scope.appContext.contextPage = 'Contas';
-            $scope.appContext.contextMenu.setActions([
-                {icon: 'add_circle', tooltip: 'Nova Conta', onClick: function() {
-                    openDialog($scope, $mdDialog, Utils, Constants);
-               }}
-            ]);
+	app.controller('ConciliationController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'SubCategoryResource', 'ConciliationResource', 'CategoryService', 'UserPreferencesResource',
+        function($scope, $filter, $mdDialog, Account, SubCategory, Conciliation, CategoryService, UserPreferences) {
 
-            // Open this account details, showing its entries.
-            $scope.detail = function(account){
-                $location.path('/account/'+ account.id +'/entries');
-            }
+            Account.listAll(function(accounts){
+                $scope.accounts = accounts;
+            })
 
-            Account.summary(function(summary){
-                $scope.summary = summary;
-                updateChart();
+            SubCategory.listAll(function (subCategories){
+                $scope.subCategories = subCategories;
             });
 
-            $scope.delete = function(account){
-                new Account(account).$delete(function(){
-                    for (var g in $scope.summary.groups){
-                        for (var a in $scope.summary.groups[g].accounts){
-                            if ($scope.summary.groups[g].accounts[a].id == account.id){
-                                $scope.summary.groups[g].balance -= $scope.summary.groups[g].accounts[a].balance;
-                                $scope.summary.balance -= $scope.summary.groups[g].accounts[a].balance;
-                                $scope.summary.groups[g].accounts.splice(a,1);
-                            }
-                        }
-                    }
-                    updateChart();
-                    addWarning($scope, 'Conta removida com sucesso!');
+            $scope.userPreferences = new UserPreferences();
+            $scope.userPreferences.$get(function(preferences){
+                $scope.userPreferences = preferences;
+            });
+
+            $scope.newSubcategory = function(fullName){
+                CategoryService.newSubcategoryShortcut($scope, fullName).then(function(newSubcategory){
+                    SubCategory.listAll(function (subCategories){
+                        $scope.subCategories = subCategories;
+                    });
+
+                    addSuccess($scope);
                 }, function(err){
-                    addError($scope, 'Não foi possível remover conta.', err);
+                    addError($scope, err);
                 });
             }
 
-            $scope.detail = function(account){
-                $location.path('/account/'+ account.id +'/entries');
+            $scope.querySearch = function(query){
+                return $filter('filter')($scope.subCategories, query, false, 'fullName');
             }
 
-            $scope.moneyDistributionChartConfig = {
-                options: {
-                    chart: {
-                        type: 'pie'
-                    },
-                    tooltip: {
-                        enabled: true,
-                        pointFormatter: function(){
-                            return $filter('currency')(this.y)
-                        }
-                    },
-                    plotOptions: {
-                        series: {
-                            dataLabels: {
-                                enabled: true,
-                                distance: -30,
-                                formatter: function(){
-                                    return $filter('number')(this.percentage, 0) + '%';
-                                }
-                            }
-                        },
-                         pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true
-                            },
-                            showInLegend: true
+            $scope.handleAccountSelection = function(){
+                $scope.conciliation = null;
+                $scope.account = null;
+                $scope.finalBalance = null;
+
+                new Account($scope.selectedAccount).$get(function(account){
+                    $scope.account = account;
+                    $scope.finalBalance = account.balance;
+                }, function(err){
+                    addError($scope, 'Não foi possível recuperar dados da conta.');
+                });
+            }
+
+            $scope.loadFileEntries = function(conciliation){
+                $scope.conciliation = new Conciliation(conciliation);
+                $scope.account.conciliations.unshift(conciliation);
+
+                checkInstallmentEntries($scope.conciliation.entries);
+                updateBalancePosSync(conciliation)
+            }
+
+            function checkInstallmentEntries(entries){
+                var found = false;
+
+                if ($scope.userPreferences.updateInstallmentDate == null){
+                    for (var i in entries){
+                        conciliationEntry = entries[i];
+                        if (conciliationEntry.installment){
+                            found=true;
+                            break;
                         }
                     }
-                },
-                title: {
-                    text: ''
-                },
-                subtitle: {
-                    text: ''
-                },
-                func: function(chart) {
-                    $timeout(function() {
-                        chart.reflow();
-                    }, 0);
-                },
-                series: [{
-                    name: 'Tipo de Conta',
-                    colorByPoint: true,
-                    data: [
-                    ],
-                }],
-                credits: {enabled: false},
-                loading: false,
-                size: {
-                   height: 260
+
+                    if (found){
+                        var confirm = $mdDialog.confirm()
+                            .title('Compras parceladas')
+                            .textContent('Encontrei compras parceladas nesta conciliação. Sou treinado para atualizar automaticamente a data do lançamento para que fique coerente com o momento que o dinheiro sai da sua conta. Gostaria que nas próximas importações eu fizesse isso?')
+                            .ariaLabel('Ops!')
+                            .ok('Sim, pode fazer!')
+                            .cancel('Não!! Eu mesmo farei.');
+
+                        $mdDialog.show(confirm).then(function(option) {
+                            $scope.userPreferences.updateInstallmentDate = true;
+
+                            $scope.userPreferences.$save(function(preferences){
+                                $scope.userPreferences = preferences;
+                            });
+                        }, function() {
+                            $scope.userPreferences.updateInstallmentDate = false;
+
+                            $scope.userPreferences.$save(function(preferences){
+                                $scope.userPreferences = preferences;
+                            });
+                        });
+                    }
                 }
             }
 
-            function updateChart(){
-                $scope.moneyDistributionChartConfig.series[0].data = [];
-                angular.forEach($scope.summary.groups, function(group){
-                    if (group.id != Constants.ACCOUNT.TYPE.CHECKING_ACCOUNT && group.balance >= 0)
-                        $scope.moneyDistributionChartConfig.series[0].data.push({name: group.name, y:group.balance});
-                });
+            $scope.delete = function(draftConciliation){
+                new Conciliation(draftConciliation).$delete(function(){
+                    for(var i in $scope.account.conciliations){
+                        if ($scope.account.conciliations[i].id == draftConciliation.id){
+                            $scope.account.conciliations.splice(i, 1);
+                        }
+
+                        if ($scope.conciliation && draftConciliation.id == $scope.conciliation.id){
+                            $scope.conciliation = null;
+                        }
+                    }
+                    addSuccess($scope);
+                }, function(err){
+                    addError($scope, 'Não foi possível remover a conciliação rascunho.');
+                })
+            }
+
+            $scope.save = function(){
+                $scope.conciliation = new Conciliation($scope.conciliation);
+                $scope.conciliation.$save(function (conciliation){
+                    $scope.conciliation = conciliation;
+                    updateBalancePosSync(conciliation)
+                    addSuccess($scope);
+                }, function(err){
+                    addError($scope, 'Não foi possível salvar os dados dessa conciliação.');
+                })
+            }
+
+            $scope.sync = function(){
+                // Check if all categories were informed
+                var occur = 0;
+                angular.forEach($scope.conciliation.entries, function(entry){
+                    if (!entry.reject && entry.subCategory == null) {
+                        occur++;
+                    }
+                })
+
+                if (occur>0){
+                    var confirm = $mdDialog.confirm()
+                        .title('Gostaria de seguir com a sincronização?')
+                        .textContent('Encontrei '+ occur +' linha'+(occur>1?'s':'')+' sem categoria. Gostaria que eu a'+(occur>1?'s':'')+' rejeitasse e seguisse com a sincronização ou prefere categorizá-la'+(occur>1?'s':'')+' agora?.')
+                        .ariaLabel('Ops!')
+                        .ok('Sim, prossiga!')
+                        .cancel('Vou categorizá-las.');
+
+                    $mdDialog.show(confirm).then(function() {
+                      rejectAllNotCategorized();
+                      syncIntoAccount();
+                    }, function() {
+                      return;
+                    });
+                } else {
+                    syncIntoAccount();
+                }
 
             }
 
+            function syncIntoAccount (){
+               $scope.conciliation.$syncIntoAccount(function(conciliation){
+                    $scope.account.$get(function(account){
+                        $scope.account = account;
+                        $scope.conciliation = conciliation;
 
-            function openDialog($scope, $mdDialog, Constants){
-               $mdDialog.show({
-                   controller: DialogController,
-                   templateUrl: 'modules/account/views/new-account-template.html',
-                   parent: angular.element(document.body),
-                   clickOutsideToClose:true
-               }).then(function(newAccount){
+                        addSuccess($scope);
+                    })
 
-                    new Account(newAccount).$save(function(account){
-                        angular.forEach($scope.summary.groups, function(group){
-                            if (group.id == account.type){
-                                group.accounts.push(account);
-                                group.balance += account.startBalance;
-                                updateChart();
-                            }
-                        });
-                        $scope.summary.balance += account.startBalance;
-                        addWarning($scope, 'Conta cadastrada com sucesso!');
-                    }, function(err){
-                        addError($scope, 'Não foi possível cadastrar conta.', err);
+                }, function(err){
+                    addError($scope, 'Não foi possível sincronizar os dados com a conta selecionada.');
+                });
+            }
+
+            $scope.rollback = function(conciliationToRollback){
+                new Conciliation(conciliationToRollback).$rollback(function(conciliation){
+                    new Account($scope.selectedAccount).$get(function(account){
+                        $scope.account = account;
+                        updateBalancePosSync(conciliation)
+
+                        addSuccess($scope);
                     });
-               });
+                    $scope.conciliation = conciliation;
+
+                }, function(err){
+                    addError($scope, 'Não foi possível desfazer a importação dos dados relacionados a esta conciliação.');
+                });
+            }
+
+            $scope.open = function(conciliationToOpen){
+                new Conciliation(conciliationToOpen).$get(function(conciliation){
+                    $scope.conciliation = conciliation;
+                    updateBalancePosSync(conciliation);
+                }, function(err){
+                    addError($scope, 'Não foi possível abrir esta conciliação.');
+                })
+            }
+
+            function updateBalancePosSync(conciliation){
+                $scope.finalBalance = $scope.account.balance;
+
+                if (!conciliation.imported){
+                    angular.forEach(conciliation.entries, function(entry) {
+                        if (!entry.reject) {
+                            $scope.finalBalance += entry.amount;
+                        }
+                    });
+                }
+            }
+
+            $scope.updateRejection = function(entry, toStatus){
+                entry.reject = toStatus;
+
+                if (entry.reject){
+                    $scope.finalBalance -= entry.amount;
+                } else {
+                    $scope.finalBalance += entry.amount;
+                }
+            }
+
+            function rejectAllNotCategorized(){
+                angular.forEach($scope.conciliation.entries, function(entry){
+                    if (entry.subCategory == null){
+                        $scope.updateRejection(entry, true);
+                    }
+                })
             }
         }
-
 	]);
 
-    function DialogController($scope, $mdDialog, Utils, Constants) {
-        $scope.accountTypes = Constants.ACCOUNT.TYPE;
+    app.controller('UploadFileController', ['$scope', 'Upload',
+        function($scope, Upload) {
 
-        $scope.newAccount = {};
+            // upload on file select or drop
+            $scope.upload = function (file) {
+                if (file){
+                    Upload.upload({
+                        url: 'api/account/'+ $scope.account.id +'/conciliation/upload',
+                        data: {file: file}
+                    }).then(function (resp) {
+                        // start the import process.
+                        $scope.loadFileEntries(resp.data);
+                    }, function (resp) {
+                        addError($scope, 'Error status: ' + resp.status, '');
+                    }, function (evt) {
+                    });
+                } else {
+                    addError($scope, 'Tipo de arquivo inválido');
+                }
 
-        $scope.hide = function() {
-            $mdDialog.cancel();
-        };
-        $scope.cancel = function() {
-            $mdDialog.cancel();
-        };
-        $scope.submit = function() {
-            $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
-            $mdDialog.hide($scope.newAccount);
-        };
-    }
+
+            };
+        }
+    ]);
 });
 

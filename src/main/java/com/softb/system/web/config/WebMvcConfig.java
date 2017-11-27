@@ -28,11 +28,14 @@ import java.util.*;
 
 @Configuration
 @ComponentScan(basePackages = {
-		"com.softb.system.rest", 
-		"com.softb.system.errorhandler.web",
-		"com.softb.system.security.service",
-		"com.softb.system.security.provider",
-		"com.softb.system.security.web"
+		"com.softb.system.rest"
+		,"com.softb.system.errorhandler.web"
+		,"com.softb.system.security.service"
+		,"com.softb.system.security.provider"
+		,"com.softb.system.security.web"
+		,"com.softb.meeconomiza.account.web"
+		,"com.softb.meeconomiza.categorization.web"
+		,"com.softb.meeconomiza.preferences.web"
 })
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletContextInitializer {
 

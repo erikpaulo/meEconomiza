@@ -6,7 +6,7 @@ import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Classe que representa as entradas em uma conta de usuário.
+ * Classe que representa as entradas em uma conciliação.
  * @author Erik Lacerda
  *
  */
@@ -22,9 +22,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "ACCOUNT_ENTRY")
+@Table(name = "CONCILIATION_ENTRY")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountEntry extends BaseEntity<Integer> implements Serializable {
+public class ConciliationEntry extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,43 +32,40 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Date date;
 
+	@Column(name = "DESCRIPTION")
+	@NotEmpty
+	protected String description;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SUBCATEGORY_ID", referencedColumnName = "ID")
     protected SubCategory subCategory;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ACCOUNT_ENTRY_ID", referencedColumnName = "ID")
+    protected AccountEntry accountEntry;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "CONCILIATION_ID", referencedColumnName = "ID")
+//    protected Conciliation conciliation;
 
 	@Column(name = "AMOUNT")
 	@NotNull
 	protected Double amount;
 
-	@Column(name = "TRANSFER")
+	@Column(name = "REJECT")
 	@NotNull
-    @ColumnDefault( value="false" )
-	protected Boolean transfer;
+	protected Boolean reject;
 
-	@Column(name = "ACCOUNT_ID")
-	@NotNull
-	protected Integer accountId;
+	@Transient
+    protected Boolean exists;
 
-    @Column(name = "ACCOUNT_DESTINY_ID")
-	protected Integer accountDestinyId;
+	@Transient
+    protected Boolean installment;
 
-//	@Column(name = "TWIN_ENTRY_ID")
-//	protected Integer twinEntryId;
+	@Column(name = "CONCILIATION_ID")
+	protected Integer conciliationId;
 
-    @Column(name="USER_GROUP_ID")
+	@Column(name="USER_GROUP_ID")
 	@NotNull
 	protected Integer groupId;
-
-//    @Transient
-//    protected Double balance;
-
-//	@Transient
-//	protected Account account;
-
-//    @Override
-//    public AccountEntry clone() throws CloneNotSupportedException {
-//        return new AccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
-//                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
-//                                 this.balance,   this.account);
-//    }
 }

@@ -1,6 +1,6 @@
-package com.softb.save4me.categorization.repository;
+package com.softb.meeconomiza.categorization.repository;
 
-import com.softb.save4me.categorization.model.SubCategory;
+import com.softb.meeconomiza.categorization.model.SubCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,27 +1,36 @@
-package com.softb.save4me.account.web;
+package com.softb.meeconomiza.account.web;
 
-import com.softb.save4me.account.model.Account;
-import com.softb.save4me.account.service.AccountService;
+import com.softb.meeconomiza.account.model.Account;
+import com.softb.meeconomiza.account.model.Conciliation;
+import com.softb.meeconomiza.account.service.AccountService;
+import com.softb.meeconomiza.account.service.ConciliationService;
+import com.softb.meeconomiza.preferences.services.UserPreferencesService;
+import com.softb.system.errorhandler.exception.FormValidationError;
+import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.dao.DataAccessException;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 @RestController("AppAccountController")
 @RequestMapping("/api/account")
 public class AccountController extends AbstractRestController<Account, Integer> {
 
-	public static final String ACCOUNT_OBJECT_NAME = "Account";
-
-//	@Autowired
-//	private AccountRepository accountRepository;
-
     @Inject
     private AccountService accountService;
 
+    @Inject
+    private ConciliationService conciliationService;
+
+    @Inject
+    private UserPreferencesService userPreferencesService;
 
 
     /**
@@ -31,155 +40,73 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Account> listAll() {
-//        List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
         List<Account> accounts = accountService.getAllActiveAccounts(getGroupId());
-        for (Account account: accounts.subList( 0, (accounts.size() > 0 ? accounts.size()-1 : 0) )) {
-            account.setEntries( null );
-        }
-
         return accounts;
     }
 
+    /**
+     * Returns the informed account with no entry.
+     * @param id Id of the account
+     * @return The Account selected
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Account getSummarize(@PathVariable Integer id) throws FormValidationError {
+        Account account = accountService.getAccount(id, getGroupId());
+        account.setEntries(null);
+        return account;
+    }
 
-//    /**
-//     * This point lists all accounts of the current user, grouping them by its types.
-//     *
-//     * @return List
-//     */
-//    @RequestMapping(value = "/summary", method = RequestMethod.GET)
-//    public AccountSummaryResource summary() {
-//        List<AccountGroupResource> groups = new ArrayList<AccountGroupResource> ();
-//        AccountSummaryResource summary = new AccountSummaryResource( );
-//
-//        // Creates structure that groups accounts by its types.
-//        Iterator<Account.Type> k = new ArrayList<> ( Arrays.asList ( Account.Type.values () ) ).iterator ();
-//        while (k.hasNext ()) {
-//            Account.Type key = k.next();
-//            AccountGroupResource groupR = new AccountGroupResource ( key, key.getName () );
-//            groups.add( groupR );
-//        }
-//
-//        // Gets all accounts of the logged user, grouping by account types
-//        List<Account> accounts = accountRepository.findAllByUser( getGroupId() );
-//
-//        // translate the user investments into accounts to show its balances.
-//        List<Account> investAccounts = investmentService.getInvestmentsAsAccounts(getGroupId());
-//        accounts.addAll( (accounts.size() > 0 ? accounts.size()-1 : 0), investAccounts );
-//
-//        Iterator<Account> accs = accounts.iterator ();
-//        while (accs.hasNext ()){
-//            Account account = accs.next ();
-//
-//            // find out the correct group to use.
-//            AccountGroupResource groupR = null;
-//            Iterator<AccountGroupResource> gi = groups.iterator();
-//            while (gi.hasNext()) {
-//                groupR = gi.next();
-//                if (groupR.getId() == account.getType()) {
-//                    break;
-//                }
-//            }
-//
-//            //calculate account amountCurrent.
-//            calculateAccountBalance( account );
-//            groupR.setBalance( groupR.getBalance() + account.getBalance() );
-//            summary.setBalance( summary.getBalance() + account.getBalance() );
-//
-//            groupR.getAccounts().add( account );
-//        }
-//
-//        summary.setGroups( groups );
-//        return summary;
-//    }
+    /**
+     * Import account entries from a CSV file. This point prepares the file's data to be complemented by the user.
+     * @param id Id of the Account
+     * @param request Request
+     * @param response Response
+     * @return
+     * @throws SystemException
+     * @throws DataAccessException
+     * @throws FileUploadException
+     * @throws IOException
+     * @throws ParseException
+     */
+    @RequestMapping(value="/{id}/conciliation/upload", method = RequestMethod.POST)
+    @ResponseBody public Conciliation uploadEntries(@PathVariable Integer id,
+                                                    final HttpServletRequest request,
+                                                    final HttpServletResponse response  )
+            throws SystemException, DataAccessException, FileUploadException, IOException, ParseException {
 
+        // Treat file data, creating a conciliation structure
+        Conciliation conciliation = conciliationService.uploadEntries(id, request, response, getGroupId());
 
+        // Save the draft and return.
+        return conciliationService.save(conciliation, getGroupId());
+    }
 
-//    /**
-//     * Lists the account statement for the selected period
-//     * @return Lista de lançamentos do período.
-//     * @throws ParseException
-//     */
-//    @RequestMapping(value="/{id}/statement", method=RequestMethod.GET)
-//    public Account getAccountStatement(@PathVariable Integer id, @RequestParam String start, @RequestParam String end) throws ParseException {
-//        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-//        Date s = formatter.parse(start);
-//        Date e = formatter.parse(end);
-//        return accountService.getAccountStatement(id, s, e);
-//    }
+    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.GET)
+    @ResponseBody public Conciliation getConciliation( @PathVariable Integer conciliationId  ){
+        return conciliationService.get(conciliationId, getGroupId(), true);
+    }
 
-//    /**
-//     * Returns the informed account with all its entries.
-//     * @param id Id of the account
-//     * @return The Account selected
-//     * @throws FormValidationError
-//     */
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    public Account get(@PathVariable Integer id) throws FormValidationError {
-//        return accountRepository.findOne( id, getGroupId() );
-//    }
-//
-//    /**
-//     * This point creates a new Account into the system.
-//     * @param account Account to create
-//     * @return Account created
-//     * @throws FormValidationError
-//     */
-//    @RequestMapping(method = RequestMethod.POST)
-//    @Transactional
-//	public Account create(@RequestBody Account account) throws FormValidationError {
-//
-//        account.setGroupId( getGroupId() );
-//        account.setActivated( true );
-//        account.setLastUpdate( new Date( ) );
-//        account.setCreateDate( new Date( ) );
-//        validate( ACCOUNT_OBJECT_NAME, account );
-//
-//        account = accountRepository.save( account );
-//        account.setBalance( account.getStartBalance() );
-//
-//        return account;
-//	}
-//
-//    /**
-//     * This access deletes one user's banking account. If it has entries, then inactivate it.
-//     * @param id Id of the account
-//     * @throws FormValidationError
-//     */
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//    public void delete(@PathVariable Integer id) throws FormValidationError {
-//
-//        Account account = accountRepository.findOne( id, getGroupId() );
-//        if (account == null){
-//            throw new EntityNotFoundException( "This account doesn't belong to the current user." );
-//        }
-//
-//        // Gets all entries of this account to decide whether it will be removed or inactivated.
-//        if (account.getEntries() != null && account.getEntries().size()>0){
-//            account.setActivated( false );
-//            accountRepository.save( account );
-//        } else {
-//            accountRepository.delete( account );
-//        }
-//    }
-//
-//    private Account calculateAccountBalance (Account account){
-//        Double balance = account.getStartBalance();
-//
-//        Iterator<AccountEntry> entries = account.getEntries().iterator();
-//        while (entries.hasNext()){
-//            AccountEntry entry = entries.next();
-//            balance += entry.getAmount();
-//        }
-//        account.setBalance( balance );
-//
-//        return account;
-//    }
-//
-//    protected void updateLastUpdate(Integer accountId){
-//
-//        Account account = accountRepository.findOne( accountId );
-//        account.setLastUpdate( new Date() );
-//        accountRepository.save( account );
-//    }
+    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.POST)
+    @ResponseBody public Conciliation saveConciliation( @RequestBody Conciliation conciliation  ){
+
+        return conciliationService.save(conciliation, getGroupId());
+    }
+
+    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.DELETE)
+    @ResponseBody public void delConciliation( @PathVariable Integer id, @PathVariable Integer conciliationId ){
+        conciliationService.delete(conciliationId, getGroupId());
+    }
+
+    @RequestMapping(value="/{id}/conciliation/{conciliationId}/sync", method = RequestMethod.POST)
+    @ResponseBody public Conciliation syncConciliationIntoAccount( @PathVariable Integer id, @RequestBody Conciliation conciliation  ){
+        return conciliationService.syncEntriesIntoAccount(conciliation, getGroupId());
+    }
+
+    @RequestMapping(value="/{id}/conciliation/{conciliationId}/rollback", method = RequestMethod.POST)
+    @ResponseBody public Conciliation rollbackConciliation( @PathVariable Integer conciliationId  ){
+        return conciliationService.rollback(conciliationId, getGroupId());
+    }
+
 }
 

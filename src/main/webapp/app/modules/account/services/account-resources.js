@@ -1,16 +1,14 @@
 define(['./module'], 
 function (module) {
 	
-	module.factory('ConciliationResource', function($resource) {
+	module.factory('AccountResource', function($resource) {
 	    return $resource(
-	        'api/account/conciliation/:id',
+	        'api/account/:id/:action',
 	        {id: '@id'},
 	        {
-	            delete:     { method :'DELETE',  params: {}, isArray : true },
-	            get:		{ method :'GET',  params: {}, isArray : false },
+	            listAll:    { method :'GET',  params: {}, isArray : true },
+	            get:        { method :'GET',  params: {}, isArray : false }
 	        }
 	    );
-
 	});
-
-});	
+});

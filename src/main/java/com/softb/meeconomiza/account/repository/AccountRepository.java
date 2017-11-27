@@ -1,6 +1,6 @@
-package com.softb.save4me.account.repository;
+package com.softb.meeconomiza.account.repository;
 
-import com.softb.save4me.account.model.Account;
+import com.softb.meeconomiza.account.model.Account;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,10 +13,10 @@ import java.util.List;
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 	
 	@Query("select a from Account a where a.groupId = :groupId order by a.name")
-	List<Account> findAllByUser(@Param("groupId") Integer groupId) throws DataAccessException;
+	List<Account> findAll(@Param("groupId") Integer groupId) throws DataAccessException;
 	
 	@Query("select a from Account a where a.groupId = :groupId and activated is true order by a.name")
-	List<Account> findAllActiveByUser(@Param("groupId") Integer groupId) throws DataAccessException;
+	List<Account> findAllActive(@Param("groupId") Integer groupId) throws DataAccessException;
 
 	@Query("select a from Account a where a.id = :id and a.groupId = :groupId")
 	Account findOne(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;

@@ -1,4 +1,4 @@
-package com.softb.save4me.categorization.model;
+package com.softb.meeconomiza.categorization.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.softb.system.repository.BaseEntity;
@@ -27,13 +27,13 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 	@NotEmpty
 	protected String name;
 
-//	@Column(name = "ACTIVATED")
-//	@NotNull
-//	protected Boolean activated;
+	@Column(name = "ACTIVATED")
+	@NotNull
+	protected Boolean activated;
 
-//	@Column(name = "TYPE")
-//    @Enumerated(EnumType.STRING)
-//	protected Type type;
+	@Column(name = "TYPE")
+    @Enumerated(EnumType.STRING)
+	protected Type type;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID")
@@ -51,7 +51,7 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 	protected String fullName;
 
     public enum Type {
-        FC ( "Despesa Mensal Fixa" ), IC ( "Despesa Irregular" ), VC ( "Despesa Mensal Variável" );
+        F ( "Despesa Mensal Fixa" ), I ( "Despesa Irregular" ), V ( "Despesa Mensal Variável" );
         private String name;
 
         Type(String name) {
@@ -71,13 +71,13 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
         this.name = name;
     }
 
-//    public Boolean getActivated() {
-//        return activated;
-//    }
-//
-//    public void setActivated(Boolean activated) {
-//        this.activated = activated;
-//    }
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
 
     public Category getCategory() {
         return category;
@@ -104,18 +104,38 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
     }
 
     public String getFullName() {
-        return this.category.getType().getName() +" :: "+ this.category.getName() +" : "+ this.name;
+        if (this.category != null){
+            fullName = this.category.getType().getName() +" :: "+ this.category.getName() +" : "+ this.name;
+        }
+
+        return fullName;
     }
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-//    public Type getType() {
-//        return type;
-//    }
-//
-//    public void setType(Type type) {
-//        this.type = type;
-//    }
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+
+    public boolean equals(SubCategory s) {
+       return this.id == s.id;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (activated != null ? activated.hashCode() : 0);
+        result = 31 * result + (category != null ? category.hashCode() : 0);
+        result = 31 * result + (groupId != null ? groupId.hashCode() : 0);
+        result = 31 * result + (categoryId != null ? categoryId.hashCode() : 0);
+        return result;
+    }
 }

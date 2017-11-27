@@ -1,9 +1,9 @@
-package com.softb.save4me.categorization.web;
+package com.softb.meeconomiza.categorization.web;
 
-import com.softb.save4me.categorization.model.Category;
-import com.softb.save4me.categorization.model.SubCategory;
-import com.softb.save4me.categorization.repository.CategoryRepository;
-import com.softb.save4me.categorization.repository.SubCategoryRepository;
+import com.softb.meeconomiza.categorization.model.Category;
+import com.softb.meeconomiza.categorization.model.SubCategory;
+import com.softb.meeconomiza.categorization.repository.CategoryRepository;
+import com.softb.meeconomiza.categorization.repository.SubCategoryRepository;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,83 +32,48 @@ public class CategoryController extends AbstractRestController<Category, Integer
      *
      * @return List
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/category", method = RequestMethod.GET)
     public List<Category> listAllCategories() {
-        List<Category> groups = new ArrayList<Category> ();
-
-        // Creates structure that groups categories by its types.
-        Iterator<Category.Type> k = new ArrayList<> ( Arrays.asList ( Category.Type.values () ) ).iterator ();
-        while (k.hasNext ()) {
-            Category.Type key = k.next();
-            Category groupR = new Category ( /*key, key.getName ()*/ );
-            groups.add( groupR );
-        }
-
         // Gets all categories of the logged user, grouping by category types
         List<Category> categories = categoryRepository.listAllByUser ( getGroupId() );
+
+        return categories;
+    }
+
+    /**
+     * Gets all subcategories registered for this user with its full name
+     * @return
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category/all/subcategory", method = RequestMethod.GET)
+    public List<SubCategory> listAllSubcategories() throws FormValidationError {
+        List<SubCategory> listToReturn = new ArrayList<>(  );
+
+        // Gets all categories of the logged user, grouping by category types
+        List<Category> categories = categoryRepository.listAllByUser( getGroupId() );
         Iterator<Category> categs = categories.iterator ();
         while (categs.hasNext ()){
             Category category = categs.next ();
 
-            // find out the correct group to use.
-//            CategoryGroupResource groupR = null;
-//            Iterator<CategoryGroupResource> gi = groups.iterator();
-//            while (gi.hasNext()) {
-//                groupR = gi.next();
-//                if (groupR.getId() == category.getType()) {
-//                    break;
-//                }
-//            }
-
-            //Sort its subcategories by name
+            // Define each subcategory full name.
             List<SubCategory> subcategories = category.getSubcategories();
-            Collections.sort(subcategories, new Comparator<SubCategory>(){
-                public int compare(SubCategory o1, SubCategory o2) {
-                    return o1.getName().compareTo(o2.getName());
+            Iterator<SubCategory> s = subcategories.iterator();
+            while (s.hasNext()){
+                SubCategory subCategory = s.next();
+                if (subCategory.getActivated()){
+                    listToReturn.add( subCategory );
                 }
-            });
-            category.setSubcategories( subcategories );
-
-//            groupR.getCategories ().add ( category );
+            }
         }
 
-        return groups;
-    }
+        Collections.sort(listToReturn, new Comparator<SubCategory>(){
+            public int compare(SubCategory o1, SubCategory o2) {
+                return o1.getFullName().compareTo(o2.getFullName());
+            }
+        });
 
-//    /**
-//     * Gets all subcategories registered for this user with its full name
-//     * @return
-//     * @throws FormValidationError
-//     */
-//    @RequestMapping(value = "/category/all/subcategory", method = RequestMethod.GET)
-//    public List<SubCategory> listAllSubcategories() throws FormValidationError {
-//        List<SubCategory> listToReturn = new ArrayList<>(  );
-//
-//        // Gets all categories of the logged user, grouping by category types
-//        List<Category> categories = categoryRepository.listAllByUser( getGroupId() );
-//        Iterator<Category> categs = categories.iterator ();
-//        while (categs.hasNext ()){
-//            Category category = categs.next ();
-//
-//            // Define each subcategory full name.
-//            List<SubCategory> subcategories = category.getSubcategories();
-//            Iterator<SubCategory> s = subcategories.iterator();
-//            while (s.hasNext()){
-//                SubCategory subCategory = s.next();
-//                if (subCategory.getActivated()){
-//                    listToReturn.add( subCategory );
-//                }
-//            }
-//        }
-//
-//        Collections.sort(listToReturn, new Comparator<SubCategory>(){
-//            public int compare(SubCategory o1, SubCategory o2) {
-//                return o1.getFullName().compareTo(o2.getFullName());
-//            }
-//        });
-//
-//        return listToReturn;
-//    }
+        return listToReturn;
+    }
 
     /**
      * This point creates a new Category into the system.
@@ -128,28 +93,27 @@ public class CategoryController extends AbstractRestController<Category, Integer
 		return category;
 	}
 
-//    /**
-//     * This point creates a new Sub Category into the system.
-//     * @param subCategory SubCategory to create
-//     * @return SubCategory created
-//     * @throws FormValidationError
-//     */
-//    @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
-//	public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
-//
-//        Category category = categoryRepository.findOneByUser( categoryId, getGroupId() );
-//        subCategory.setGroupId( getGroupId() );
-//        subCategory.setActivated( true );
-//        subCategory.setCategory( category );
-//
-//        validate( SUBCATEGORY_OBJECT_NAME,  subCategory);
-//
-//        // Salva a categoria.
-//        subCategory = subCategoryRepository.save(subCategory);
-//		return subCategory;
-//	}
+    /**
+     * This point creates a new Sub Category into the system.
+     * @param subCategory SubCategory to create
+     * @return SubCategory created
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category/{categoryId}/subcategory", method = RequestMethod.POST)
+    public SubCategory create(@PathVariable Integer categoryId, @RequestBody SubCategory subCategory) throws FormValidationError {
 
-	
+        Category category = categoryRepository.findOneByUser( categoryId, getGroupId() );
+        subCategory.setGroupId( getGroupId() );
+        subCategory.setActivated( true );
+        subCategory.setCategory( category );
+
+        validate( SUBCATEGORY_OBJECT_NAME,  subCategory);
+
+        // Salva a categoria.
+        subCategory = subCategoryRepository.save(subCategory);
+        return subCategory;
+    }
+
 	@Transactional
     @RequestMapping(value = "/category/{id}", method = RequestMethod.PUT)
 	public Category update(@PathVariable Integer id, @RequestBody Category category) {

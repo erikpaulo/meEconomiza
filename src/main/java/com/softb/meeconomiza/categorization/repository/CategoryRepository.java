@@ -1,6 +1,6 @@
-package com.softb.save4me.categorization.repository;
+package com.softb.meeconomiza.categorization.repository;
 
-import com.softb.save4me.categorization.model.Category;
+import com.softb.meeconomiza.categorization.model.Category;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

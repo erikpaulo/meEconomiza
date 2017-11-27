@@ -4,7 +4,6 @@ import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Classe que representa as Contas bancárias do usuário
+ * Classe que representa uma conciliação associada a uma conta.
  * @author Erik Lacerda 
  *
  */
@@ -21,62 +20,29 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "ACCOUNT")
-public class Account extends BaseEntity<Integer> implements Serializable {
+@Table(name = "CONCILIATION")
+public class Conciliation extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "NAME")
-	@NotEmpty
-	protected String name;
-
-	@Column(name = "INSTITUTION")
-	@NotEmpty
-	protected String institution;
-
-	@Column(name = "KIND")
-	@NotEmpty
-	protected String kind;
-
-	@Column(name = "TYPE")
+	@Column(name = "DATE")
 	@NotNull
-	@Enumerated(EnumType.STRING)
-	protected Type type;
+	protected Date date;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-    protected List<AccountEntry> entries;
+	@Column(name = "ACCOUNT_ID")
+	@NotNull
+	protected Integer accountId;
 
-    @Column(name="ACTIVATED")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "CONCILIATION_ID", referencedColumnName = "ID")
+    protected List<ConciliationEntry> entries;
+
+    @Column(name="IMPORTED")
     @NotNull
-    protected Boolean activated;
+    protected Boolean imported;
 
     @Column(name="USER_GROUP_ID")
 	@NotNull
 	protected Integer groupId;
-
-    @Column(name="START_BALANCE")
-    @NotNull
-    protected Double startBalance;
-
-    @Column(name="LAST_UPDATE")
-    @NotNull
-    protected Date lastUpdate;
-
-	@Transient
-    protected Double balance;
-
-    public enum Type {
-        CKA ( "Conta Corrente" ), INV ( "Conta Investimento" ), CCA ( "Cartão de Crédito" );
-        private String name;
-
-        Type(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-    }
 
 }

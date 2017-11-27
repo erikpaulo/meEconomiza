@@ -1,10 +1,12 @@
 package com.softb.system.rest;
 
+import com.softb.meeconomiza.preferences.repository.UserPreferencesRepository;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Validator;
 
@@ -36,6 +38,8 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
     private UserAccountService userAccountService;
     @Resource
     private Validator validator;
+    @Autowired
+    private UserPreferencesRepository userPreferencesRepository;
 
 //    public abstract JpaRepository<T, ID> getRepository();
 
@@ -66,7 +70,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 //        logger.debug("update() of id#{} with body {}", id, json);
 //        logger.debug("T json is of type {}", json.getClass());
 //
-//        // TODO - Valid if exists. If not, throw exception
+//        // TODO - Valid if imported. If not, throw exception
 //        // T entity = repository.findOne(id);
 //
 //        validate(getEntityName(), json);

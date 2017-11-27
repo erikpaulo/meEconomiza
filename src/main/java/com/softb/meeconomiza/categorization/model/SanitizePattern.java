@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * Represents the relation between an expense's description with its subcategory
+ * Represents a set of patterns that are applied to descriptions to make it more predicted
  * @author Erik Lacerda
  *
  */
@@ -19,29 +19,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "CATEGORY_PREDICTION")
-public class CategoryPrediction extends BaseEntity<Integer> implements Serializable {
+@Table(name = "SANITIZE_PATTERN")
+public class SanitizePattern extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "DESCRIPTION")
+	@Column(name = "PATTERN")
 	@NotEmpty
-	protected String description;
+	protected String pattern;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "SUBCATEGORY_ID", referencedColumnName = "ID")
-	protected SubCategory subCategory;
-
-	@Column(name = "TIMES_USED")
+	@Column(name = "replaceFor")
 	@NotNull
-	protected Integer timesUsed;
-
-	@Column(name = "TIMES_REJECTED")
-	@NotNull
-	protected Integer timesRejected;
-
-    @Column(name="USER_GROUP_ID")
-	@NotNull
-	protected Integer groupId;
+	protected String replaceFor;
 
 }

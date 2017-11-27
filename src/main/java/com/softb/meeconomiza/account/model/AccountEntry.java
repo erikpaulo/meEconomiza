@@ -1,7 +1,7 @@
-package com.softb.save4me.account.model;
+package com.softb.meeconomiza.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.softb.save4me.categorization.model.SubCategory;
+import com.softb.meeconomiza.categorization.model.SubCategory;
 import com.softb.system.repository.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,13 +1,13 @@
 define(['./module'], 
 function (module) {
 	
-	module.factory('AccountResource', function($resource) {
+	module.factory('ConciliationResource', function($resource) {
 	    return $resource(
-	        'api/account/:id/:action',
-	        {id: '@id'},
+	        'api/account/:accountId/conciliation/:id/:action',
+	        {accountId: '@accountId', id: '@id'},
 	        {
-	            listAll:            { method :'GET',  params: {}, isArray : true },
-	            getConciliations:   { method: 'GET',  params: {action: 'conciliation'}, isArray: true}
+	            syncIntoAccount: { method :'POST',  params: {action: "sync"}, isArray : false },
+	            rollback: { method :'POST',  params: {action: "rollback"}, isArray : false },
 	        }
 	    );
 	});

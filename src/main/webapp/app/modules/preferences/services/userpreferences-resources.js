@@ -1,13 +1,12 @@
 define(['./module'], 
 function (module) {
 	
-	module.factory('ConciliationResource', function($resource) {
+	module.factory('UserPreferencesResource', function($resource) {
 	    return $resource(
-	        'api/account/:accountId/conciliation/:id/:action',
-	        {accountId: '@accountId', id: '@id'},
+	        'api/user/preferences/:id',
+	        {id: '@id'},
 	        {
-	            syncIntoAccount: { method :'POST',  params: {action: "sync"}, isArray : false },
-	            rollback: { method :'POST',  params: {action: "rollback"}, isArray : false },
+//	            syncIntoAccount: { method :'POST',  params: {action: "sync"}, isArray : false }
 	        }
 	    );
 	});
