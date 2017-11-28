@@ -15,7 +15,7 @@ TBD - Erik will put some introdution here
 
 ```command
 mvn clean package
-docker-compose up
+docker-compose -f stack.yml up
 ```
 
 Firt time docker will build 2 images like defined on stack.yml file.
