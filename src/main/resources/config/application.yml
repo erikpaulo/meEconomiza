@@ -5,7 +5,8 @@ server:
         access_log_enabled: true
         basedir: target/tomcat
 
-DATABASE_URL: postgres://eriklacerda@localhost:5432/meeconomiza
+# DATABASE_URL: postgres://postgres:admin@localhost:5432/meeconomiza
+DATABASE_URL: postgres://postgres:admin@postgres-local:5432/meeconomiza
 
 spring:
     application:
@@ -27,7 +28,7 @@ spring:
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
 
     messageSource:
-        cacheSeconds: 1    
+        cacheSeconds: 1
 
 cache:
     timeToLiveSeconds: 3600
@@ -39,7 +40,6 @@ application:
         google:
             clientId: 316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com
             clientSecret: otHjsiw9GrRL4uRtwSnsG2_A
-    security: 
+    security:
         secureChannel: http
         key: meEconomiza
-
