@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  postgres:
+    build: postgresdb
+    container_name: postgres-local
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+
+  application:
+    build: .
+    ports:
+      - "8080:8080"
