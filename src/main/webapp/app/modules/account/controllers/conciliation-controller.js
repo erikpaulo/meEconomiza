@@ -21,10 +21,12 @@ define(['./module',
                 $scope.userPreferences = preferences;
             });
 
-            $scope.newSubcategory = function(fullName){
+            $scope.newSubcategory = function(fullName, item){
                 CategoryService.newSubcategoryShortcut($scope, fullName).then(function(newSubcategory){
                     SubCategory.listAll(function (subCategories){
                         $scope.subCategories = subCategories;
+
+                        item.subCategory = newSubcategory;
                     });
 
                     addSuccess($scope);

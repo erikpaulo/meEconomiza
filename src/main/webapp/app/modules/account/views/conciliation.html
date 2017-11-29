@@ -142,7 +142,7 @@
                                             </md-item-template>
                                             <md-not-found>
                                                 Categoria não encontrada.
-                                                <a ng-click="newSubcategory(searchText)">Criar nova!</a>
+                                                <a ng-click="newSubcategory(searchText, item)">Criar nova!</a>
                                             </md-not-found>
                                         </md-autocomplete>
                                         <div class="errors" ng-messages="myForm.investType.$error" ng-if="myForm.$dirty">
