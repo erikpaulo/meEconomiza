@@ -83,8 +83,10 @@ define([ './module'
                         var found = false;
                         for(var i in categories){
                             if (categories[i].name == category.name){
-                                category.id = categories[i].id;
-                                found = true;
+                                if (category.type == categories[i].type){
+                                    category.id = categories[i].id;
+                                    found = true;
+                                }
                             }
                         }
 
