@@ -72,7 +72,7 @@ public class ConciliationService {
         // Sort Entries DESC
         Collections.sort(conciliation.getEntries(), new Comparator<ConciliationEntry>(){
             public int compare(ConciliationEntry o1, ConciliationEntry o2) {
-                return o2.getDate().compareTo(o1.getDate());
+                return o1.getId().compareTo(o2.getId());
             }
         });
         return conciliation;
