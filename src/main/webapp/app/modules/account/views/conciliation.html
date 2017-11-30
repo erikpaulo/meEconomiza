@@ -153,8 +153,8 @@
                                     <td flex="10">
                                         <md-button class="md-icon-button" ng-click="updateRejection(item, !item.reject)" aria-label="Rejeitar" ng-disabled="conciliation.imported">
                                             <md-tooltip ng-if="item.exists" md-direction="left">Existe um lançamento na mesma data e com mesmo valor</md-tooltip>
-                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step" ng-if="!item.reject">thumb_up</md-icon>
-                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step" ng-if="item.reject">thumb_down</md-icon>
+                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step md-18" ng-if="!item.reject">thumb_up</md-icon>
+                                            <md-icon ng-class="{'color-selection': item.exists}" class="material-icons step md-18" ng-if="item.reject">thumb_down</md-icon>
                                         </md-button>
                                     </td>
                                 </tr>

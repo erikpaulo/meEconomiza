@@ -282,7 +282,7 @@ table > tbody > tr > td {
     border-top: 0 !important;
     font-size: 12px;
     text-align: center;
-    padding: 6px;
+    padding: 1px;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
