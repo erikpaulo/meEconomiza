@@ -53,8 +53,12 @@ public class CategoryPredictionService {
                 categoryPrediction.setTimesUsed(categoryPrediction.getTimesUsed()+1);
             } else {
                 categoryPrediction.setTimesRejected(categoryPrediction.getTimesRejected()+1);
-                categoryPrediction.setSubCategory(subCategory);
-                categoryPredictionRepository.save(categoryPrediction);
+                if (categoryPrediction.getTimesRejected() > categoryPrediction.getTimesUsed()){
+                    categoryPrediction.setSubCategory(subCategory);
+                    categoryPrediction.setTimesRejected(0);
+                    categoryPrediction.setTimesUsed(1);
+                    categoryPredictionRepository.save(categoryPrediction);
+                }
             }
 
         }
