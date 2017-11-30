@@ -1,5 +1,5 @@
 /**
-* heroku pg:psql --app meEconomiza < /Users/eriklacerda/Documents/Personal/Projetos/meEconomia/src/main/resources/config/postgres/db-postgres-clear.sql
+* heroku pg:psql --app savefy < /Users/eriklacerda/Documents/Personal/Projetos/meEconomia/src/main/resources/config/postgres/db-postgres-clear.sql
 */
 
 DELETE FROM USER_ROLE;

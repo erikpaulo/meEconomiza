@@ -1,6 +1,6 @@
 package com.softb.system.rest;
 
-import com.softb.meeconomiza.preferences.repository.UserPreferencesRepository;
+import com.softb.savefy.preferences.repository.UserPreferencesRepository;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.security.model.UserAccount;
 import com.softb.system.security.service.UserAccountService;

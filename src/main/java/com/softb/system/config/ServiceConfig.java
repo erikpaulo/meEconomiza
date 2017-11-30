@@ -16,9 +16,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @ComponentScan(basePackages = { 
 		"com.softb.system.security.service"
         ,"com.softb.system.security.provider"
-        ,"com.softb.meeconomiza.account.service"
-        ,"com.softb.meeconomiza.categorization.service"
-        ,"com.softb.meeconomiza.preferences.services"
+        ,"com.softb.savefy.account.service"
+        ,"com.softb.savefy.categorization.service"
+        ,"com.softb.savefy.preferences.services"
 })
 @Import(value={RepositoryConfig.class, LocaleConfig.class})
 public class ServiceConfig {

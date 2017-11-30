@@ -33,9 +33,9 @@ import java.util.*;
 		,"com.softb.system.security.service"
 		,"com.softb.system.security.provider"
 		,"com.softb.system.security.web"
-		,"com.softb.meeconomiza.account.web"
-		,"com.softb.meeconomiza.categorization.web"
-		,"com.softb.meeconomiza.preferences.web"
+		,"com.softb.savefy.account.web"
+		,"com.softb.savefy.categorization.web"
+		,"com.softb.savefy.preferences.web"
 })
 public class WebMvcConfig extends WebMvcConfigurerAdapter implements ServletContextInitializer {
 

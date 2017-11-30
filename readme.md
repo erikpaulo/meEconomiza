@@ -42,7 +42,7 @@ services:
 You can connect into postgres container using psql command. See the command bellow
 
 ```
-docker exec -it postgres-local psql -U postgres meeconomiza
+docker exec -it postgres-local psql -U postgres savefy
 ```
 
 ## Stuff used to make this:

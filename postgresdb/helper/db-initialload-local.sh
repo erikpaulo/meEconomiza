@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 
-COPY USER_GROUP FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-meEconomiza-group.csv' DELIMITER ',' CSV;
-COPY USER_ACCOUNT FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-meEconomiza-user_account.csv' DELIMITER ',' CSV;
-COPY USER_ROLE FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-meEconomiza-roles.csv' DELIMITER ',' CSV;
+COPY USER_GROUP FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-savefy-group.csv' DELIMITER ',' CSV;
+COPY USER_ACCOUNT FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-savefy-user_account.csv' DELIMITER ',' CSV;
+COPY USER_ROLE FROM '/Users/eriklacerda/Dev-Projects/ipocket/src/main/resources/config/postgres/load-data/db-postgres-load-savefy-roles.csv' DELIMITER ',' CSV;
 copy CATEGORY from '/Users/eriklacerda/Dev-Projects/ipocket/heroku-db/CATEGORY.csv' WITH (DELIMITER ',', NULL '');
 copy SUBCATEGORY from '/Users/eriklacerda/Dev-Projects/ipocket/heroku-db/SUBCATEGORY.csv' WITH (DELIMITER ',', NULL '');
 copy ACCOUNT from '/Users/eriklacerda/Dev-Projects/ipocket/heroku-db/ACCOUNT.csv' WITH (DELIMITER ',', NULL '');

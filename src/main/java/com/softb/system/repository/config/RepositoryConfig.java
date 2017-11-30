@@ -16,15 +16,15 @@ import java.net.URISyntaxException;
 @Configuration
 @EnableJpaRepositories(basePackages = { 
 		"com.softb.system.security.repository"
-		,"com.softb.meeconomiza.account.repository"
-		,"com.softb.meeconomiza.categorization.repository"
-		,"com.softb.meeconomiza.preferences.repository"
+		,"com.softb.savefy.account.repository"
+		,"com.softb.savefy.categorization.repository"
+		,"com.softb.savefy.preferences.repository"
 })
 @EntityScan(basePackages = { 
 		"com.softb.system.security.model"
-		,"com.softb.meeconomiza.account.model"
-		,"com.softb.meeconomiza.categorization.model"
-		,"com.softb.meeconomiza.preferences.model"
+		,"com.softb.savefy.account.model"
+		,"com.softb.savefy.categorization.model"
+		,"com.softb.savefy.preferences.model"
 })
 public class RepositoryConfig  {
 

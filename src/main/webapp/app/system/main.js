@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/meEconomiza',
+    baseUrl: '/savefy',
     waitSeconds: 30,
     paths: {
     	'jquery': 'resources/lib/jquery/jquery.min',

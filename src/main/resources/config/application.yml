@@ -1,15 +1,15 @@
 server:
     port: 8080
-    contextPath: /meEconomiza
+    contextPath: /savefy
     tomcat:
         access_log_enabled: true
         basedir: target/tomcat
 
-DATABASE_URL: postgres://erikpaulo@localhost:5432/meeconomiza
+DATABASE_URL: postgres://eriklacerda@localhost:5432/savefy
 
 spring:
     application:
-        name: meEconomiza
+        name: savefy
         version: 2017.1
 
     jpa:
@@ -41,4 +41,4 @@ application:
             clientSecret: otHjsiw9GrRL4uRtwSnsG2_A
     security:
         secureChannel: http
-        key: meEconomiza
+        key: savefy
