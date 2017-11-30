@@ -18,7 +18,7 @@ mvn clean package
 docker-compose -f stack.yml up
 ```
 
-Firt time docker will build 2 images like defined on stack.yml file.
+Docker will build two images like defined on stack.yml file. It takes a few minutes at the first time.
 
 ```yaml
 version: '3.1'
@@ -39,14 +39,14 @@ services:
 
 ```
 
-You can connect into database container and use psql command to check your schema and make some queries.
+You can connect into postgres container using psql command. See the command bellow
 
-docker exec -it meeconomiza_database_1 psql -U postgres
+```
+docker exec -it postgres-local psql -U postgres meeconomiza
+```
 
+## Stuff used to make this:
 
-java -jar taret/meEconomiza-2017.01.jar
-
-### Stuff used to make this:
 [1]: http://java.com/en/
 [2]: https://maven.apache.org/download.cgi
 [3]: http://www.docker.com
