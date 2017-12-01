@@ -1,9 +1,9 @@
 <section ng-controller="AccountsController">
-    <div layout="column" flex-offset="15" flex="70" layout-padding>
+    <div layout="column" flex-offset-gt-xs="15" flex-gt-xs="70" layout-padding>
         <div ng-repeat="(groupName,accounts) in groupedAccounts" layout="column" layout-padding>
             <span class="md-title c-padding-5 highlighted">{{groupName | accountTypeName}}</span>
-            <div layout="row">
-                <md-card ng-repeat="account in accounts" flex="25" class="md-whiteframe-2dp border-radius-5">
+            <div layout="row" layout-align-xs="center center">
+                <md-card ng-repeat="account in accounts" flex-gt-xs="25" class="md-whiteframe-2dp border-radius-5">
                     <md-card-header class="md-body-2" layout-align="center center">
                         {{account.name}}
                     </md-card-header>
