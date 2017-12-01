@@ -9,8 +9,22 @@
                     </md-card-header>
                     <md-divider></md-divider>
                     <md-card-content>
-                                <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-headline md-padding">{{account.balance | currency}}</div>
-                                <div layout="row" layout-align="center end" md-colors="{color: 'grey-700'}" class="md-caption">Ultima atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</div>
+                        <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-headline md-padding">{{account.balance | currency}}</div>
+                        <div layout="row" layout-align="center end" md-colors="{color: 'grey-700'}" class="md-caption">Ultima atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</div>
+                    </md-card-content>
+                </md-card>
+                <md-card flex-gt-xs="25" class="md-whiteframe-2dp border-radius-5 no-bg flat add" style="">
+                    <md-card-content layout-align="center center">
+                        <div layout="column" layout-align="center center" style="min-height: 139px;">
+                            <div layout="row">
+                                <md-button aria-label="Adicionar" class="md-fab md-hue-2">
+                                    <md-icon class="material-icons">add_circle</md-icon>
+                                </md-button>
+                            </div>
+                            <div layout="row">
+                                <span  md-colors="{color: 'grey-500'}">Adicionar {{groupName | accountTypeName}}</span>
+                            </div>
+                        </div>
                     </md-card-content>
                 </md-card>
             </div>

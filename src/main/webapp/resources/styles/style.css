@@ -95,10 +95,6 @@ md-sidenav md-list md-list-item:hover {
     color:red;
 }
 
-.c-caption{
-    color: #7A7A7A;
-}
-
 .md-title.highlighted {
     border-bottom: 2px solid #93c47d;
 }
@@ -126,43 +122,13 @@ md-card.no-border{
 md-card.no-bg{
     background-color: rgb(250,250,250);
 }
-/*
-md-card.mdl-color--green-600 {
-    color: #fff;
+md-card.add{
+    border-style: dashed
 }
-
-md-card.summary-card{
-    height: 95px;
-}
-
-md-card.report-card.white, md-card.report-card md-icon{
-    color:white !important;
-}
-md-card.report-card md-card-title-text span.md-subhead {
-    font-style: italic;
-}
-md-card.card-hover:hover{
-    box-shadow: 0 8px 9px -5px rgba(0,0,0,.2),0 15px 22px 2px rgba(0,0,0,.14),0 6px 28px 5px rgba(0,0,0,.12);
+md-card.add:hover{
+    border-style:solid;
     cursor:pointer;
 }
-
-.c-vertical-title{
-    transition: rotate(270deg);
-    writing-mode: tb-rl;
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    transform: rotate(180deg);
-    white-space: nowrap;
-    display: block;
-    bottom: 0;
-    width: 20px;
-    padding: 16px 0;
-    font-size: x-large;
-    letter-spacing: 0.08em;
-}
-*/
 
 /********** >>> ICONS <<< ***********/
 .material-icons.md-18 {
@@ -190,40 +156,6 @@ md-card.card-hover:hover{
 }
 
 
-/********** >>> TO-DO LIST <<< **********
-md-card.to-do-list md-card-header{
-    color: white;
-}
-md-card.to-do-list md-card-content{
-    min-height:381px;
-    max-height:381px;
-}
-md-card.to-do-list md-card-content md-list-item md-checkbox.md-icon{
-    border-color: white;
-
-}
-md-card.to-do-list md-card-content md-list-item .md-list-item-text.done{
-    text-decoration: line-through;
-    color: rgba(176,190,197,0.87);
-}
-md-card.to-do-list md-card-actions md-input-container{
-    margin-bottom: 0px;
-}
-md-card.to-do-list md-card-actions md-input-container.md-icon-right{
-    padding-left:5px;
-}
-md-card.to-do-list md-card-actions md-input-container.md-has-icon>input{
-    padding-left: 8px;
-    padding-right: 8px;
-}
-md-card.to-do-list md-card-actions md-input-container.md-has-icon>label{
-    left: 8px;
-}
-md-card.to-do-list md-card-actions md-input-container.md-has-icon>md-icon{
-    cursor:pointer;
-}
-*/
-
 /********** >>> DIVIDER <<< ***********/
 md-divider.blue{
     background-color:rgb(63,81,181);
@@ -232,43 +164,6 @@ md-divider.thin{
     border-top: 1px solid grey;
 }
 
-
-/********** >>> INPUT <<< **********
-md-input-container.md-input-invalid md-select md-select-value{
-    border-color: rgb(221,44,0);
-}
-md-option:hover{
-    background-color: #eceff1 !important;
-}
-
-md-input-container.c-input-container-no-error div.md-errors-spacer{
-    min-height: 0px;
-}
-
-md-datepicker{
-    margin: 18px 0;
-    height:43px;
-}
-
-.md-datepicker-input-container{
-    padding-bottom: 3px;
-}
-
-.md-datepicker-button{
-    height:43px !important;
-}
-
-fieldset{
-    border: 1px solid lightgray;
-    padding-left: 8px;
-    margin: 0 2px;
-}
-
-.c-no-error md-input-container{
-    padding-bottom: 0 !important;
-    margin-bottom: 0;
-}
-*/
 
 /********** >>> TABLE <<< **********/
 table > thead > tr > th {
@@ -312,25 +207,13 @@ md-autocomplete input:not(.md-input) {
     -ms-flex-preferred-size: 26px;
 }
 
-/*md-autocomplete-wrap{
-    box-shadow: none !important;
-    border-bottom: 1px solid rgba(0,0,0,0.12);
-}*/
-
 .md-autocomplete-suggestions li {
     font-size: 12px;
-    /*line-height: 36px;*/
 }
 
 md-autocomplete .md-show-clear-button button {
      height: unset;
 }
-
-/********** >>> TOAST <<< **********
-md-toast.md-error-toast-theme .md-toast-content {
-    background-color: red;
-}
-
 
 /********** >>> FILE UPLOAD <<< ***********/
 .file-drop-box{
@@ -348,54 +231,6 @@ md-toast.md-error-toast-theme .md-toast-content {
     color:rgb(63,81,181);
 }
 
-
-/********** >>> CALENDAR <<< **********
-calendar-md{
-    margin-top: 8px;
-}
-calendar-md md-content{
-    min-height:0 !important;
-    height:425px !important;
-}
-*/
-
-/********** >>> TABLES <<< **********
-.table-head{
-    background-color: #90a4ae !important;
-    color:white;
-    font-weight:600;
-    padding: 8px;
-    min-height:34px;
-}
-.table-row{
-    padding: 8px;
-    min-height:34px;
-}
-*/
-/********** >>> ACCORDION <<< **********
-div.c-card-accordion-header{
-    margin-top: 15px;
-}
-div.c-card-accordion-header span{
-    padding:5px 10px;
-}
-div.c-card-accordion-header.closed{
-    border-bottom: 1px solid #ddd;
-}
-div.c-card-accordion-header.opened{
-    border-bottom: 2px solid rgb(124, 181, 236);
-}
-div.c-card-accordion{
-    padding: 8px 8px 0px 8px;
-}
-div.c-card-accordion.opened{
-    display: inherit;
-    border: 1px solid #ddf;
-}
-div.c-card-accordion.closed{
-    display:none;
-}
-*/
 /********** >>> TOOLBAR <<< ***********/
 md-toolbar.thin{
     min-height:0;
@@ -411,3 +246,4 @@ md-progress-linear{
     z-index: 2;
 }
 
+/********** >>> PROGRESS BAR <<< ***********/
