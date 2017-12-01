@@ -1,9 +1,5 @@
 server:
     port: 8080
-    contextPath: /savefy
-    tomcat:
-        access_log_enabled: true
-        basedir: target/tomcat
 
 DATABASE_URL: postgres://eriklacerda@localhost:5432/savefy
 

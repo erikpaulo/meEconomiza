@@ -39,11 +39,18 @@ services:
 
 ```
 
-You can connect into postgres container using psql command. See the command bellow
+You can connect into postgres container using psql command. See some commands bellow
 
 ```
 docker exec -it postgres-local psql -U postgres savefy
+docker exec -it postgres-local bash
 ```
+
+## Using postgres
+
+cd postgresdb
+docker build . -t meeconomiza_postgres:latest
+docker run -p 5432:5432 -name postgres-local meeconomiza_postgres:latest
 
 ## Stuff used to make this:
 

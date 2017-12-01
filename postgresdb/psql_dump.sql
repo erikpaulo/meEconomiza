@@ -5,9 +5,10 @@
 * Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/src/main/resources/config/postgres/data/db-postgres-savefy-2017.01.sql
 */
 
-CREATE USER eriklacerda;
 CREATE DATABASE savefy;
-GRANT ALL PRIVILEGES ON DATABASE savefy TO eriklacerda;
+
+CREATE USER eriklacerda;
+ALTER ROLE eriklacerda WITH LOGIN;
 
 \connect savefy;
 
@@ -182,3 +183,9 @@ insert into account values (2, 'Visa Person', 'Itaú', 'N', 'CCA', TRUE, '0', '2
 --insert into category_prediction values (1, 'TED 237.3807CAROLINA M P', 4, 1, 0, 1);
 INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
 INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
+
+
+
+
+GRANT ALL PRIVILEGES ON DATABASE savefy TO eriklacerda;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO eriklacerda;
