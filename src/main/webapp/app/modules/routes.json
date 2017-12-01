@@ -35,6 +35,16 @@
         "dependencies": [
           "modules/account/controllers/conciliation-controller"
         ]
+      },
+      {
+        "id": "account",
+        "name":"Gerir Contas",
+        "originalPath": "/accounts",
+        "templateUrl": "modules/account/views/accounts.html",
+        "visible": true,
+        "dependencies": [
+          "modules/account/controllers/accounts-controller"
+        ]
       }
     ]
   },

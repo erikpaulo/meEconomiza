@@ -5,8 +5,9 @@ body{
 
 /* Header */
 md-toolbar.header {
-    background-color: #22262e !important;
-    /*    background: -webkit-linear-gradient(45deg, #020031 0%,#6d3353 100%);*/
+    /*background-color: #f5f5f5 !important;*/
+    /*background-color: #22262e !important;*/
+        background: -webkit-linear-gradient(45deg, #263238 0%,#37474F 100%);
 }
 md-toolbar.header button.md-icon-button:hover{
     background-color: rgba(158,158,158,0.2) !important;

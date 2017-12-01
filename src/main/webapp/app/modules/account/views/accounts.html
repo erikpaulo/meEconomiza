@@ -1,0 +1,19 @@
+<section ng-controller="AccountsController">
+    <div layout="column" flex-offset="15" flex="70" layout-padding>
+        <div ng-repeat="(groupName,accounts) in groupedAccounts" layout="column" layout-padding>
+            <span class="md-title c-padding-5 highlighted">{{groupName | accountTypeName}}</span>
+            <div layout="row">
+                <md-card ng-repeat="account in accounts" flex="25" class="md-whiteframe-2dp border-radius-5">
+                    <md-card-header class="md-body-2" layout-align="center center">
+                        {{account.name}}
+                    </md-card-header>
+                    <md-divider></md-divider>
+                    <md-card-content>
+                                <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-headline md-padding">{{account.balance | currency}}</div>
+                                <div layout="row" layout-align="center end" md-colors="{color: 'grey-700'}" class="md-caption">Ultima atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}</div>
+                    </md-card-content>
+                </md-card>
+            </div>
+        </div>
+    </div>
+</section>
