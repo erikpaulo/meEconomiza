@@ -48,12 +48,20 @@ public class AccountService {
     }
 
     /**
-     * Return all current active user accounts
+     * Return all current active user accounts. Calculate the account balance for presentation purposes
      * @param groupId
      * @return
      */
     public List<Account> getAllActiveAccounts(Integer groupId){
     		List<Account> accounts = accountRepository.findAllActive(groupId);
+
+    		// Calculate account balance
+        for (Account account: accounts) {
+            calcAccountBalance(account);
+
+            // Set entries null to minimiza data transfer
+            account.setEntries(null);
+        }
 
     		return accounts;
     }
@@ -76,16 +84,9 @@ public class AccountService {
      * @return
      */
     public Account getAccount(Integer accountId, Integer groupId){
-    		Account account = accountRepository.findOne(accountId, groupId);
+        Account account = accountRepository.findOne(accountId, groupId);
+        calcAccountBalance(account);
 
-        // Set the account balance based in its entries;
-        Double balance = 0.0;
-        if (account.getEntries() != null){
-            for (AccountEntry entry: account.getEntries()){
-                balance += entry.getAmount();
-            }
-        }
-        account.setBalance(account.getStartBalance() + balance);
 
         // For those conciliations not yet imported, update the entry info that indicates if it should be imported or not.
         for (Conciliation conciliation: account.getConciliations()) {
@@ -109,6 +110,17 @@ public class AccountService {
         });
 
         return account;
+    }
+
+    private void calcAccountBalance(Account account) {
+        // Set the account balance based in its entries;
+        Double balance = 0.0;
+        if (account.getEntries() != null){
+            for (AccountEntry entry: account.getEntries()){
+                balance += entry.getAmount();
+            }
+        }
+        account.setBalance(account.getStartBalance() + balance);
     }
 
     public void deleteEntries(List<AccountEntry> entries, Integer groupId){
