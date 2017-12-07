@@ -2,10 +2,10 @@ package com.softb.savefy.account.web;
 
 import com.softb.savefy.account.model.Account;
 import com.softb.savefy.account.model.Conciliation;
+import com.softb.savefy.account.model.Institution;
 import com.softb.savefy.account.service.AccountService;
 import com.softb.savefy.account.service.ConciliationService;
 import com.softb.savefy.preferences.services.UserPreferencesService;
-import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.rest.AbstractRestController;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -22,6 +22,8 @@ import java.util.List;
 @RestController("AppAccountController")
 @RequestMapping("/api/account")
 public class AccountController extends AbstractRestController<Account, Integer> {
+
+    public static final String CHECKING_ACCOUNT_OBJECT_NAME = "CheckingAccount";
 
     @Inject
     private AccountService accountService;
@@ -45,16 +47,12 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     }
 
     /**
-     * Returns the informed account with no entry.
-     * @param id Id of the account
-     * @return The Account selected
-     * @throws FormValidationError
+     * Inactivate this account
+     * @param id
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Account getSummarize(@PathVariable Integer id) throws FormValidationError {
-        Account account = accountService.getAccount(id, getGroupId());
-        account.setEntries(null);
-        return account;
+    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable Integer id) {
+        accountService.inactivate(id, getGroupId());
     }
 
     /**
@@ -106,6 +104,11 @@ public class AccountController extends AbstractRestController<Account, Integer> 
     @RequestMapping(value="/{id}/conciliation/{conciliationId}/rollback", method = RequestMethod.POST)
     @ResponseBody public Conciliation rollbackConciliation( @PathVariable Integer conciliationId  ){
         return conciliationService.rollback(conciliationId, getGroupId());
+    }
+
+    @RequestMapping(value="/institutions", method = RequestMethod.GET)
+    @ResponseBody public List<Institution> getInstitutions( ){
+        return accountService.getInstitutions();
     }
 
 }

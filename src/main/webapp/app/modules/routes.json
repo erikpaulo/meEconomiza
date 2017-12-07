@@ -38,12 +38,25 @@
       },
       {
         "id": "account",
-        "name":"Gerir Contas",
+        "name":"Extrato de Contas",
         "originalPath": "/accounts",
         "templateUrl": "modules/account/views/accounts.html",
         "visible": true,
         "dependencies": [
           "modules/account/controllers/accounts-controller"
+          ,"modules/shared/services/app-filters"
+        ]
+      },
+      {
+        "id": "accountEntries",
+        "name":"lançamentos",
+        "originalPath": "/account/:type/:accountID/detail",
+        "templateUrl": "modules/account/views/account.html",
+        "visible": false,
+        "dependencies": [
+          "modules/account/controllers/account-controller"
+          ,"modules/shared/services/app-filters"
+          ,"modules/account/controllers/conciliation-controller"
         ]
       }
     ]

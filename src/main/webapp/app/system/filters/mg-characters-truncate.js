@@ -1,40 +1,33 @@
-define(['./module'], function (app) {
 
-//	app.filter('mapType', function() {
-//		var typeHash = {
-//                'FC' : 'Despesa Mensal Fixa',
-//             	'VC' : 'Despesa Mensal Variável',
-//             	'IC' : 'Despesa Irregular'
-//		};
-//
-//        return function(input) {
-//            if (!input){
-//                return '';
-//			} else {
-//				return typeHash[input];
-//			}
-//		};
-//	});
+define(['./module'], function(module)
+{
 
-    app.filter('accountTypeName', function () {
-        var typeNameHash = {
-            CKA:  'Conta Corrente',
-            SVA:  'Conta Poupança',
-            INV:  'Conta Investimento',
-            CCA: 'Cartão de Crédito'
-        }
-        return function (input) {
-            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
+	/**
+	 * Realiza um truncate de um caracter dado um determinado tamanho.
+	 * Exemplo  {{logger.name | characters:140}}
+	 */
+
+	module.filter('characters', function () {
+        return function (input, chars, breakOnWord) {
+            if (isNaN(chars)) return input;
+            if (chars <= 0) return '';
+            if (input && input.length > chars) {
+                input = input.substring(0, chars);
+
+                if (!breakOnWord) {
+                    var lastspace = input.lastIndexOf(' ');
+                    //get last space
+                    if (lastspace !== -1) {
+                        input = input.substr(0, lastspace);
+                    }
+                }else{
+                    while(input.charAt(input.length-1) === ' '){
+                        input = input.substr(0, input.length -1);
+                    }
+                }
+                return input + '...';
+            }
+            return input;
         };
     });
-
-//    app.filter('investEntryTypeName', function () {
-//        var typeNameHash = {
-//            B:  'Compra',
-//            S:  'Venda'
-//        }
-//        return function (input) {
-//            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
-//        };
-//    });
 });

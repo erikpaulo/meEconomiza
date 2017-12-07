@@ -24,7 +24,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ACCOUNT_ENTRY")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountEntry extends BaseEntity<Integer> implements Serializable {
+public class CheckingAccountEntry extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -59,15 +59,15 @@ public class AccountEntry extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Integer groupId;
 
-//    @Transient
-//    protected Double balance;
+    @Transient
+    protected Double balance;
 
 //	@Transient
 //	protected Account account;
 
 //    @Override
-//    public AccountEntry clone() throws CloneNotSupportedException {
-//        return new AccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
+//    public CheckingAccountEntry clone() throws CloneNotSupportedException {
+//        return new CheckingAccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
 //                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
 //                                 this.balance,   this.account);
 //    }

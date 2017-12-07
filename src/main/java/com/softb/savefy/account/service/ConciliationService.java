@@ -1,9 +1,6 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.Account;
-import com.softb.savefy.account.model.AccountEntry;
-import com.softb.savefy.account.model.Conciliation;
-import com.softb.savefy.account.model.ConciliationEntry;
+import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.ConciliationEntryRepository;
 import com.softb.savefy.account.repository.ConciliationRepository;
@@ -57,7 +54,7 @@ public class ConciliationService {
     private UserPreferencesService userPreferencesService;
 
     @Inject
-    private AccountService accountService;
+    private CheckingAccountService checkingAccountService;
 
     public Conciliation get(Integer conciliationId, Integer groupId, Boolean recheckConflicts){
         Conciliation conciliation = conciliationRepository.findOne(conciliationId, groupId);
@@ -81,7 +78,7 @@ public class ConciliationService {
     public Conciliation uploadEntries(Integer accountId, final HttpServletRequest request, final HttpServletResponse response, Integer groupId)
             throws SystemException, DataAccessException, FileUploadException, IOException, ParseException {
 
-        Account account = accountService.get(accountId, groupId);
+        Account account = checkingAccountService.get(accountId, groupId);
 
         Conciliation conciliation = null;
 
@@ -174,7 +171,7 @@ public class ConciliationService {
 
     private void checkConflicts(Integer accountId, ConciliationEntry entryToImport, Integer groupId) {
         // Verifica se existe um lançamento na conta com mesma data e valor. Se existir aponta como provável conflito.
-        List<AccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entryToImport.getDate(), entryToImport.getAmount());
+        List<CheckingAccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entryToImport.getDate(), entryToImport.getAmount());
         if (conflicts.size() > 0) {
             entryToImport.setExists(true);
             entryToImport.setReject(true);
@@ -205,7 +202,7 @@ public class ConciliationService {
                 categoryPredictionService.register(entry.getDescription(), entry.getSubCategory(), groupId);
 
                 // Create account entries
-                AccountEntry accEntry = new AccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false, conciliation.getAccountId(), null, groupId);
+                CheckingAccountEntry accEntry = new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false, conciliation.getAccountId(), null, groupId, 0.0);
                 accEntry = accountEntryRepository.save(accEntry);
 
                 entry.setAccountEntry(accEntry);
@@ -213,9 +210,9 @@ public class ConciliationService {
         }
 
         // Update Account
-        Account account = accountService.getAccount(conciliation.getAccountId(), groupId);
+        CheckingAccount account = checkingAccountService.getAccount(conciliation.getAccountId(), groupId);
         account.setLastUpdate(Calendar.getInstance().getTime());
-        accountService.save(account, groupId);
+        checkingAccountService.save(account, groupId);
 
         // Remove old conciliations
         Integer count = 0;
@@ -263,7 +260,7 @@ public class ConciliationService {
     }
 
     public Conciliation rollback(Integer conciliationId, Integer groupId) {
-        List<AccountEntry> entriesToDelete = new ArrayList<>();
+        List<CheckingAccountEntry> entriesToDelete = new ArrayList<>();
 
         Conciliation conciliation = get(conciliationId, groupId, false);
         for (ConciliationEntry entry: conciliation.getEntries()) {
@@ -273,7 +270,7 @@ public class ConciliationService {
             }
 
         }
-        accountService.deleteEntries(entriesToDelete, groupId);
+        checkingAccountService.deleteEntries(entriesToDelete, groupId);
 
         //After remove, recheck new conflicts.
         for (ConciliationEntry entry: conciliation.getEntries()) {

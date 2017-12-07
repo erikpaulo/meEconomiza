@@ -22,6 +22,8 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "ACCOUNT")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name= "TYPE")
 public class Account extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,21 +33,17 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	protected String name;
 
 	@Column(name = "INSTITUTION")
-	@NotEmpty
-	protected String institution;
+	@NotNull
+	protected Integer institutionId;
+//
+//	@Column(name = "KIND")
+//	@NotEmpty
+//	protected String kind;
 
-	@Column(name = "KIND")
-	@NotEmpty
-	protected String kind;
-
-	@Column(name = "TYPE")
+	@Column(name = "TYPE", insertable = false, updatable = false, nullable = false)
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	protected Type type;
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-    protected List<AccountEntry> entries;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
@@ -58,10 +56,6 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     @Column(name="USER_GROUP_ID")
 	@NotNull
 	protected Integer groupId;
-
-    @Column(name="START_BALANCE")
-    @NotNull
-    protected Double startBalance;
 
     @Column(name="LAST_UPDATE")
     @NotNull

@@ -44,24 +44,6 @@ md-toolbar.subheader md-menu-content{
     color: #b1b3b4;
 }
 
-/* Navegação Lateral
-md-sidenav md-toolbar {
-    background-color: #22262e !important;
-}
-md-sidenav {
-  fill: #737373;
-}
-md-sidenav md-list md-list-item:hover {
-    background-color: #ECEFF1;
-    cursor:pointer;
-}
-.user-avatar {
-  border-radius: 99%;
-  width: 85px;
-  height: 85px;
-  margin: 10px;
-}
-*/
 
 /********** >>> GERAL <<< ***********/
 .border-radius-5 {
@@ -111,6 +93,10 @@ a {
     color: #93c47d;
 }
 
+.c-no-margin{
+    margin: 0px !important;
+}
+
 /********** >>> CARDS <<< ***********/
 md-card.flat{
     box-shadow: none;
@@ -128,6 +114,11 @@ md-card.add{
 md-card.add:hover{
     border-style:solid;
     cursor:pointer;
+    background: rgba(0,0,0,.02);
+}
+
+md-card.account: hover{
+
 }
 
 /********** >>> ICONS <<< ***********/
@@ -155,6 +146,14 @@ md-card.add:hover{
     height:48px;
 }
 
+.theme{
+    height: 64px;
+    width: 64px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 38px;
+    /*background: -webkit-linear-gradient(45deg, #263238 0%,#37474F 100%);*/
+    background-color: #37474F;
+}
 
 /********** >>> DIVIDER <<< ***********/
 md-divider.blue{
@@ -166,23 +165,24 @@ md-divider.thin{
 
 
 /********** >>> TABLE <<< **********/
-table > thead > tr > th {
+table.table-striped > thead > tr > th {
     border-top: 0 !important;
     font-size: 12px;
     text-align: center;
-    background: #c0c0c0;
+    background: #78909C;
     color: white;
     padding: .75rem;
 }
-table > tbody > tr > td {
+table.table-striped > tbody > tr > td {
     border-top: 0 !important;
     font-size: 12px;
     text-align: center;
     padding: 1px;
+    line-height: 3;
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0,0,0,.05);
+    background-color: #ECEFF1;
 }
 
 .table-striped {
@@ -245,5 +245,3 @@ md-progress-linear{
     top: 59px;
     z-index: 2;
 }
-
-/********** >>> PROGRESS BAR <<< ***********/

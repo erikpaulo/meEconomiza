@@ -54,8 +54,8 @@
                             </md-button>
 
                             <md-menu-content style="background-color: #22262e">
-                                <md-menu-item ng-repeat="item in module.items">
-                                    <md-button class="menu-link" ng-click="appContext.menu.handleClick(item.originalPath)">
+                                <md-menu-item ng-repeat="item in module.items" ng-if="item.visible">
+                                    <md-button class="menu-link" ng-click="appContext.menu.handleClick(item.originalPath)" >
                                         {{item.name}}
                                     </md-button>
                                 </md-menu-item>
@@ -77,8 +77,9 @@
                         <md-tooltip md-direction="left">
                             {{action.tooltip}}
                         </md-tooltip>
-                        <md-button aria-label="{{action.icon}}" class="md-fab md-mini md-hue-3" ng-click="handleClick(action)">
-                            <md-icon class="material-icons"> {{action.icon}} </md-icon>
+                        <md-button aria-label="{{action.icon}}" class="md-fab md-mini md-hue-3" ng-click="handleClick(action)" layout layout-align="center center">
+                            <md-icon ng-if="action.icon" class="material-icons"> {{action.icon}} </md-icon>
+                            <img ng-if="action.img" ng-src="resources/static/images/{{action.img}}"/>
                         </md-button>
                     </div>
                 </md-fab-actions>

@@ -67,6 +67,12 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                         scope.appContext.contextMenu.actions = acts;
                     },0);
                 },
+                addAction: function(acts){
+
+                    timeout(function() {
+                        scope.appContext.contextMenu.actions.push(acts);
+                    },0);
+                },
                 icon: 'add',
                 isOpen: false
             },
