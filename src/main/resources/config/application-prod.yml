@@ -1,6 +1,5 @@
 server:
     port: 8080
-    contextPath: /savefy
     tomcat:
         access_log_enabled: true
         basedir: target/tomcat
@@ -24,7 +23,7 @@ spring:
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
 
     messageSource:
-        cacheSeconds: 1    
+        cacheSeconds: 1
 
 cache:
     timeToLiveSeconds: 3600
@@ -36,6 +35,6 @@ application:
         google:
             clientId: 316087946070-9qge3fgub11tvvh1vl87jt6ell13l12f.apps.googleusercontent.com
             clientSecret: hcx0OxU-i2xMHYnr7Cbc3JF2
-    security: 
+    security:
             secureChannel: http
             key: savefy
