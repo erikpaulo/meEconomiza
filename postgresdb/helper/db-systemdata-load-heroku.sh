@@ -4,7 +4,7 @@ heroku pg:psql postgresql-cubic-67049 --app savefy
 TRUNCATE TABLE SANITIZE_PATTERN RESTART IDENTITY CASCADE;
 \q
 
-PGPASSWORD=4851528416fee096b8c895dbdae70c9c64defd4fa703a557447e4a8dad2fd477 psql -h ec2-50-17-201-204.compute-1.amazonaws.com -U qmespspfhewcbp d9pcua8t1pjv9b -c "\copy SANITIZE_PATTERN FROM '../data/system/db-postgres-load-sanitize-pattern.csv' WITH CSV;"
+PGPASSWORD=b272d30609c8c5f8a64aa83b0bc06d3fb36ff3a677cb919e8853bc5553b2d358 psql -h ec2-54-235-210-115.compute-1.amazonaws.com -U cvsxhyjahnnuxe df5cja041q5ij1 -c "\copy SANITIZE_PATTERN FROM './postgresdb/data/system/db-postgres-load-sanitize-pattern.csv' WITH CSV;"
 
 
 
