@@ -131,6 +131,7 @@ public class CheckingAccountService {
             }
         });
 
+        calcAccountBalance(account);
         return account;
     }
 

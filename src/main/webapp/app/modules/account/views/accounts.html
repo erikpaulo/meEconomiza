@@ -1,4 +1,4 @@
-<section ng-controller="AccountsController" ng-cloak>
+<section ng-controller="AccountsController" ng-cloak="ng-cloak">
         <div layout="row" layout-padding>
             <div layout="column" flex-offset="5">
                 <div layout="row"  layout-align="start center">
@@ -27,7 +27,9 @@
                             </div>
                         </md-card-header>
                         <md-card-content>
-                            <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-headline ">{{account.balance | currency}}</div>
+                            <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-headline ">
+                                <span my-currency="account.balance" layout-align="center center"></span>
+                            </div>
                             <div layout="row" layout-align="center center" md-colors="{color: 'grey-700'}" class="md-caption" >
                                     Atualização: {{account.lastUpdate | date: 'dd/MM/yyyy'}}
                             </div>

@@ -155,6 +155,19 @@ md-card.account: hover{
     background-color: #37474F;
 }
 
+.md-headline .visibility-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    line-height: 32px;
+}
+.md-display-1 .visibility-icon {
+    font-size: 34px;
+    height: 34px;
+    width: 34px;
+    line-height: 40px;
+}
+
 /********** >>> DIVIDER <<< ***********/
 md-divider.blue{
     background-color:rgb(63,81,181);

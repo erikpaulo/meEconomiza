@@ -27,7 +27,9 @@
                         </div>
                         <md-divider></md-divider>
                         <div layout="column" flex="50">
-                            <div layout="row" layout-align="center center" style="color: #7A7A7A;" class="md-headline">{{account.balance | currency}}</div>
+                            <div layout="row" layout-align="center center" style="color: #7A7A7A;" class="md-headline">
+                                <span my-currency="account.balance"></span>
+                            </div>
                             <div layout="row" layout-align="center center" style="color: #7A7A7A;">Saldo Corrente</div>
                         </div>
                     </div>
@@ -48,7 +50,9 @@
                         </div>
 
                         <div layout="column" flex="50" layout-align="center center" ng-if="conciliation != null">
-                            <div layout="row" layout-align="center center" class="md-headline">{{finalBalance | currency}}</div>
+                            <div layout="row" layout-align="center center" class="md-headline">
+                                <span my-currency="finalBalance" layout-align="center center"></span>
+                            </div>
                             <div layout="row" layout-align="center center" style="color: #7A7A7A;">Saldo Final</div>
                         </div>
 

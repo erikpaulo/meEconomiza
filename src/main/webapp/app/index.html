@@ -33,6 +33,10 @@
                     <img src="resources/static/images/savefy-icon.png" style="margin: 0px 10px 0 5px;" height="28" width="28"/>
                     Savefy
                     <span flex></span>
+                    <md-button class="md-icon-button" aria-label="Visibility" ng-click="changeCurrencyVisibility()">
+                        <ng-md-icon ng-if="!appContext.currencyVisible" icon="visibility_off"></ng-md-icon>
+                        <ng-md-icon ng-if="appContext.currencyVisible" icon="visibility"></ng-md-icon>
+                    </md-button>
                     <md-button class="md-icon-button" aria-label="Message">
                         <ng-md-icon icon="mail"></ng-md-icon>
                     </md-button>

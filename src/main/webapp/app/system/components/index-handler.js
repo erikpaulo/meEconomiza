@@ -95,6 +95,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                     this.$errors.push(err);
                 }
             },
+            currencyVisible: false,
             currentUser: null
         };
 
@@ -125,6 +126,10 @@ define(['angular-resource', 'jquery'], function (resource, $) {
 //                    $location.path('dashboard');
                 }
             });
+
+            $scope.changeCurrencyVisibility = function(){
+                $scope.appContext.currencyVisible = !$scope.appContext.currencyVisible;
+            }
 
             $scope.handleClick = function(action){
                 action.onClick();

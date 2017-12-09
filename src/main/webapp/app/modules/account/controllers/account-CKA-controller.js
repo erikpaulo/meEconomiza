@@ -4,8 +4,8 @@ define(['./module'
         ,'../../shared/services/utils-service'
         ,'../../categorization/services/subcategory-resources'], function (app) {
 
-	app.controller('AccountCKAController', ['$scope', '$routeParams', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'SubCategoryResource', 'Utils',
-        function($scope, $routeParams, $filter, $mdDialog, Account, AccountEntry, SubCategory, Constants, Utils) {
+	app.controller('AccountCKAController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'SubCategoryResource', 'Utils',
+        function($scope, $filter, $mdDialog, Account, AccountEntry, SubCategory, Constants, Utils) {
             $scope.appContext.contextMenu.addAction(
                 {icon: 'add', tooltip: 'Adicionar Lançamento', onClick: function() {
                     $scope.edit();
@@ -79,7 +79,7 @@ define(['./module'
             }
 
             function updateView(entry, newEntry){
-                $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date');
+                $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date', true);
 
                 var balance = $scope.account.startBalance;
                 for (var i in $scope.account.entries){
