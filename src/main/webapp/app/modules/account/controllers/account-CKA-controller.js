@@ -12,6 +12,11 @@ define(['./module'
                 }}
             );
 
+            $scope.accountsToTransfer;
+            Account.listAllForTransferable(function (data){
+                $scope.accountsToTransfer = data;
+            });
+
             SubCategory.listAll(function (subCategories){
                 $scope.subCategories = subCategories;
             });
@@ -25,7 +30,8 @@ define(['./module'
                     parent: angular.element(document.body),
                     locals: {
                         subCategories: $scope.subCategories,
-                        entry: entry
+                        entry: entry,
+                        accountsToTransfer: $scope.accountsToTransfer
                     },
                     clickOutsideToClose:true
                 }).then(function(newEntry){
@@ -45,7 +51,7 @@ define(['./module'
 
                                 addSuccess($scope);
                             }, function(err){
-                                addError($scope, 'Não foi possível cadastrar conta.', err);
+                                addError($scope, 'Não foi possível atualizar o lançamento.', err);
                             });
                         } else {
                             accountEntry.$save(function(e){
@@ -54,7 +60,7 @@ define(['./module'
 
                                 addSuccess($scope);
                             }, function(err){
-                                addError($scope, 'Não foi possível cadastrar conta.', err);
+                                addError($scope, 'Não foi possível atualizar o lançamento.', err);
                             });
                         }
                     }
@@ -79,7 +85,7 @@ define(['./module'
             }
 
             function updateView(entry, newEntry){
-                $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date', true);
+                $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date', false);
 
                 var balance = $scope.account.startBalance;
                 for (var i in $scope.account.entries){
@@ -89,11 +95,17 @@ define(['./module'
                 $scope.account.balance = balance;
             }
 
-            function DialogController($scope, $mdDialog, $filter, Utils, subCategories, entry) {
+            function DialogController($scope, $mdDialog, $filter, Utils, subCategories, entry, accountsToTransfer) {
                 if (!entry) entry = {transfer: false}
 
                 $scope.editEntry = angular.copy(entry);
                 $scope.subCategories = subCategories;
+                $scope.accountsToTransfer = accountsToTransfer;
+                for (var i in accountsToTransfer){
+                    if (accountsToTransfer[i].id == entry.accountId){
+                        accountsToTransfer.splice(i, 1);
+                    }
+                }
 
                 $scope.querySearch = function(query){
                     return $filter('filter')($scope.subCategories, query);

@@ -20,5 +20,5 @@ public class InvestimentAccount extends Account implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-    protected List<CheckingAccountEntry> entries;
+    protected List<AccountEntry> entries;
 }

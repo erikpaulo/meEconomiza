@@ -44,15 +44,15 @@
             </div>
             <div layout="row">
                 <div layout="column" flex="40" layout-align="center start" style="padding: 7px;">
-                    <md-checkbox ng-model="editEntry.transfer" aria-label="Checkbox 1" class="c-no-margin">
+                    <md-checkbox ng-model="editEntry.transfer" aria-label="Checkbox 1" class="c-no-margin" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)">
                         Transferência
                     </md-checkbox>
                 </div>
                 <div layout="column" flex="60">
                     <md-input-container class="c-no-margin" ng-show="editEntry.transfer">
                         <label>Conta Destino</label>
-                        <md-select name="category" ng-model="editEntry.accountDestinyId">
-                            <md-option ng-repeat="account in accounts" ng-value="account.id">
+                        <md-select name="category" ng-model="editEntry.accountDestinyId" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)">
+                            <md-option ng-repeat="account in accountsToTransfer" ng-value="account.id">
                                 {{account.name}}
                             </md-option>
                         </md-select>

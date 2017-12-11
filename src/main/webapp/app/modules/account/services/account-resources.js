@@ -10,7 +10,8 @@ function (module) {
 	            get:        { method :'GET',  params: {}, isArray : false },
 	            getDetailed: { method :'GET',  params: {action: 'detail'}, isArray : false },
 	            save:       { method :'POST', params: {}, isArray : false},
-	            getInstitutions: { method :'GET', params: {action: 'institutions'}, isArray : true}
+	            getInstitutions: { method :'GET', params: {action: 'institutions'}, isArray : true},
+	            listAllForTransferable: { method :'GET', params: {action: 'transferable'}, isArray : true},
 	        }
 	    );
 	});

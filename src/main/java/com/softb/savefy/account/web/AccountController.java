@@ -111,5 +111,12 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         return accountService.getInstitutions();
     }
 
+    @RequestMapping(value="/transferable", method = RequestMethod.GET)
+    @ResponseBody public List<Account> getAllForTransferable( ){
+        return accountService.getAllForTransferable(getGroupId());
+    }
+
+
+
 }
 

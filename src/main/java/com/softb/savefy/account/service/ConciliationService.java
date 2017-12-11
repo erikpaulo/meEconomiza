@@ -202,7 +202,8 @@ public class ConciliationService {
                 categoryPredictionService.register(entry.getDescription(), entry.getSubCategory(), groupId);
 
                 // Create account entries
-                CheckingAccountEntry accEntry = new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false, conciliation.getAccountId(), null, groupId, 0.0);
+                CheckingAccountEntry accEntry = new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
+                                                                         conciliation.getAccountId(), null, null, groupId, 0.0);
                 accEntry = accountEntryRepository.save(accEntry);
 
                 entry.setAccountEntry(accEntry);
@@ -212,7 +213,7 @@ public class ConciliationService {
         // Update Account
         CheckingAccount account = checkingAccountService.getAccount(conciliation.getAccountId(), groupId);
         account.setLastUpdate(Calendar.getInstance().getTime());
-        checkingAccountService.save(account, groupId);
+        checkingAccountService.saveAccount(account, groupId);
 
         // Remove old conciliations
         Integer count = 0;

@@ -19,18 +19,6 @@ public class CheckingAccount extends Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-//	public CheckingAccount(Account account){
-//        super.name = account.name;
-//        super.institution = account.institution;
-//        super.type = account.type;
-//        super.groupId = account.groupId;
-//        super.activated = account.activated;
-//        super.lastUpdate = account.lastUpdate;
-//
-//        this.startBalance = account.balance;
-//        this.entries = new ArrayList<>();
-//    }
-
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<CheckingAccountEntry> entries;

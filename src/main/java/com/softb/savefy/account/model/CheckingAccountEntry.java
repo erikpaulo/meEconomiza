@@ -1,11 +1,7 @@
 package com.softb.savefy.account.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.softb.savefy.categorization.model.SubCategory;
-import com.softb.system.repository.BaseEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -18,57 +14,49 @@ import java.util.Date;
  * @author Erik Lacerda
  *
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Entity
-@Table(name = "ACCOUNT_ENTRY")
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class CheckingAccountEntry extends BaseEntity<Integer> implements Serializable {
+@DiscriminatorValue("CKA")
+public class CheckingAccountEntry extends AccountEntry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Column(name = "DATE")
-	@NotNull
-	protected Date date;
+
+	public CheckingAccountEntry(Date date, SubCategory subCategory, Double amount, Boolean transfer, Integer accountId,
+								Integer accountDestinyId, Integer twinEntryId, Integer groupId, Double balance) {
+		super.date = date;
+		super.amount = amount;
+		super.accountId = accountId;
+		super.groupId = groupId;
+		this.subCategory = subCategory;
+		this.transfer = transfer;
+		this.accountDestinyId = accountDestinyId;
+		this.twinEntryId = twinEntryId;
+		this.balance = balance;
+	}
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SUBCATEGORY_ID", referencedColumnName = "ID")
     protected SubCategory subCategory;
-
-	@Column(name = "AMOUNT")
-	@NotNull
-	protected Double amount;
 
 	@Column(name = "TRANSFER")
 	@NotNull
     @ColumnDefault( value="false" )
 	protected Boolean transfer;
 
-	@Column(name = "ACCOUNT_ID")
-	@NotNull
-	protected Integer accountId;
-
     @Column(name = "ACCOUNT_DESTINY_ID")
 	protected Integer accountDestinyId;
 
-//	@Column(name = "TWIN_ENTRY_ID")
-//	protected Integer twinEntryId;
-
-    @Column(name="USER_GROUP_ID")
-	@NotNull
-	protected Integer groupId;
+	@Column(name = "TWIN_ENTRY_ID")
+	protected Integer twinEntryId;
 
     @Transient
     protected Double balance;
 
-//	@Transient
-//	protected Account account;
-
-//    @Override
-//    public CheckingAccountEntry clone() throws CloneNotSupportedException {
-//        return new CheckingAccountEntry( this.date,      this.subCategory, this.amount, this.transfer,
-//                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
-//                                 this.balance,   this.account);
-//    }
+	@Override
+    public CheckingAccountEntry clone() throws CloneNotSupportedException {
+        return new CheckingAccountEntry( super.date,      this.subCategory, this.amount, this.transfer,
+                                 this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
+                                 this.balance/*,   this.account*/);
+    }
 }

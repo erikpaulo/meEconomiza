@@ -5,6 +5,7 @@ import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
 import com.softb.system.errorhandler.exception.BusinessException;
+import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,13 +34,16 @@ public class CheckingAccountService {
     @Inject
     private UserAccountService userAccountService;
 
+    @Inject
+    private AccountService accountService;
+
     /**
-     * Update or create the account date, verifying if it belongs to the current user
+     * Update or create the account
      * @param account
      * @param groupId
      * @return
      */
-    public CheckingAccount save(CheckingAccount account, Integer groupId){
+    public CheckingAccount saveAccount(CheckingAccount account, Integer groupId){
         account = accountRepository.save(account);
         calcAccountBalance(account);
 
@@ -47,50 +51,37 @@ public class CheckingAccountService {
     }
 
     /**
-     * Save an entry.
+     * Save an entry, checking if it belongs to current user.
      * @param entry
      * @return
      */
-    public CheckingAccountEntry saveEntry(CheckingAccountEntry entry, Integer groupId){
-        if (!entry.getGroupId().equals(groupId)){
-            throw new BusinessException("This entry doesn't belong to the current user");
+    public CheckingAccountEntry updateEntry(CheckingAccountEntry entry, Integer groupId){
+        CheckingAccountEntry currentEntry = accountEntryRepository.findOne( entry.getId(), groupId );
+
+        // Check if it's a transfer
+        if (currentEntry.getTransfer()){
+            if (!entry.getTransfer()) { // Needs to delete its twin entry.
+                removeTwinEntry( entry, currentEntry );
+            } else {
+                updateTwinEntry( entry );
+            }
+
+        } else {
+            if (entry.getTransfer()) { // Needs to create its twin entry.
+                CheckingAccountEntry twinEntry = createTwinEntry( entry, groupId );
+                entry.setTwinEntryId( twinEntry.getId() );
+            }
         }
-        return accountEntryRepository.save(entry);
+        return save(entry, groupId);
     }
 
-    /**
-     * Return this entry if the current user has it
-     * @param entryId
-     * @param groupId
-     * @return
-     */
-    public CheckingAccountEntry getEntry(Integer entryId, Integer groupId){
-        return accountEntryRepository.findOne(entryId, groupId);
+    private CheckingAccountEntry save(CheckingAccountEntry entry, Integer groupId) {
+        CheckingAccountEntry accountEntry = accountEntryRepository.save( entry );
+        accountService.updateLastUpdate( accountEntry.getAccountId(), groupId );
+
+        return accountEntry;
     }
 
-    /**
-     * Return this entry if the current user has it
-     * @param entryId
-     * @return
-     */
-    public void delEntry(Integer entryId){
-        try{
-            accountEntryRepository.delete(entryId);
-        } catch(DataIntegrityViolationException e){
-            throw new BusinessException("Lançamentos importados não podem ser removidos.");
-        }
-    }
-
-    /**
-     * Return one account with no detail
-     * @param accountId
-     * @param groupId
-     * @return
-     */
-    public Account get(Integer accountId, Integer groupId){
-    		Account account = accountRepository.findOne(accountId, groupId);
-    		return account;
-    }
 
     /**
      * Return this account with all its related and pre processed data
@@ -125,8 +116,8 @@ public class CheckingAccountService {
         });
 
         // Sort entries ASC
-        Collections.sort(account.getEntries(), new Comparator<CheckingAccountEntry>(){
-            public int compare(CheckingAccountEntry o1, CheckingAccountEntry o2) {
+        Collections.sort(account.getEntries(), new Comparator<AccountEntry>(){
+            public int compare(AccountEntry o1, AccountEntry o2) {
                 return o1.getDate().compareTo(o2.getDate());
             }
         });
@@ -135,6 +126,33 @@ public class CheckingAccountService {
         return account;
     }
 
+    /**
+     * Return this entry if the current user has it
+     * @param entryId
+     * @param groupId
+     * @return
+     */
+    public CheckingAccountEntry getEntry(Integer entryId, Integer groupId){
+        return accountEntryRepository.findOne(entryId, groupId);
+    }
+
+    /**
+     * Return this entry if the current user has it
+     * @param entryId
+     * @return
+     */
+    public void delEntry(Integer entryId){
+        try{
+            accountEntryRepository.delete(entryId);
+        } catch(DataIntegrityViolationException e){
+            throw new BusinessException("Lançamentos importados não podem ser removidos.");
+        }
+    }
+
+    /**
+     * Calculate the account balance
+     * @param checkingAccount
+     */
     protected void calcAccountBalance(CheckingAccount checkingAccount) {
         // Set the account balance based in its entries;
         Double balance = 0.0;
@@ -149,11 +167,49 @@ public class CheckingAccountService {
         checkingAccount.setBalance(balance);
     }
 
-    public void deleteEntries(List<CheckingAccountEntry> entries, Integer groupId){
-        accountEntryRepository.delete(entries);
+    private CheckingAccountEntry createTwinEntry(CheckingAccountEntry entry, Integer groupId) {
+        CheckingAccountEntry twinEntry;
+        try {
+            twinEntry = entry.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new SystemException(e.getMessage());
+        }
+        twinEntry.setAmount( twinEntry.getAmount() * -1 );
+        twinEntry.setTwinEntryId( entry.getId() );
+        twinEntry.setAccountId( entry.getAccountDestinyId() );
+        twinEntry.setAccountDestinyId( entry.getAccountId() );
+        return save(twinEntry, groupId);
     }
 
-    public List<Institution> getInstitutions(){
-        return institutionRepository.findAll();
+    private void removeTwinEntry(CheckingAccountEntry entry, CheckingAccountEntry currentEntry) {
+        accountEntryRepository.delete( currentEntry.getTwinEntryId() );
+        entry.setTwinEntryId( null );
+        entry.setAccountDestinyId( null );
+    }
+
+    private void updateTwinEntry(CheckingAccountEntry entry) {
+        CheckingAccountEntry twinEntry = accountEntryRepository.findOne( entry.getTwinEntryId() );
+        twinEntry.setAmount( entry.getAmount() * -1 );
+        twinEntry.setDate( entry.getDate() );
+        twinEntry.setSubCategory( entry.getSubCategory() );
+        accountEntryRepository.save( twinEntry );
+    }
+
+    /**
+     * Used by conciliation process
+     * @param entriesToDelete
+     * @param groupId
+     */
+    public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
+    }
+
+    /**
+     * Used by conciliation process
+     * @param accountId
+     * @param groupId
+     * @return
+     */
+    public Account get(Integer accountId, Integer groupId) {
+        return accountRepository.findOne(accountId, groupId);
     }
 }

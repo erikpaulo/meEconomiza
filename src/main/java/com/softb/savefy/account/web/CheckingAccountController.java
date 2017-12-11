@@ -32,7 +32,7 @@ public class CheckingAccountController extends AbstractRestController<Account, I
         checkingAccount.setLastUpdate(Calendar.getInstance().getTime());
 
         validate(OBJECT_NAME, checkingAccount);
-        return checkingAccountService.save(checkingAccount, getGroupId());
+        return checkingAccountService.saveAccount(checkingAccount, getGroupId());
     }
 
     /**
@@ -43,7 +43,7 @@ public class CheckingAccountController extends AbstractRestController<Account, I
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody public CheckingAccount save(@RequestBody CheckingAccount checkingAccount) throws FormValidationError {
-        CheckingAccount account = checkingAccountService.save(checkingAccount, getGroupId());
+        CheckingAccount account = checkingAccountService.saveAccount(checkingAccount, getGroupId());
         return account;
     }
 
@@ -75,7 +75,10 @@ public class CheckingAccountController extends AbstractRestController<Account, I
      */
     @RequestMapping(value = "/{accountId}/entry/{id}", method = RequestMethod.POST)
     @ResponseBody public CheckingAccountEntry editEntry(@RequestBody CheckingAccountEntry entry) throws FormValidationError {
-        return checkingAccountService.saveEntry(entry, getGroupId());
+        if (!entry.getGroupId().equals(getGroupId())){
+            throw new BusinessException("This entry doesn't belong to the current user");
+        }
+        return checkingAccountService.updateEntry(entry, getGroupId());
     }
 
     /**
@@ -89,7 +92,7 @@ public class CheckingAccountController extends AbstractRestController<Account, I
         entry.setGroupId(getGroupId());
 
         validate(OBJECT_ENTRY_NAME, entry);
-        return checkingAccountService.saveEntry(entry, getGroupId());
+        return checkingAccountService.updateEntry(entry, getGroupId());
     }
 
 
