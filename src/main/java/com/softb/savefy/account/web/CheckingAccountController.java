@@ -95,7 +95,11 @@ public class CheckingAccountController extends AbstractRestController<Account, I
         return checkingAccountService.updateEntry(entry, getGroupId());
     }
 
-
+    /**
+     * Remove this entry, checking if it belongs to current user first
+     * @param id
+     * @throws FormValidationError
+     */
     @RequestMapping(value = "/{accountId}/entry/{id}", method = RequestMethod.DELETE)
     @ResponseBody public void removeEntry(@PathVariable Integer id) throws FormValidationError {
         CheckingAccountEntry entry = checkingAccountService.getEntry(id, getGroupId());

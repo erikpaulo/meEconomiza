@@ -2,8 +2,7 @@ package com.softb.savefy.account.web;
 
 import com.softb.savefy.account.model.Account;
 import com.softb.savefy.account.model.Conciliation;
-import com.softb.savefy.account.model.Institution;
-import com.softb.savefy.account.service.AccountService;
+import com.softb.savefy.account.service.AccountsService;
 import com.softb.savefy.account.service.ConciliationService;
 import com.softb.savefy.preferences.services.UserPreferencesService;
 import com.softb.system.errorhandler.exception.SystemException;
@@ -17,34 +16,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.List;
 
-@RestController("AppAccountController")
-@RequestMapping("/api/account")
-public class AccountController extends AbstractRestController<Account, Integer> {
+@RestController("AppConciliationController")
+@RequestMapping("/api/account/{id}/conciliation")
+public class ConciliationController extends AbstractRestController<Account, Integer> {
 
     public static final String CHECKING_ACCOUNT_OBJECT_NAME = "CheckingAccount";
 
     @Inject
-    private AccountService accountService;
+    private AccountsService accountService;
 
     @Inject
     private ConciliationService conciliationService;
 
     @Inject
     private UserPreferencesService userPreferencesService;
-
-
-    /**
-     * Lists all account registered for this user, but its entries aren't loaded.
-     *
-     * @return List Accounts without its entries
-     */
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Account> listAll() {
-        List<Account> accounts = accountService.getAllActiveAccounts(getGroupId());
-        return accounts;
-    }
 
     /**
      * Inactivate this account
@@ -67,7 +53,7 @@ public class AccountController extends AbstractRestController<Account, Integer> 
      * @throws IOException
      * @throws ParseException
      */
-    @RequestMapping(value="/{id}/conciliation/upload", method = RequestMethod.POST)
+    @RequestMapping(value="/upload", method = RequestMethod.POST)
     @ResponseBody public Conciliation uploadEntries(@PathVariable Integer id,
                                                     final HttpServletRequest request,
                                                     final HttpServletResponse response  )
@@ -80,42 +66,31 @@ public class AccountController extends AbstractRestController<Account, Integer> 
         return conciliationService.save(conciliation, getGroupId());
     }
 
-    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.GET)
+    @RequestMapping(value="/{conciliationId}", method = RequestMethod.GET)
     @ResponseBody public Conciliation getConciliation( @PathVariable Integer conciliationId  ){
         return conciliationService.get(conciliationId, getGroupId(), true);
     }
 
-    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.POST)
+    @RequestMapping(value="/{conciliationId}", method = RequestMethod.POST)
     @ResponseBody public Conciliation saveConciliation( @RequestBody Conciliation conciliation  ){
 
         return conciliationService.save(conciliation, getGroupId());
     }
 
-    @RequestMapping(value="/{id}/conciliation/{conciliationId}", method = RequestMethod.DELETE)
+    @RequestMapping(value="/{conciliationId}", method = RequestMethod.DELETE)
     @ResponseBody public void delConciliation( @PathVariable Integer id, @PathVariable Integer conciliationId ){
         conciliationService.delete(conciliationId, getGroupId());
     }
 
-    @RequestMapping(value="/{id}/conciliation/{conciliationId}/sync", method = RequestMethod.POST)
+    @RequestMapping(value="/{conciliationId}/sync", method = RequestMethod.POST)
     @ResponseBody public Conciliation syncConciliationIntoAccount( @PathVariable Integer id, @RequestBody Conciliation conciliation  ){
         return conciliationService.syncEntriesIntoAccount(conciliation, getGroupId());
     }
 
-    @RequestMapping(value="/{id}/conciliation/{conciliationId}/rollback", method = RequestMethod.POST)
+    @RequestMapping(value="/{conciliationId}/rollback", method = RequestMethod.POST)
     @ResponseBody public Conciliation rollbackConciliation( @PathVariable Integer conciliationId  ){
         return conciliationService.rollback(conciliationId, getGroupId());
     }
-
-    @RequestMapping(value="/institutions", method = RequestMethod.GET)
-    @ResponseBody public List<Institution> getInstitutions( ){
-        return accountService.getInstitutions();
-    }
-
-    @RequestMapping(value="/transferable", method = RequestMethod.GET)
-    @ResponseBody public List<Account> getAllForTransferable( ){
-        return accountService.getAllForTransferable(getGroupId());
-    }
-
 
 
 }

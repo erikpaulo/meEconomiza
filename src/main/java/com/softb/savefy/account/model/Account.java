@@ -35,10 +35,6 @@ public class Account extends BaseEntity<Integer> implements Serializable {
 	@Column(name = "INSTITUTION")
 	@NotNull
 	protected Integer institutionId;
-//
-//	@Column(name = "KIND")
-//	@NotEmpty
-//	protected String kind;
 
 	@Column(name = "TYPE", insertable = false, updatable = false, nullable = false)
 	@NotNull

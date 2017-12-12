@@ -3,6 +3,7 @@ package com.softb.savefy.account.service;
 import com.softb.savefy.account.model.Account;
 import com.softb.savefy.account.model.CheckingAccount;
 import com.softb.savefy.account.model.Institution;
+import com.softb.savefy.account.model.InvestimentAccount;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by eriklacerda on 3/1/16.
  */
 @Service
-public class AccountService {
+public class AccountsService {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -32,6 +33,9 @@ public class AccountService {
 
     @Inject
     private CheckingAccountService checkingAccountService;
+
+    @Inject
+    private InvestmentAccountService investmentAccountService;
 
     /**
      * Return all current active user accounts. Calculate the account balance for presentation purposes
@@ -46,6 +50,8 @@ public class AccountService {
             if (account.getType().equals(Account.Type.CKA)){
                 checkingAccountService.calcAccountBalance((CheckingAccount) account);
                 ((CheckingAccount)account).setEntries(null);
+            } else if (account.getType().equals(Account.Type.INV)){
+                investmentAccountService.calcAccountBalance((InvestimentAccount) account);
             }
         }
 
@@ -78,7 +84,7 @@ public class AccountService {
      * @param groupId
      * @return
      */
-    public List<Account> getAllForTransferable(Integer groupId) {
+    public List<Account> getAllTransferable(Integer groupId) {
         List<Account> returnList = new ArrayList<>();
 
         List<Account> accounts = accountRepository.findAllActive(groupId);

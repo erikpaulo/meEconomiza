@@ -17,10 +17,10 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Created by eriklacerda on 3/1/16.
+ * This class, put together all services user can do with checking account (and similar) accounts.
  */
 @Service
-public class CheckingAccountService {
+public class CheckingAccountService extends AbstractAccountService {
 
     @Autowired
     private AccountRepository accountRepository;
@@ -35,7 +35,7 @@ public class CheckingAccountService {
     private UserAccountService userAccountService;
 
     @Inject
-    private AccountService accountService;
+    private AccountsService accountService;
 
     /**
      * Update or create the account
@@ -151,13 +151,13 @@ public class CheckingAccountService {
 
     /**
      * Calculate the account balance
-     * @param checkingAccount
+     * @param account
      */
-    protected void calcAccountBalance(CheckingAccount checkingAccount) {
-        // Set the account balance based in its entries;
-        Double balance = 0.0;
+    @Override
+    protected void calcAccountBalance(Account account) {
+        CheckingAccount checkingAccount = (CheckingAccount) account;
 
-        balance += checkingAccount.getStartBalance();
+        Double balance = checkingAccount.getStartBalance();
         if (checkingAccount.getEntries() != null){
             for (CheckingAccountEntry entry: checkingAccount.getEntries()){
                 balance += entry.getAmount();
@@ -165,6 +165,25 @@ public class CheckingAccountService {
             }
         }
         checkingAccount.setBalance(balance);
+    }
+
+
+    /**
+     * Used by conciliation process
+     * @param entriesToDelete
+     * @param groupId
+     */
+    public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
+    }
+
+    /**
+     * Used by conciliation process
+     * @param accountId
+     * @param groupId
+     * @return
+     */
+    public Account get(Integer accountId, Integer groupId) {
+        return accountRepository.findOne(accountId, groupId);
     }
 
     private CheckingAccountEntry createTwinEntry(CheckingAccountEntry entry, Integer groupId) {
@@ -193,23 +212,5 @@ public class CheckingAccountService {
         twinEntry.setDate( entry.getDate() );
         twinEntry.setSubCategory( entry.getSubCategory() );
         accountEntryRepository.save( twinEntry );
-    }
-
-    /**
-     * Used by conciliation process
-     * @param entriesToDelete
-     * @param groupId
-     */
-    public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
-    }
-
-    /**
-     * Used by conciliation process
-     * @param accountId
-     * @param groupId
-     * @return
-     */
-    public Account get(Integer accountId, Integer groupId) {
-        return accountRepository.findOne(accountId, groupId);
     }
 }

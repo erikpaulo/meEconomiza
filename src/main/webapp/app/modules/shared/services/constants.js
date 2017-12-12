@@ -7,14 +7,14 @@ define(['./module'], function (app) {
 	                CHECKING_ACCOUNT: {
 	                    id: 'CKA',
 	                    name: 'Conta Corrente'
-	                }/*,
-	                SAVING_ACCOUNT: {
-	                    id: 'SVA',
-	                    name: 'Conta Poupança'
 	                },
 	                INVESTMENT: {
 	                    id: 'INV',
 	                    name: 'Conta Investmento'
+	                }/*,
+	                SAVING_ACCOUNT: {
+	                    id: 'SVA',
+	                    name: 'Conta Poupança'
 	                },
 	                CREDIT_ACCOUNT: {
 	                    id: 'CCA',
