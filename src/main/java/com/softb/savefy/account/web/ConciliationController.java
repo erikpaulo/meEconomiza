@@ -33,15 +33,6 @@ public class ConciliationController extends AbstractRestController<Account, Inte
     private UserPreferencesService userPreferencesService;
 
     /**
-     * Inactivate this account
-     * @param id
-     */
-    @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Integer id) {
-        accountService.inactivate(id, getGroupId());
-    }
-
-    /**
      * Import account entries from a CSV file. This point prepares the file's data to be complemented by the user.
      * @param id Id of the Account
      * @param request Request
@@ -78,7 +69,7 @@ public class ConciliationController extends AbstractRestController<Account, Inte
     }
 
     @RequestMapping(value="/{conciliationId}", method = RequestMethod.DELETE)
-    @ResponseBody public void delConciliation( @PathVariable Integer id, @PathVariable Integer conciliationId ){
+    @ResponseBody public void delete( @PathVariable Integer id, @PathVariable Integer conciliationId ){
         conciliationService.delete(conciliationId, getGroupId());
     }
 
