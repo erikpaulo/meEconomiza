@@ -2,22 +2,23 @@ define(['./module'], function(directives) {
 	directives.directive('format', ['$filter', function ($filter) {
 		return {
 			require: '?ngModel',
+
 			link: function (scope, elem, attrs, ctrl) {
 				if (!ctrl) return;
-		
-			    ctrl.$formatters.unshift(function (a) {
-			        return $filter('currency')(ctrl.$modelValue)
-			    });
-		
-			    ctrl.$parsers.unshift(function (viewValue) {
-			    	elem.priceFormat({
-			    		prefix: 'R$ ',
-			    		centsSeparator: ',',
-			    		thousandsSeparator: '.'
-			        });                
-		                         
-		            return elem[0].value;
-		        });
+
+                ctrl.$formatters.unshift(function (a) {
+                    return $filter('currency')(ctrl.$modelValue)
+                });
+
+                ctrl.$parsers.unshift(function (viewValue) {
+                    elem.priceFormat({
+                        prefix: 'R$ ',
+                        centsSeparator: ',',
+                        thousandsSeparator: '.'
+                    });
+
+                    return elem[0].value;
+                });
 			}
 		};
 	}]);

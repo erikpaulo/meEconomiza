@@ -55,7 +55,7 @@ define(['./module'
                 });
             }
 
-            function DialogController($scope, $mdDialog, Utils, type, institutions) {
+            function DialogController($scope, $mdDialog, Utils, Constants, type, institutions) {
                 $scope.newAccount = {type: type};
 
                 $scope.types = Constants.ACCOUNT.TYPE;
@@ -65,6 +65,9 @@ define(['./module'
                     SubCategory.listAll(function (subCategories){
                         $scope.subCategories = subCategories;
                     });
+                } else if ($scope.newAccount.type == 'INV'){
+                    $scope.products = Constants.ACCOUNT.INVESTMENT_PRODUCTS;
+                    $scope.liquidityTypes = Constants.ACCOUNT.LIQUIDITY_TYPE;
                 }
 
                 $scope.hide = function() {

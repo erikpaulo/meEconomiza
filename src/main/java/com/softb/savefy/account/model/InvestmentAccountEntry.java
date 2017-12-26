@@ -2,7 +2,6 @@ package com.softb.savefy.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -10,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Classe que representa as entradas de um investimento.
@@ -26,7 +26,7 @@ public class InvestmentAccountEntry extends AccountEntry implements Serializable
 
 	// PURCHASE OR SALE
 	@Column(name = "OPERATION")
-	@NotEmpty
+	@NotNull
 	protected Operation operation;
 
 	// QTD QUOTES PURCHASED
@@ -44,45 +44,40 @@ public class InvestmentAccountEntry extends AccountEntry implements Serializable
 	@NotNull
 	protected Double quotesAvailable;
 
-	// FROM THE TOTAL INVESTED, HOW MUCH IS AVAILABLE WITHOUT PROFITABILITY
-	@Transient
-	protected Double amountAvailable;
-
 	// ROM THE TOTAL INVESTED, HOW MUCH IS AVAILABLE WITH PROFITABILITY
-	@Transient
+	@Column(name = "CURRENT_AMOUNT")
 	protected Double currentAmount;
 
-	//QUOTE VALUE AT TIME OF THE SALE
-	@Column(name = "QUOTE_VALUE_SOLD")
-	@NotNull
-	protected Double quoteValueSold;
-
 	// TAX INCOME PERCENT (CONSIDERING TAX RANGE)
-	@Transient
+	@Column(name = "INCOME_TAX_PERCENT")
 	protected Double incomeTaxPercent;
 
 	// TAX INCOME AMOUNT (CONSIDERING TAX RANGE)
-	@Transient
+	@Column(name = "INCOME_TAX_AMOUNT")
 	protected Double incomeTaxAmount;
 
-	// GROSS PROFITABILITY AMOUNT
+	// DATE THIS ENTRY GET LOWER TAX RATE;
 	@Transient
+	protected Date nextTaxRangeDate;
+
+	// GROSS PROFITABILITY AMOUNT
+	@Column(name = "GROSS_PROFITABILITY")
 	protected Double grossProfitability;
 
 	// PERCENT GROSS PROFITABILITY
-	@Transient
+	@Column(name = "PERCENT_GROSS_PROFITABILITY")
 	protected Double percentGrossProfitability;
 
 	// NET PROFITABILITY AMOUNT
-	@Transient
+	@Column(name = "NET_PROFITABILITY")
 	protected Double netProfitability;
 
 	// PERCENT NET PROFITABILITY
-	@Transient
+	@Column(name = "PERCENT_NET_PROFITABILITY")
 	protected Double percentNetProfitability;
 
 	public enum Operation {
-		PURCHASE ( "Aplicação" ), SALE ( "Resgate" );
+		PURCHASE ( "Aplicação" ), SALE ( "Resgate" ), IR_LAW ( "Come Cotas" );
 		private String name;
 
 		Operation(String name) {

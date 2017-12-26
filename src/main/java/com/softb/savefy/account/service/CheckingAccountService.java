@@ -4,11 +4,9 @@ import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
-import com.softb.system.errorhandler.exception.BusinessException;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -34,9 +32,6 @@ public class CheckingAccountService extends AbstractAccountService {
     @Inject
     private UserAccountService userAccountService;
 
-    @Inject
-    private AccountsService accountService;
-
     /**
      * Update or create the account
      * @param account
@@ -56,7 +51,7 @@ public class CheckingAccountService extends AbstractAccountService {
      * @return
      */
     public CheckingAccountEntry updateEntry(CheckingAccountEntry entry, Integer groupId){
-        CheckingAccountEntry currentEntry = accountEntryRepository.findOne( entry.getId(), groupId );
+        CheckingAccountEntry currentEntry = (CheckingAccountEntry) accountEntryRepository.findOne( entry.getId(), groupId );
 
         // Check if it's a transfer
         if (currentEntry.getTransfer()){
@@ -72,16 +67,8 @@ public class CheckingAccountService extends AbstractAccountService {
                 entry.setTwinEntryId( twinEntry.getId() );
             }
         }
-        return save(entry, groupId);
+        return (CheckingAccountEntry) save(entry, groupId);
     }
-
-    private CheckingAccountEntry save(CheckingAccountEntry entry, Integer groupId) {
-        CheckingAccountEntry accountEntry = accountEntryRepository.save( entry );
-        accountService.updateLastUpdate( accountEntry.getAccountId(), groupId );
-
-        return accountEntry;
-    }
-
 
     /**
      * Return this account with all its related and pre processed data
@@ -100,7 +87,7 @@ public class CheckingAccountService extends AbstractAccountService {
                 for (ConciliationEntry entry: conciliation.getEntries()) {
 
                     // Check if there is an account entry that has the sabe date and amount as this conciliation entry.
-                    List<CheckingAccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entry.getDate(), entry.getAmount());
+                    List<AccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entry.getDate(), entry.getAmount());
                     if (conflicts.size() > 0) {
                         entry.setExists(true);
                     }
@@ -124,29 +111,6 @@ public class CheckingAccountService extends AbstractAccountService {
 
         calcAccountBalance(account);
         return account;
-    }
-
-    /**
-     * Return this entry if the current user has it
-     * @param entryId
-     * @param groupId
-     * @return
-     */
-    public CheckingAccountEntry getEntry(Integer entryId, Integer groupId){
-        return accountEntryRepository.findOne(entryId, groupId);
-    }
-
-    /**
-     * Return this entry if the current user has it
-     * @param entryId
-     * @return
-     */
-    public void delEntry(Integer entryId){
-        try{
-            accountEntryRepository.delete(entryId);
-        } catch(DataIntegrityViolationException e){
-            throw new BusinessException("Lançamentos importados não podem ser removidos.");
-        }
     }
 
     /**
@@ -176,15 +140,15 @@ public class CheckingAccountService extends AbstractAccountService {
     public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
     }
 
-    /**
-     * Used by conciliation process
-     * @param accountId
-     * @param groupId
-     * @return
-     */
-    public Account get(Integer accountId, Integer groupId) {
-        return accountRepository.findOne(accountId, groupId);
-    }
+//    /**
+//     * Used by conciliation process
+//     * @param accountId
+//     * @param groupId
+//     * @return
+//     */
+//    public Account get(Integer accountId, Integer groupId) {
+//        return accountRepository.findOne(accountId, groupId);
+//    }
 
     private CheckingAccountEntry createTwinEntry(CheckingAccountEntry entry, Integer groupId) {
         CheckingAccountEntry twinEntry;
@@ -197,7 +161,7 @@ public class CheckingAccountService extends AbstractAccountService {
         twinEntry.setTwinEntryId( entry.getId() );
         twinEntry.setAccountId( entry.getAccountDestinyId() );
         twinEntry.setAccountDestinyId( entry.getAccountId() );
-        return save(twinEntry, groupId);
+        return (CheckingAccountEntry) save((AccountEntry)twinEntry, groupId);
     }
 
     private void removeTwinEntry(CheckingAccountEntry entry, CheckingAccountEntry currentEntry) {
@@ -207,7 +171,7 @@ public class CheckingAccountService extends AbstractAccountService {
     }
 
     private void updateTwinEntry(CheckingAccountEntry entry) {
-        CheckingAccountEntry twinEntry = accountEntryRepository.findOne( entry.getTwinEntryId() );
+        CheckingAccountEntry twinEntry = (CheckingAccountEntry) accountEntryRepository.findOne( entry.getTwinEntryId() );
         twinEntry.setAmount( entry.getAmount() * -1 );
         twinEntry.setDate( entry.getDate() );
         twinEntry.setSubCategory( entry.getSubCategory() );

@@ -1,21 +1,3 @@
 <section ng-controller="AccountController" ng-cloak>
-    <div layout="row" layout-padding layout-align="center center"  md-colors="{color: 'blue-grey-600'}">
-        <div layout="column" flex="33" flex-xs="50">
-            <div layout="row" layout-align="start center">
-                <img hide-xs ng-if="account.type" ng-src="resources/static/images/{{account.type}}-icon.png" style="height: 42px; width: 42px;"/>
-                <span hide-xs class="md-headline md-padding">{{account.name}}</span>
-                <span hide-gt-xs class="md-subhead md-padding">{{account.name}}</span>
-            </div>
-        </div>
-        <div layout="column" flex hide-xs>
-        </div>
-        <div layout="column" flex="33" flex-xs="50">
-            <div layout="row" layout-align="end center">
-                <span hide-xs class="md-display-1" my-currency="account.balance"></span>
-                <span hide-gt-xs class="md-title"  my-currency="account.balance"></span>
-            </div>
-        </div>
-    </div>
-    <md-divider></md-divider>
     <div layout="row" ng-include="entriesPage"/>
 </section>

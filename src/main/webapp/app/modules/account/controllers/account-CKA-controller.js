@@ -1,6 +1,6 @@
 define(['./module'
         ,'../services/account-resources'
-        ,'../services/account-CKA-entry-resources'
+        ,'../services/account-entry-resources'
         ,'../../shared/services/utils-service'
         ,'../../categorization/services/subcategory-resources'], function (app) {
 
@@ -37,6 +37,7 @@ define(['./module'
                 }).then(function(newEntry){
                     if (newEntry){
                         var accountEntry = new AccountEntry(newEntry);
+                        accountEntry.type = 'CKA';
                         accountEntry.accountId = $scope.account.id;
 
                         if (entry){
@@ -70,6 +71,7 @@ define(['./module'
 
             $scope.remove = function(entry){
                 var accountEntry = new AccountEntry(entry);
+                accountEntry.type = 'CKA';
                 accountEntry.$remove(function(){
                     for (var i in $scope.account.entries){
                         if($scope.account.entries[i].id == entry.id){

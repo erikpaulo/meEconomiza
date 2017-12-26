@@ -1,0 +1,61 @@
+<md-dialog flex="30" flex-xs="90">
+    <form name="entryForm" ng-submit="submit()">
+        <md-toolbar layout="row" layout-align="center center" class="header">
+            <div class="md-toolbar-tools">
+                <h2>Incluir/Editar Lançamento</h2>
+            </div>
+            <div flex></div>
+            <div>
+                <md-button class="md-icon-button" layout="row" layout-align="right center" ng-click="hide()">X</md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content class="md-padding">
+            <div layout="row" layout-alig="center center" class="md-padding">
+                <div layout="column" flex="60">
+                        <md-datepicker name="date" ng-model="editEntry.date" md-placeholder="Data" required style="margin-bottom: 18px;"></md-datepicker>
+                </div>
+                <div layout="column" flex="35" flex-offset="5">
+                    <md-input-container class="c-no-margin">
+                        <label>Operação</label>
+                        <md-select name="operation" ng-model="editEntry.operation" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)">
+                            <md-option ng-repeat="(key, operation) in operations" ng-value="operation.id">
+                                {{operation.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-alig="center center">
+                <div layout="column" flex="45" flex-offset="5">
+                    <md-input-container class="md-block">
+                        <label>Valor Bruto</label>
+                        <input name="amount" ng-model="editEntry.amount" type="text" required format="number">
+                    </md-input-container>
+                </div>
+                <div layout="column" flex="40" flex-offset="5">
+                    <md-input-container class="md-block">
+                        <label>Valor da Cota</label>
+                        <input name="quoteValue" ng-model="editEntry.quoteValue" type="number" required step="0.00000001">
+                    </md-input-container>
+                </div>
+            </div>
+            <div layout="row" layout-alig="center center" ng-if="editEntry.operation == 'SALE'">
+                <div layout="column" flex="45" flex-offset="5">
+                    <md-input-container class="md-block">
+                        <label>Valor IR</label>
+                        <input name="incomeTaxAmount" ng-model="editEntry.incomeTaxAmount" type="text" ng-required="editEntry.operation == 'SALE'" format="number">
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row" layout-align="end center">
+            <md-button class="" ng-click="cancel()" ng-show="!entryForm.$pristine">Cancelar</md-button>
+            <md-button ng-show="editEntry.id" class="md-primary" type="submit" ng-click="save()"
+                       ng-disabled="entryForm.$invalid">Alterar
+            </md-button>
+            <md-button ng-show="!editEntry.id" class="md-primary" type="submit" ng-click="new()" ng-disabled="entryForm.$invalid">
+                Incluir
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

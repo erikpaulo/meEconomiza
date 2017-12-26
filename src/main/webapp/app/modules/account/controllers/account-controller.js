@@ -2,10 +2,12 @@ define(['./module'
         ,'../services/account-resources'
         ,'../../shared/services/utils-service'
         ,'../../shared/services/constants'
-        ,'./account-CKA-controller'], function (app) {
+        ,'./account-CKA-controller'
+        ,'./account-INV-controller'], function (app) {
 
 	app.controller('AccountController', ['$scope', '$location', '$mdDialog', '$routeParams', 'AccountResource', 'Constants', 'Utils',
         function($scope, $location, $mdDialog, $routeParams, Account, Constants, Utils,) {
+            $scope.root = $scope;
             $scope.appContext.contextMenu.setActions([
                 {icon: 'close', tooltip: 'Inativar Conta', onClick: function() {
                     $scope.inactivate();

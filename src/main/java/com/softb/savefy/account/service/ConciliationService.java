@@ -171,7 +171,7 @@ public class ConciliationService {
 
     private void checkConflicts(Integer accountId, ConciliationEntry entryToImport, Integer groupId) {
         // Verifica se existe um lançamento na conta com mesma data e valor. Se existir aponta como provável conflito.
-        List<CheckingAccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entryToImport.getDate(), entryToImport.getAmount());
+        List<AccountEntry> conflicts =  accountEntryRepository.listAllByDateAmount(groupId, accountId, entryToImport.getDate(), entryToImport.getAmount());
         if (conflicts.size() > 0) {
             entryToImport.setExists(true);
             entryToImport.setReject(true);
@@ -185,7 +185,6 @@ public class ConciliationService {
      * @return
      */
     public Conciliation save(Conciliation conciliation, Integer groupId){
-//        conciliationEntryRepository.save(conciliation.getEntries());
         conciliationRepository.save(conciliation);
         return conciliation;
     }

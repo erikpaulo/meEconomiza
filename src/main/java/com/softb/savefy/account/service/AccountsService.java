@@ -3,7 +3,7 @@ package com.softb.savefy.account.service;
 import com.softb.savefy.account.model.Account;
 import com.softb.savefy.account.model.CheckingAccount;
 import com.softb.savefy.account.model.Institution;
-import com.softb.savefy.account.model.InvestimentAccount;
+import com.softb.savefy.account.model.InvestmentAccount;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -51,7 +50,7 @@ public class AccountsService {
                 checkingAccountService.calcAccountBalance((CheckingAccount) account);
                 ((CheckingAccount)account).setEntries(null);
             } else if (account.getType().equals(Account.Type.INV)){
-                investmentAccountService.calcAccountBalance((InvestimentAccount) account);
+                investmentAccountService.calcAccountBalance((InvestmentAccount) account);
             }
         }
 
@@ -96,16 +95,5 @@ public class AccountsService {
         }
 
         return returnList;
-    }
-
-    /**
-     * Update the last update of this account
-     * @param accountId
-     * @param groupId
-     */
-    public void updateLastUpdate(Integer accountId, Integer groupId) {
-        Account account = accountRepository.findOne(accountId, groupId);
-        account.setLastUpdate(Calendar.getInstance().getTime());
-        accountRepository.save(account);
     }
 }

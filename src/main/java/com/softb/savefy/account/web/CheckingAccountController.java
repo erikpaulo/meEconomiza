@@ -102,7 +102,7 @@ public class CheckingAccountController extends AbstractRestController<Account, I
      */
     @RequestMapping(value = "/{accountId}/entry/{id}", method = RequestMethod.DELETE)
     @ResponseBody public void removeEntry(@PathVariable Integer id) throws FormValidationError {
-        CheckingAccountEntry entry = checkingAccountService.getEntry(id, getGroupId());
+        CheckingAccountEntry entry = (CheckingAccountEntry) checkingAccountService.getEntry(id, getGroupId());
         if (entry == null){
             throw new BusinessException("Lançamento não encontrado para usuário corrente.");
         }
