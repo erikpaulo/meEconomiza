@@ -52,9 +52,6 @@ public class Category extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	protected Integer groupId;
 
-//	@Transient
-//	protected String fullName;
-
     public enum Type {
         INC ( "Entradas" ), EXP ( "Despesas" ), INV ( "Investimentos" );
         private String name;

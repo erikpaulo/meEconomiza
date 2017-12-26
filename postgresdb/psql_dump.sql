@@ -74,7 +74,7 @@ CREATE TABLE SUBCATEGORY (
 	ID             SERIAL PRIMARY KEY,
 	NAME           VARCHAR(50),
 	ACTIVATED      BOOLEAN NOT NULL,
-	TYPE           VARCHAR(1), --F - fixed, I - irregular, V - variable
+	TYPE           VARCHAR(1), --E - essential, S - superfluous
 	CATEGORY_ID    INTEGER REFERENCES CATEGORY(ID),
 	USER_GROUP_ID  INTEGER NOT NULL REFERENCES USER_GROUP(id),
 

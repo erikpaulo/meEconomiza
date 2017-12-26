@@ -51,7 +51,7 @@ public class SubCategory extends BaseEntity<Integer> implements Serializable {
 	protected String fullName;
 
     public enum Type {
-        F ( "Despesa Mensal Fixa" ), I ( "Despesa Irregular" ), V ( "Despesa Mensal Variável" );
+        E ( "Essencial" ), S ( "Supérfluo" );
         private String name;
 
         Type(String name) {

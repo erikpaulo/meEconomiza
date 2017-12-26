@@ -3,9 +3,8 @@ define([ './module' ], function(module) {
 	    return{
 	        Subcategory: {
                 Types: [
-                    {id:'F', name:'Mensal Fixo'},
-                    {id:'I', name:'Mensal Irregular'},
-                    {id:'V', name:'Variável'}
+                    {id:'E', name:'Essencial'},
+                    {id:'S', name:'Supérfluo'}
                 ]
             },
 	        Types: [
