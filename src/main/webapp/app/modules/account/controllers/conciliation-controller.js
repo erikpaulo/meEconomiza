@@ -7,8 +7,7 @@ define(['./module',
 
 	app.controller('ConciliationController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'SubCategoryResource', 'ConciliationResource', 'CategoryService', 'UserPreferencesResource',
         function($scope, $filter, $mdDialog, Account, SubCategory, Conciliation, CategoryService, UserPreferences) {
-            $scope.appContext.contextMenu.addAction(
-            );
+            $scope.appContext.contextMenu.setActions([]);
 
             Account.listAll(function(accounts){
                 $scope.accounts = accounts;
