@@ -12,6 +12,6 @@ import java.util.List;
 @Repository("AppQuoteSaleRepository")
 public interface QuoteSaleRepository extends JpaRepository<QuoteSale, Integer> {
 
-    @Query("select qs from QuoteSale qs where qs.saleEntryId = :id")
-    List<QuoteSale> findAllByInvestment(@Param("id") Integer id) throws DataAccessException;
+    @Query("select qs from QuoteSale qs where qs.saleEntry.id = :id")
+    List<QuoteSale> findAllBySaleId(@Param("id") Integer id) throws DataAccessException;
 }

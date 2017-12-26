@@ -100,9 +100,6 @@ define(['./module'
 
             function updateBalance(){
                 $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date', false);
-
-
-//                $scope.account.balance = 0.0;
                 $scope.totalProfit = {
                     grossValue: 0.0,
                     grossPercent: 0.0,
@@ -112,8 +109,6 @@ define(['./module'
                     amountInvested: 0.0
                 }
                 for (var i in $scope.account.entries){
-//                    $scope.account.balance += $scope.account.entries[i].currentAmount;
-
                     $scope.totalProfit.grossValue += $scope.account.entries[i].grossProfitability;
                     $scope.totalProfit.amountInvested += $scope.account.entries[i].amount;
                     $scope.totalProfit.netValue += $scope.account.entries[i].netProfitability;

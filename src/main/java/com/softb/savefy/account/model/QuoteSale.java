@@ -26,11 +26,11 @@ public class QuoteSale extends BaseEntity<Integer> implements Serializable {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PURCHASE_ENTRY_ID", referencedColumnName = "ID")
-    protected InvestmentAccountEntry purchaseEntryId;
+    protected InvestmentAccountEntry purchaseEntry;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "SALE_ENTRY_ID", referencedColumnName = "ID")
-    protected InvestmentAccountEntry saleEntryId;
+    protected InvestmentAccountEntry saleEntry;
 
     @Column(name = "QTD_QUOTES")
     @NotNull

@@ -60,6 +60,10 @@ public class InvestmentAccountEntry extends AccountEntry implements Serializable
 	@Transient
 	protected Date nextTaxRangeDate;
 
+	// TAX INCOME AMOUNT (CONSIDERING TAX RANGE)
+	@Column(name = "IOF")
+	protected Double iof;
+
 	// GROSS PROFITABILITY AMOUNT
 	@Column(name = "GROSS_PROFITABILITY")
 	protected Double grossProfitability;

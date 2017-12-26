@@ -1,6 +1,7 @@
 package com.softb.savefy.account.service;
 
 import com.softb.savefy.account.model.*;
+import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.IndexRepository;
 import com.softb.savefy.account.repository.QuoteSaleRepository;
@@ -23,6 +24,9 @@ public class InvestmentAccountService extends AbstractAccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AccountEntryRepository accountEntryRepository;
 
     @Autowired
     private IndexRepository indexRepository;
@@ -93,6 +97,22 @@ public class InvestmentAccountService extends AbstractAccountService {
 
         entry.setPercentGrossProfitability(entry.getGrossProfitability() / currentOriginalValue);
         entry.setPercentNetProfitability(entry.getNetProfitability() / currentOriginalValue);
+    }
+
+    public void delEntry(InvestmentAccountEntry entry, Integer groupId) {
+
+        if (!entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
+            List<QuoteSale> sales = quoteSaleRepository.findAllBySaleId(entry.getId());
+            for (QuoteSale quoteSale: sales) {
+                InvestmentAccountEntry purchaseEntry = quoteSale.getPurchaseEntry();
+                purchaseEntry.setQuotesAvailable(purchaseEntry.getQuotesAvailable() + quoteSale.getQtdQuotes());
+                purchaseEntry.setAmount(purchaseEntry.getQuotesAvailable() * purchaseEntry.getQuoteValue());
+                save(purchaseEntry, groupId);
+
+                quoteSaleRepository.delete(quoteSale);
+            }
+        }
+        accountEntryRepository.delete(entry);
     }
 
     /**

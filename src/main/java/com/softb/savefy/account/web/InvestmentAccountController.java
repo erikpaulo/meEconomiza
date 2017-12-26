@@ -122,7 +122,7 @@ public class InvestmentAccountController extends AbstractRestController<Account,
         if (entry == null){
             throw new BusinessException("Lançamento não encontrado para usuário corrente.");
         }
-        investmentAccountService.delEntry(id);
+        investmentAccountService.delEntry(entry, getGroupId());
     }
 
     /**
