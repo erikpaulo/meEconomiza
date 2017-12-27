@@ -35,11 +35,19 @@
             </md-input-container>
         </div>
         <div layout="row">
-            <md-input-container flex="30">
-                <label>Administração (% aa)</label>
+            <md-input-container flex="15">
+                <label>Risco</label>
+                <md-select name="risk" ng-model="newAccount.risk" required>
+                    <md-option ng-repeat="(id, risk) in risks" ng-value="risk.id">
+                        {{risk.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container flex="20" flex-offset="5">
+                <label>Admin. (% aa)</label>
                 <input name="adminTax" ng-model="newAccount.adminTax" type="number" step="0.01" required>
             </md-input-container>
-            <md-input-container flex="30" flex-offset="5">
+            <md-input-container flex="20" flex-offset="5">
                 <label>Liquidez</label>
                 <md-select name="type" ng-model="newAccount.liquidityType" required>
                     <md-option ng-repeat="(id, liquidity) in liquidityTypes" ng-value="liquidity.id">
@@ -47,11 +55,11 @@
                     </md-option>
                 </md-select>
             </md-input-container>
-            <md-input-container flex="30" flex-offset="5" ng-if="newAccount.liquidityType == 'DPLUS'">
+            <md-input-container flex="20" flex-offset="5" ng-if="newAccount.liquidityType == 'DPLUS'">
                 <label>Dias</label>
                 <input name="liquidityDays" ng-model="newAccount.liquidityDays" type="number" step="0.01" required>
             </md-input-container>
-            <md-input-container flex="30" flex-offset="5" ng-if="newAccount.liquidityType == 'DUE_DATE'">
+            <md-input-container flex="35" flex-offset="5" ng-if="newAccount.liquidityType == 'DUE_DATE'">
                 <md-datepicker name="liquidityDueDate" ng-model="editEntry.liquidityDueDate" md-placeholder="Data" required style="margin-bottom: 18px;"></md-datepicker>
             </md-input-container>
         </div>

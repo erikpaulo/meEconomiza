@@ -37,6 +37,20 @@ define(['./module'], function (app) {
 	                    name: 'No Vencimento'
 	                }
 
+	            },
+	            INVESTMENT_RISK: {
+	                HIGH: {
+	                    id: 'HIGH',
+	                    name: 'Alto'
+	                },
+	                MEDIUM: {
+	                    id: 'MEDIUM',
+	                    name: 'Médio'
+	                },
+	                LOW: {
+	                    id: 'LOW',
+	                    name: 'Baixo'
+	                }
 	            }
 	        },
 	        ACCOUNT_ENTRY: {

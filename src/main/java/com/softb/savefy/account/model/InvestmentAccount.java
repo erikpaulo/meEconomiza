@@ -1,6 +1,7 @@
 package com.softb.savefy.account.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,6 +29,10 @@ public class InvestmentAccount extends Account implements Serializable {
     @Column(name="ADMIN_TAX")
     @NotNull
     protected Double adminTax;
+
+    @Column(name="RISK")
+    @NotEmpty
+    protected String risk;
 
     // D+ OR DUE DATE
     @Column(name="LIQUIDITY_TYPE")

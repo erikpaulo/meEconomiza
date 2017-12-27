@@ -68,6 +68,7 @@ define(['./module'
                 } else if ($scope.newAccount.type == 'INV'){
                     $scope.products = Constants.ACCOUNT.INVESTMENT_PRODUCTS;
                     $scope.liquidityTypes = Constants.ACCOUNT.LIQUIDITY_TYPE;
+                    $scope.risks = Constants.ACCOUNT.INVESTMENT_RISK;
                 }
 
                 $scope.hide = function() {
