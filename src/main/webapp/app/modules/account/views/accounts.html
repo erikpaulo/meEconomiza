@@ -17,10 +17,10 @@
                              md-whiteframe="{{elevation}}"
                              ng-mouseover="elevation=4"
                              ng-mouseleave="elevation=2"
-                             style="min-width: 212px;cursor:pointer">
-                        <md-card-header class="md-body-2" >
+                             style="min-width: 212px;max-width: 212px;cursor:pointer">
+                        <md-card-header class="md-body-2">
                             <div layout="column" layout-align="center center" flex>
-                                <span style="margin-bottom:14px">{{account.name}}</span>
+                                <span style="margin-bottom:14px;text-align: center;min-height:48px">{{account.name}}</span>
                                 <md-divider></md-divider>
                                 <img ng-src="resources/static/images/{{account.type}}-icon.png" md-colors="{background: 'blue-grey-700'}" class="theme"/>
                                 <span class="md-caption">{{account.type | accountTypeName}}</span>
@@ -38,6 +38,4 @@
                 </div>
             </div>
         </div>
-    <!--<div layout="column" flex-offset-gt-xs="5" layout-align-xs="center center" layout-padding>-->
-    <!--</div>-->
 </section>
