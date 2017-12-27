@@ -69,7 +69,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         for (InvestmentAccountEntry entry: ((InvestmentAccount) account).getEntries()) {
             if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                 calcPrevisionGains(investmentAccount, entry);
-                balance += entry.getCurrentAmount();
+                balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
             }
         }
         account.setBalance(balance);
