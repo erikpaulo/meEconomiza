@@ -22,7 +22,8 @@ define(['./module'], function (app) {
             SVA: 'Conta Poupança',
             INV: 'Conta Investimento',
             CCA: 'Cartão de Crédito',
-            LOA: 'Financiamento'
+            LOA: 'Financiamento',
+            STK: 'Carteira de Ações'
         }
         return function (input) {
             return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');

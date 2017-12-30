@@ -1,7 +1,7 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.Index;
-import com.softb.savefy.account.repository.IndexRepository;
+import com.softb.savefy.account.model.AssetPrice;
+import com.softb.savefy.account.repository.AssetPriceRepository;
 import com.softb.system.errorhandler.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,26 +15,26 @@ import java.util.List;
 public class IndexService {
 
     @Autowired
-    private IndexRepository indexRepository;
+    private AssetPriceRepository indexRepository;
 
-    public void delete(Index index, Integer groupId) {
-        Index curIndex =  indexRepository.findOne(index.getId());
+    public void delete(AssetPrice index, Integer groupId) {
+        AssetPrice curIndex =  indexRepository.findOne(index.getId());
         if (curIndex != null && !curIndex.getGroupId().equals(groupId)){
             throw new BusinessException("This index doesn't belong to current user.");
         }
         indexRepository.delete(index);
     }
 
-    public Index save(Index index, Integer groupId){
+    public AssetPrice save(AssetPrice index, Integer groupId){
         return indexRepository.save(index);
     }
 
-    public List<Index> getAll(Integer accountId){
+    public List<AssetPrice> getAll(Integer accountId){
         return indexRepository.findAllByInvestment(accountId);
     }
 
     public void delIndexValue(Integer id, Integer groupId) {
-        Index index = indexRepository.findOne(id);
+        AssetPrice index = indexRepository.findOne(id);
         if (!index.getGroupId().equals(groupId)) throw new BusinessException("This index doesn't belong to currentuser");
 
         indexRepository.delete(id);

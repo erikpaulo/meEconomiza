@@ -95,7 +95,7 @@
             </div>
         </div>
         <div layout="column" flex="60">
-            <md-card class="flat" ng-if="conciliation.entries.length > 0">
+            <md-card class="flat" ng-if="conciliation.stocks.length > 0">
                 <md-card-content>
                     <div layout="column" flex style="margin-bottom:3px;">
                         <div layout="row">
@@ -128,7 +128,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr layout="row" ng-repeat="item in conciliation.entries" layout-align="center center">
+                                <tr layout="row" ng-repeat="item in conciliation.stocks" layout-align="center center">
                                     <td flex="10">{{ item.date | date: 'dd/MM/yyyy' }}</td>
                                     <td flex="25" md-truncate>{{ item.description }}</td>
                                     <td flex="40">

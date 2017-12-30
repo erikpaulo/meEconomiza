@@ -1,7 +1,7 @@
 package com.softb.savefy.account.web;
 
 import com.softb.savefy.account.model.Account;
-import com.softb.savefy.account.model.Index;
+import com.softb.savefy.account.model.AssetPrice;
 import com.softb.savefy.account.service.IndexService;
 import com.softb.system.rest.AbstractRestController;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class IndexController extends AbstractRestController<Account, Integer> {
      * @param index
      */
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
-    public void delete(@RequestBody Index index) {
+    public void delete(@RequestBody AssetPrice index) {
         indexService.delete(index, getGroupId());
     }
 
@@ -30,7 +30,7 @@ public class IndexController extends AbstractRestController<Account, Integer> {
      * @param accountId
      */
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody public List<Index> listAllByInvestment(@PathVariable Integer accountId) {
+    @ResponseBody public List<AssetPrice> listAllByInvestment(@PathVariable Integer accountId) {
         return indexService.getAll(accountId);
     }
 
@@ -39,7 +39,7 @@ public class IndexController extends AbstractRestController<Account, Integer> {
      * @param index
      */
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody public Index create(@RequestBody Index index) {
+    @ResponseBody public AssetPrice create(@RequestBody AssetPrice index) {
         return indexService.save(index, getGroupId());
     }
 }

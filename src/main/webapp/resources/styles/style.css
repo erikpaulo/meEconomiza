@@ -93,8 +93,9 @@ a {
     color: #93c47d;
 }
 
-.c-no-margin{
-    margin: 0px !important;
+.no-error div.md-errors-spacer{
+    min-height:0px;
+    min-width:0px;
 }
 
 /********** >>> CARDS <<< ***********/

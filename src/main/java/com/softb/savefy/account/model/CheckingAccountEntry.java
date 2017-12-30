@@ -2,6 +2,7 @@ package com.softb.savefy.account.model;
 
 import com.softb.savefy.categorization.model.SubCategory;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ import java.util.Date;
  */
 @Data
 @Entity
+@NoArgsConstructor
 @DiscriminatorValue("CKA")
 public class CheckingAccountEntry extends AccountEntry implements Serializable {
 
@@ -23,7 +25,7 @@ public class CheckingAccountEntry extends AccountEntry implements Serializable {
 
 
 	public CheckingAccountEntry(Date date, SubCategory subCategory, Double amount, Boolean transfer, Integer accountId,
-								Integer accountDestinyId, Integer twinEntryId, Integer groupId, Double balance) {
+								Integer accountDestinyId, Integer twinEntryId, Integer groupId, Double balance, Account.Type type) {
 		super.date = date;
 		super.amount = amount;
 		super.accountId = accountId;
@@ -33,6 +35,7 @@ public class CheckingAccountEntry extends AccountEntry implements Serializable {
 		this.accountDestinyId = accountDestinyId;
 		this.twinEntryId = twinEntryId;
 		this.balance = balance;
+		super.type = type;
 	}
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -57,6 +60,6 @@ public class CheckingAccountEntry extends AccountEntry implements Serializable {
     public CheckingAccountEntry clone() throws CloneNotSupportedException {
         return new CheckingAccountEntry( super.date,      this.subCategory, this.amount, this.transfer,
                                  this.accountId, this.accountDestinyId, this.twinEntryId, this.groupId,
-                                 this.balance/*,   this.account*/);
+                                 this.balance, this.type);
     }
 }

@@ -54,7 +54,7 @@ public class CheckingAccountService extends AbstractAccountService {
         CheckingAccountEntry currentEntry = (CheckingAccountEntry) accountEntryRepository.findOne( entry.getId(), groupId );
 
         // Check if it's a transfer
-        if (currentEntry.getTransfer()){
+        if (currentEntry!=null && currentEntry.getTransfer()){
             if (!entry.getTransfer()) { // Needs to delete its twin entry.
                 removeTwinEntry( entry, currentEntry );
             } else {
@@ -102,7 +102,7 @@ public class CheckingAccountService extends AbstractAccountService {
             }
         });
 
-        // Sort entries ASC
+        // Sort stocks ASC
         Collections.sort(account.getEntries(), new Comparator<AccountEntry>(){
             public int compare(AccountEntry o1, AccountEntry o2) {
                 return o1.getDate().compareTo(o2.getDate());

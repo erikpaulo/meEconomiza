@@ -8,9 +8,13 @@ define(['./module'], function (app) {
 	                    id: 'CKA',
 	                    name: 'Conta Corrente'
 	                },
-	                INVESTMENT: {
+	                INVESTMENT_ACCOUNT: {
 	                    id: 'INV',
 	                    name: 'Conta Investmento'
+	                },
+	                STOCK_PORTFOLIO: {
+	                    id: 'STK',
+	                    name: 'Carteira de Ações'
 	                }
 	            },
 	            INVESTMENT_PRODUCTS: {
@@ -66,6 +70,16 @@ define(['./module'], function (app) {
 	                IR_LAW: {
 	                    id: 'IR_LAW',
 	                    name: 'Come Cotas'
+	                }
+	            },
+	            STOCK_OPERATION: {
+	                PURCHASE: {
+	                    id: 'PURCHASE',
+	                    name: 'Compra'
+	                },
+	                SALE: {
+	                    id: 'SALE',
+	                    name: 'Venda'
 	                }
 	            }
 	        }

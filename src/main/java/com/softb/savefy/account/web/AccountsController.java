@@ -26,9 +26,9 @@ public class AccountsController extends AbstractRestController<Account, Integer>
 
 
     /**
-     * Lists all account registered for this user, but its entries aren't loaded.
+     * Lists all account registered for this user, but its stocks aren't loaded.
      *
-     * @return List Accounts without its entries
+     * @return List Accounts without its stocks
      */
     @RequestMapping(method = RequestMethod.GET)
     public List<Account> listAll() {

@@ -3,7 +3,8 @@ define(['./module'
         ,'../../shared/services/utils-service'
         ,'../../shared/services/constants'
         ,'./account-CKA-controller'
-        ,'./account-INV-controller'], function (app) {
+        ,'./account-INV-controller'
+        ,'./account-STK-controller'], function (app) {
 
 	app.controller('AccountController', ['$scope', '$location', '$mdDialog', '$routeParams', 'AccountResource', 'Constants', 'Utils',
         function($scope, $location, $mdDialog, $routeParams, Account, Constants, Utils,) {

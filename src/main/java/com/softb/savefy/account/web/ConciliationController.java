@@ -33,7 +33,7 @@ public class ConciliationController extends AbstractRestController<Account, Inte
     private UserPreferencesService userPreferencesService;
 
     /**
-     * Import account entries from a CSV file. This point prepares the file's data to be complemented by the user.
+     * Import account stocks from a CSV file. This point prepares the file's data to be complemented by the user.
      * @param id Id of the Account
      * @param request Request
      * @param response Response

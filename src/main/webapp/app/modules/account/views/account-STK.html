@@ -1,0 +1,96 @@
+<div layout="column" flex="100" ng-controller="AccountSTKController">
+    <div layout="row" layout-padding layout-align="center center"  md-colors="{color: 'blue-grey-600'}">
+        <div layout="column" flex="33" flex-xs="50">
+            <div layout="row" layout-align="start center">
+                <img hide-xs ng-if="account.type" ng-src="resources/static/images/{{account.type}}-icon.png" style="height: 42px; width: 42px;"/>
+                <span hide-xs class="md-headline md-padding">{{account.name}}</span>
+                <span hide-gt-xs class="md-subhead md-padding">{{account.name}}</span>
+            </div>
+        </div>
+        <div layout="column" flex="33" hide-xs>
+            <div layout="row">
+                <div layout="column" flex="50">
+                    <div layout="row" layout-align="center center">
+                        <span class="md-headline">{{totalProfit.grossValue | currency}}</span><span>({{totalProfit.grossPercent*100 | number:2}}%)</span>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <span class="md-caption">Rendimento Bruto</span>
+                    </div>
+                </div>
+                <md-divider></md-divider>
+                <div layout="column" flex="50">
+                    <div layout="row" layout-align="center center">
+                        <span class="md-headline">{{totalProfit.netValue | currency}}</span><span>({{totalProfit.netPercent*100 | number:2}}%)</span>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <span class="md-caption">Rendimento Líquido</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div layout="column" flex="33" flex-xs="50">
+            <div layout="row" layout-align="end center">
+                <span hide-xs class="md-display-1" my-currency="account.balance"></span>
+                <span hide-gt-xs class="md-title"  my-currency="account.balance"></span>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-align="start start">
+        <div layout="column" flex="20" class="md-padding">
+            <div layout="row" ng-repeat="(code, stock) in activeStocks" md-colors="{color: 'blue-grey-400'}">
+                <span class="md-headline" layout="column" flex="40" layout-align="center center">{{stock.code}}:</span>
+                <span class="md-headline" layout="column" flex="30" layout-align="center center">{{(stock.gp / stock.ai)*100 | number: 2}}%</span>
+            </div>
+        </div>
+        <div layout="column" flex="60" flex-xs="100" flex-offset="5">
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="90" ng-if="account.stocks.length<=0">
+                    <h6 style="color: #7A7A7A;font-style: italic;">Não existem ações nesta carteira.</h6>
+                </div>
+                <table layout="column" flex="100" class="table-striped" style="margin:10px;" ng-if="account.stocks.length>0">
+                    <thead>
+                    <tr layout="row">
+                        <th flex="10" flex-xs="10">Ativo</th>
+                        <th flex="15" flex-xs="25">Inclusão</th>
+                        <th flex="10" hide-xs>Preço Ori.</th>
+                        <th flex="10" hide-xs>Preço Ult.</th>
+                        <th flex="10" hide-xs>Taxas</th>
+                        <th flex="10" flex-xs="25">Var. Bruta</th>
+                        <th flex="10" hide-xs>Var. Líq.</th>
+                        <th flex="20" flex-xs="30">Posição</th>
+                        <th flex="5" flex-xs="10"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr layout="row" ng-repeat="item in account.stocks"  layout-align="center center" class="c-hover">
+                            <td flex="10" flex-xs="10">{{ item.code }}</td>
+                            <td flex="15" flex-xs="25">{{ item.date | date : 'dd/MM/yyyy' }}</td>
+                            <td flex="10" hide-xs>{{ item.originalPrice | currency }}</td>
+                            <td flex="10" hide-xs>
+                                <span ng-if="item.quantity==0 || item.operation == 'SALE'">{{ item.lastPrice | currency }}</span>
+                                <md-input-container ng-if="item.quantity>0 && item.operation == 'PURCHASE'" class="md-block c-no-margin no-error">
+                                    <input aria-label="Ultimo preço" name="lastPrice" ng-model="item.lastPrice" type="text" required format="number" ng-blur="updatePrice(item)">
+                                </md-input-container>
+                            </td>
+                            <td flex="10" hide-xs>{{ item.brokerage | currency }}</td>
+                            <td flex="10" flex-xs="25">{{ item.percentGrossProfitability | number:2 }}%</td>
+                            <td flex="10" hide-xs>{{ item.percentNetProfitability | number:2 }}%</td>
+                            <td flex="20" flex-xs="30" my-currency="item.currentValue"></td>
+                            <td flex="5" flex-xs="10">
+                                <div layout="row">
+                                    <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">
+                                        <md-icon class="material-icons step md-18">highlight_off</md-icon>
+                                    </md-button>
+                                    <!--<md-button class="md-icon-button" ng-click="updatePrice(item)" aria-label="Remover">-->
+                                        <!--<md-icon class="material-icons step md-18">monetization_on</md-icon>-->
+                                    <!--</md-button>-->
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

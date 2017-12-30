@@ -1,9 +1,6 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.Account;
-import com.softb.savefy.account.model.CheckingAccount;
-import com.softb.savefy.account.model.Institution;
-import com.softb.savefy.account.model.InvestmentAccount;
+import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
@@ -36,6 +33,9 @@ public class AccountsService {
     @Inject
     private InvestmentAccountService investmentAccountService;
 
+    @Inject
+    private StockAccountService stockAccountService;
+
     /**
      * Return all current active user accounts. Calculate the account balance for presentation purposes
      * @param groupId
@@ -47,10 +47,12 @@ public class AccountsService {
     		// Calculate account balance
         for (Account account: accounts) {
             if (account.getType().equals(Account.Type.CKA)){
-                checkingAccountService.calcAccountBalance((CheckingAccount) account);
+                checkingAccountService.calcAccountBalance(account);
                 ((CheckingAccount)account).setEntries(null);
             } else if (account.getType().equals(Account.Type.INV)){
-                investmentAccountService.calcAccountBalance((InvestmentAccount) account);
+                investmentAccountService.calcAccountBalance(account);
+            } else if (account.getType().equals(Account.Type.STK)){
+                stockAccountService.calcAccountBalance(account);
             }
         }
 

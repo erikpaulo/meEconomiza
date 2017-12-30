@@ -78,7 +78,9 @@ define(['./module'
                     $mdDialog.cancel();
                 };
                 $scope.submit = function() {
-                    $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
+                    if ($scope.newAccount.startBalance) {
+                        $scope.newAccount.startBalance = Utils.currencyToNumber($scope.newAccount.startBalance);
+                    }
                     $mdDialog.hide($scope.newAccount);
                 };
             }

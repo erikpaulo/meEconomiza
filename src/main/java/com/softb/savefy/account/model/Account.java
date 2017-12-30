@@ -61,7 +61,8 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     protected Double balance;
 
     public enum Type {
-        CKA ( "Conta Corrente" ), INV ( "Conta Investimento" ), CCA ( "Cartão de Crédito" );
+        CKA ( "Conta Corrente" ), INV ( "Conta Investimento" ), CCA ( "Cartão de Crédito" ),
+        STK ( "Carteira de Ações" );
         private String name;
 
         Type(String name) {

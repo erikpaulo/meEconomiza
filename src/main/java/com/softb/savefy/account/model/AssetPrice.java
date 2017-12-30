@@ -13,7 +13,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Classe que representa as atualizações do indexador de um investimento.
+ * Classe que representa as atualizações de preço de um determinado ativo.
  * @author Erik Lacerda
  *
  */
@@ -21,14 +21,16 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "INDEX")
-public class Index extends BaseEntity<Integer> implements Serializable {
+@Table(name = "ASSET_PRICE")
+public class AssetPrice extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
     @Column(name = "ACCOUNT_ID")
-    @NotNull
     protected Integer accountId;
+
+    @Column(name = "ACCOUNT_ENTRY_ID")
+    protected Integer accountEntryId;
 
     @Column(name = "DATE")
     @NotNull

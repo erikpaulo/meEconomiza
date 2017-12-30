@@ -190,6 +190,7 @@ public class ConciliationService {
     }
 
     public Conciliation syncEntriesIntoAccount(Conciliation conciliation, Integer groupId){
+        CheckingAccount account = checkingAccountService.getAccount(conciliation.getAccountId(), groupId);
 
         if (conciliation.getImported()){
             throw new BusinessException("This conciliation has already been imported!");
@@ -200,9 +201,9 @@ public class ConciliationService {
                 // Update categorization for future predictions;
                 categoryPredictionService.register(entry.getDescription(), entry.getSubCategory(), groupId);
 
-                // Create account entries
+                // Create account stocks
                 CheckingAccountEntry accEntry = new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
-                                                                         conciliation.getAccountId(), null, null, groupId, 0.0);
+                                                                         conciliation.getAccountId(), null, null, groupId, 0.0, account.getType());
                 accEntry = accountEntryRepository.save(accEntry);
 
                 entry.setAccountEntry(accEntry);
@@ -210,7 +211,6 @@ public class ConciliationService {
         }
 
         // Update Account
-        CheckingAccount account = checkingAccountService.getAccount(conciliation.getAccountId(), groupId);
         account.setLastUpdate(Calendar.getInstance().getTime());
         checkingAccountService.saveAccount(account, groupId);
 
@@ -255,7 +255,7 @@ public class ConciliationService {
 
         if (conciliation.getImported()) throw new BusinessException("Esta conciliação já foi sincronizada no sistema e não pode ser removida.");
         if (!conciliation.getGroupId().equals(groupId)) throw new BusinessException("Esta conciliação não pertence ao usuário corrente");
-//        conciliationEntryRepository.delete(conciliation.getEntries());
+//        conciliationEntryRepository.delete(conciliation.getStocks());
         conciliationRepository.delete(conciliation);
     }
 

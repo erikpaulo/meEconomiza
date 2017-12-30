@@ -19,7 +19,7 @@ public class InvestmentAccountController extends AbstractRestController<Account,
 
     public static final String OBJECT_ENTRY_NAME = "InvestmentAccountEntry";
 
-    public static final String OBJECT_INDEX_NAME = "Index";
+    public static final String OBJECT_INDEX_NAME = "AssetPrice";
 
     @Inject
     private InvestmentAccountService investmentAccountService;
@@ -132,7 +132,7 @@ public class InvestmentAccountController extends AbstractRestController<Account,
      * @throws FormValidationError
      */
     @RequestMapping(value = "/{accountId}/index", method = RequestMethod.POST)
-    @ResponseBody public Index createIndexValue(@RequestBody Index index) throws FormValidationError {
+    @ResponseBody public AssetPrice createIndexValue(@RequestBody AssetPrice index) throws FormValidationError {
         index.setGroupId(getGroupId());
 
         validate(OBJECT_INDEX_NAME, index);

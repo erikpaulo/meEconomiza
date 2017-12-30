@@ -3,11 +3,10 @@ package com.softb.savefy.account.service;
 import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
-import com.softb.savefy.account.repository.IndexRepository;
+import com.softb.savefy.account.repository.AssetPriceRepository;
 import com.softb.savefy.account.repository.QuoteSaleRepository;
 import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
-import com.softb.system.errorhandler.exception.BusinessException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class InvestmentAccountService extends AbstractAccountService {
     private AccountEntryRepository accountEntryRepository;
 
     @Autowired
-    private IndexRepository indexRepository;
+    private AssetPriceRepository indexRepository;
 
     @Autowired
     private QuoteSaleRepository quoteSaleRepository;
@@ -58,7 +57,7 @@ public class InvestmentAccountService extends AbstractAccountService {
     }
 
     /**
-     * Calulate the account balance, considering the current value of its entries.
+     * Calulate the account balance, considering the current value of its stocks.
      * @param account
      */
     @Override
@@ -83,14 +82,14 @@ public class InvestmentAccountService extends AbstractAccountService {
     private void calcPrevisionGains(InvestmentAccount account, InvestmentAccountEntry entry){
         TaxRange taxRange = getTaxRange(account, entry);
 
-        Index currentIndex = getLastIndex(account, account.getGroupId());
+        AssetPrice currentIndex = getLastIndex(account, account.getGroupId());
         entry.setCurrentAmount(entry.getQuotesAvailable() * currentIndex.getValue());
 
         Double currentOriginalValue = (entry.getQuotesAvailable()*entry.getQuoteValue());
 
         entry.setIncomeTaxPercent(taxRange.taxRange);
         entry.setNextTaxRangeDate(taxRange.nextRangeDate);
-        entry.setGrossProfitability((entry.getQuotesAvailable()*currentIndex.getValue()) - currentOriginalValue);
+        entry.setGrossProfitability(entry.getCurrentAmount() - currentOriginalValue);
 
         entry.setIncomeTaxAmount(entry.getGrossProfitability() * (entry.getIncomeTaxPercent()));
         entry.setNetProfitability(entry.getGrossProfitability() - entry.getIncomeTaxAmount());
@@ -104,7 +103,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         if (!entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
             List<QuoteSale> sales = quoteSaleRepository.findAllBySaleId(entry.getId());
             for (QuoteSale quoteSale: sales) {
-                InvestmentAccountEntry purchaseEntry = quoteSale.getPurchaseEntry();
+                InvestmentAccountEntry purchaseEntry = (InvestmentAccountEntry) quoteSale.getPurchaseEntry();
                 purchaseEntry.setQuotesAvailable(purchaseEntry.getQuotesAvailable() + quoteSale.getQtdQuotes());
                 purchaseEntry.setAmount(purchaseEntry.getQuotesAvailable() * purchaseEntry.getQuoteValue());
                 save(purchaseEntry, groupId);
@@ -122,7 +121,7 @@ public class InvestmentAccountService extends AbstractAccountService {
      */
     public InvestmentAccountEntry saveEntry(InvestmentAccountEntry entry, Integer groupId){
         if (entry.getId() == null){
-            indexRepository.save(new Index(entry.getAccountId(), entry.getDate(), entry.getQuoteValue(), groupId));
+            indexRepository.save(new AssetPrice(entry.getAccountId(), null, entry.getDate(), entry.getQuoteValue(), groupId));
         }
         InvestmentAccount account = (InvestmentAccount) accountRepository.findOne(entry.getAccountId(), groupId);
 
@@ -137,19 +136,19 @@ public class InvestmentAccountService extends AbstractAccountService {
         return entry;
     }
 
-    private Index getLastIndex(InvestmentAccount account, Integer groupId){
-        Index index = null;
+    private AssetPrice getLastIndex(InvestmentAccount account, Integer groupId){
+        AssetPrice index = null;
 
         // Sort Conciliations DESC
-        Collections.sort(account.getIndexValues(), new Comparator<Index>(){
-            public int compare(Index o1, Index o2) {
+        Collections.sort(account.getIndexValues(), new Comparator<AssetPrice>(){
+            public int compare(AssetPrice o1, AssetPrice o2) {
                 return o2.getDate().compareTo(o1.getDate());
             }
         });
 
-        List<Index> indexValues = account.getIndexValues();
+        List<AssetPrice> indexValues = account.getIndexValues();
         if (indexValues==null || indexValues.size() <= 0){
-            index = new Index(account.getId(), new Date(), 0.0, groupId);
+            index = new AssetPrice(account.getId(), null, new Date(), 0.0, groupId);
         } else {
             index = indexValues.get(0);
         }
@@ -231,10 +230,6 @@ public class InvestmentAccountService extends AbstractAccountService {
                 qtdQuotesToSell = AppMaths.round(qtdQuotesToSell - entryToSell.getQuotesAvailable(),8);
             }
             i++;
-        }
-
-        if (i==entries.size()+1){
-            throw new BusinessException("Insufficient Money");
         }
 
         percentGrossProfit = grossProfit / originalAmount * 100;
