@@ -50,7 +50,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 
 //    @RequestMapping(method=RequestMethod.GET)
 //    public List<T> listAll() {
-//        return getRepository().findAll();
+//        return getRepository().findByDate();
 //    }
 
 //    @RequestMapping(method=RequestMethod.POST)

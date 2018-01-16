@@ -95,7 +95,7 @@ define(['angular-resource', 'jquery'], function (resource, $) {
                     this.$errors.push(err);
                 }
             },
-            currencyVisible: false,
+            currencyVisible: true,
             currentUser: null
         };
 

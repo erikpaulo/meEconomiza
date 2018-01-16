@@ -1,11 +1,11 @@
 package com.softb.savefy.account.model;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +30,6 @@ public class InvestmentAccount extends Account implements Serializable {
     @NotNull
     protected Double adminTax;
 
-    @Column(name="RISK")
-    @NotEmpty
-    protected String risk;
-
     // D+ OR DUE DATE
     @Column(name="LIQUIDITY_TYPE")
     @NotNull
@@ -41,15 +37,15 @@ public class InvestmentAccount extends Account implements Serializable {
 
     // IF D+, DEFINE HOW MANY DAYS GET THE MONEY
     @Column(name="LIQUIDITY_DAYS")
-    protected Double liquidityDays;
+    protected Integer liquidityDays;
 
     // IF DUE DATE, DEFINE THE DAY TO GET FULL REMUNERATION
     @Column(name="LIQUIDITY_DUE_DATE")
     protected Date liquidityDueDate;
 
-    // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
-    @Transient
-    protected Double liquidityDate;
+//    // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
+//    @Transient
+//    protected Double liquidityDate;
 
     // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
     @OneToMany(fetch = FetchType.LAZY)
@@ -61,7 +57,7 @@ public class InvestmentAccount extends Account implements Serializable {
     protected List<InvestmentAccountEntry> entries;
 
     public enum Product {
-        INVESTMENT_FUND ( "Fundo de Investimentos" ), INVESTMENT_FUND_OF_SHARES ( "Fundo de Acões" ), INVESTMENT_FUND_PENSION ( "Fundo de Previdência" );
+        FIXED_INCOME ( "Renda Fixa" ), FUND_OF_SHARES( "Fundo de Acões" ), PENSION_FUND( "Fundo de Previdência" );
         private String name;
 
         Product(String name) {
@@ -84,5 +80,24 @@ public class InvestmentAccount extends Account implements Serializable {
         public String getName() {
             return this.name;
         }
+    }
+
+    @Override
+    public Date getLiquidityDate() {
+        Date date = null;
+
+        if (this.liquidityType.equals(LiquidityType.DPLUS)){
+            Calendar cal = Calendar.getInstance();
+            cal.clear(Calendar.HOUR);
+            cal.clear(Calendar.MINUTE);
+            cal.clear(Calendar.SECOND);
+            cal.clear(Calendar.MILLISECOND);
+            cal.add(Calendar.DAY_OF_MONTH, this.liquidityDays);
+            date = cal.getTime();
+        } else {
+            date = this.liquidityDueDate;
+        }
+
+        return date;
     }
 }

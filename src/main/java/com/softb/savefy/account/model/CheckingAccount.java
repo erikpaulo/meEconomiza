@@ -5,6 +5,8 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,4 +28,14 @@ public class CheckingAccount extends Account implements Serializable {
     @Column(name="START_BALANCE")
     @NotNull
     protected Double startBalance;
+
+    @Override
+    public Date getLiquidityDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.clear(Calendar.HOUR);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        return cal.getTime();
+    }
 }

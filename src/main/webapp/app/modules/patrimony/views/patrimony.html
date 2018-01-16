@@ -1,0 +1,130 @@
+<section ng-controller="PatrimonyController" ng-cloak>
+    <div layout="row" layout-align="end center">
+        <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
+            <span class="md-subhead">Patrimônio Total</span>
+            <div layout="row" md-colors="{color: 'blue-grey-700'}">
+                <span class="md-body-2">{{patrimony.balanceTotal | currency}}</span>
+                <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profitTotal | currency}}</span>
+                <span class="md-body-2">({{patrimony.percentProfitTotal | number:2}}%)</span>
+            </div>
+        </div>
+        <md-divider></md-divider>
+        <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
+            <span class="md-subhead">Patrimônio Investido</span>
+            <div layout="row" md-colors="{color: 'blue-grey-700'}">
+                <span class="md-body-2">{{patrimony.balanceInvested | currency}}</span>
+                <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profitInvested | currency}}</span>
+                <span class="md-body-2">({{patrimony.percentProfitInvested | number:2}}%)</span>
+            </div>
+        </div>
+        <div layout="column" flex></div>
+        <div layout="column"  layout-align="center start" flex="2">
+            <div layout="row">
+                <md-datepicker ng-model="patrimony.date" md-open-on-focus="true" md-current-view="month" md-hide-icons="true"></md-datepicker>
+                <md-button ng-click="baseline(baselineDate)">Gerar Baseline</md-button>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-padding>
+        <div layout="column" layout-padding>
+            <highchart id="patrimonyEvolution" config="patrimonyEvolutionChart" style="display:block;"></highchart>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" style="background:white" layout-padding>
+        <div layout="column" flex="100">
+            <div layout="row">
+                <div layout="column" flex="35" layout-align="center center">
+                    <highchart id="distribution" config="distributionChart"></highchart>
+                </div>
+                <div layout="column" flex="65">
+                    <highchart id="portfolioEvolution" config="portfolioEvolutionChart"></highchart>
+                </div>
+            </div>
+            <div layout="row">
+                <div layout="column" flex="35" layout-align="center center">
+                    <!--<div layout="row" layout-wrap style="margin-top:30px">-->
+                        <!--<div layout="column" flex="50" ng-repeat="(key, value) in patrimony.investTypeMap">-->
+                            <!--<div layout="row">-->
+                                <!--<div layout="column" ng-style="getProductCSS($index)" style="margin:5px" class="md-padding">-->
+                                    <!--<span class="md-subhead" md-colors="{color: 'blue-grey-700'}">{{key | investTypeName}}</span>-->
+                                    <!--<div layout="row" layout-align="start center" md-colors="{color: 'grey-700'}" class="md-subhead">-->
+                                        <!--<span my-currency="value" layout-align="center center"></span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <highchart id="risk" config="riskChart"></highchart>
+                </div>
+                <div layout="column" flex="65">
+                    <highchart id="liquidity" config="liquidityChart"></highchart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" >
+        <div layout="column" flex="100">
+            <div layout="row" layout-padding layout-align="center center">
+
+                <div layout="column" flex="80">
+                    <div layout="row" class="md-title" style="margin-top: 15px">
+                        <div layout="column" flex="5">
+                        </div>
+                        <div layout="column" flex layout-align="center start">Ativo</div>
+                        <div layout="column" flex="20" layout-align="center center">Instituição</div>
+                        <div layout="column" flex="20" layout-align="center center">Variação (R$)</div>
+                        <div layout="column" flex="15" layout-align="center center">Variação (%)</div>
+                        <div layout="column" flex="15" layout-align="center center">Saldo</div>
+                        <div layout="column" flex="5" layout-align="center center"></div>
+                    </div>
+                    <div layout="row" ng-repeat="entry in patrimony.entries" style="margin-top: 15px">
+                        <div layout="column" flex="100">
+                            <div layout="row" class="md-body-1">
+                                <div layout="column" flex="5">
+                                    <img ng-src="resources/static/images/{{entry.assetType}}-icon.png"
+                                         ng-click="detail(entry)" md-colors="{background: 'blue-grey-700'}"
+                                         style="cursor:pointer"
+                                         class="icon-theme-42"/>
+                                </div>
+                                <div layout="column" flex layout-align="center start">{{entry.name}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{entry.institution}}</div>
+                                <div layout="column" flex="20" layout-align="center center">{{entry.profit | currency}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.percentProfit | number: 2}}%</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.balance | currency}}</div>
+                                <div layout="column" flex="5">
+                                    <md-button class="md-icon-button" ng-click="open(entry)" aria-label="Detalhes">
+                                        <md-icon class="material-icons step md-18">keyboard_arrow_down</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <md-divider style="margin-top:10px" ng-if="entry.open"></md-divider>
+                            <div layout="row" layout-align="center center" ng-show="entry.open">
+                                <table layout="column" flex="60" class="table-striped" style="margin:10px;">
+                                    <thead>
+                                    <tr layout="row">
+                                        <th flex>Mês</th>
+                                        <th flex="25">Variação (R$)</th>
+                                        <th flex="15">Variação (%)</th>
+                                        <th flex="25">Posição</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr layout="row" ng-repeat="eHistory in entry.history"  layout-align="center center" class="c-hover">
+                                        <td flex>{{ eHistory.date | date: 'MMM/yyyy' }}</td>
+                                        <td flex="25">{{ eHistory.profit | currency }}</td>
+                                        <td flex="15">{{ eHistory.percentProfit | number:2 }}%</td>
+                                        <td flex="25" my-currency="eHistory.balance"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

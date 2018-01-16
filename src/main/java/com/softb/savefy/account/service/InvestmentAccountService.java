@@ -255,7 +255,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         cal.setTime(entry.getDate());
 
         Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND)){
+        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME)){
             if (age>=0 && age<=180) {
                 range.taxRange = 0.225;
                 cal.add(Calendar.DAY_OF_YEAR,180);
@@ -269,7 +269,7 @@ public class InvestmentAccountService extends AbstractAccountService {
                 range.taxRange = 0.150;
                 cal = null;
             }
-        } else if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND_PENSION)){
+        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
             if (age>=0 && age<=720) {
                 range.taxRange = 0.350;
                 cal.add(Calendar.DAY_OF_YEAR,720);
@@ -289,7 +289,7 @@ public class InvestmentAccountService extends AbstractAccountService {
                 range.taxRange = 0.100;
                 cal = null;
             }
-        } else if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND_OF_SHARES)){
+        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
             range.taxRange = 0.150;
             cal = null;
         }
@@ -300,11 +300,11 @@ public class InvestmentAccountService extends AbstractAccountService {
 
     private Double getMaxTaxRange(InvestmentAccount account){
         Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND)){
+        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME)){
             taxRange = 0.150;
-        } else if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND_PENSION)){
+        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
             taxRange = 0.100;
-        } else if (account.getProduct().equals(InvestmentAccount.Product.INVESTMENT_FUND_OF_SHARES)){
+        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
             taxRange = 0.150;
         }
 

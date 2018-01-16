@@ -85,14 +85,6 @@ public class StockAccountService extends AbstractAccountService {
         stock.setNetProfitability(stock.getGrossProfitability() - stock.getBrokerage());
         stock.setPercentGrossProfitability((stock.getAmount() > 0 ?stock.getGrossProfitability() / stock.getAmount()*100 : 0.0));
         stock.setPercentNetProfitability((stock.getAmount() > 0 ? stock.getNetProfitability() / stock.getAmount()*100 : 0.0));
-
-////        AssetPrice currentPrice = getLastPrice(stock, stock.getGroupId());
-////        stock.setCurrentValue(stock.getQuantity() * currentPrice.getValue());
-//        Double originalValue = (stock.getQuantity() * stock.getOriginalPrice());
-//        stock.setGrossProfitability(stock.getCurrentValue() - originalValue);
-//        stock.setNetProfitability(stock.getGrossProfitability() - stock.getBrokerage());
-//        stock.setPercentGrossProfitability(stock.getGrossProfitability() / originalValue);
-//        stock.setPercentNetProfitability(stock.getNetProfitability() / originalValue);
     }
 
     public void delEntry(StockAccountEntry entry, Integer groupId) {
@@ -126,33 +118,8 @@ public class StockAccountService extends AbstractAccountService {
             stock = sellStock(stockPortfolio, stock, groupId);
         }
 
-//        if (stock.getId() == null){
-//            indexRepository.save(new AssetPrice(null, stock.getId(), stock.getDate(), stock.getQuantity(), groupId));
-//        }
-
         return stock;
     }
-
-//    private AssetPrice getLastPrice(StockAccountEntry stock, Integer groupId){
-//        AssetPrice assetPrice = null;
-//        List<AssetPrice> assetPrices = stock.getAssetPrices();
-//
-//
-//        if (assetPrices==null || assetPrices.size() <= 0){
-//            assetPrice = new AssetPrice(null, stock.getId(), new Date(), 0.0, groupId);
-//        } else {
-//            // Sort Conciliations DESC
-//            Collections.sort(assetPrices, new Comparator<AssetPrice>(){
-//                public int compare(AssetPrice o1, AssetPrice o2) {
-//                    return o2.getDate().compareTo(o1.getDate());
-//                }
-//            });
-//
-//            assetPrice = assetPrices.get(0);
-//        }
-//
-//        return assetPrice;
-//    }
 
     public StockAccountEntry setLastPrice(StockAccountEntry stock, Integer groupId){
         calcGains(stock);

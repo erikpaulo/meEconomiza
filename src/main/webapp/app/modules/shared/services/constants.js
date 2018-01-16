@@ -18,17 +18,25 @@ define(['./module'], function (app) {
 	                }
 	            },
 	            INVESTMENT_PRODUCTS: {
-	                INVESTMENT_FUND: {
-	                    id: 'INVESTMENT_FUND',
-	                    name: 'Fundo de Investimentos'
+	                FIXED_INCOME: {
+	                    id: 'FIXED_INCOME',
+	                    name: 'Renda Fixa'
 	                },
-	                INVESTMENT_FUND_OF_SHARES: {
-	                    id: 'INVESTMENT_FUND_OF_SHARES',
+	                FUND_OF_SHARES: {
+	                    id: 'FUND_OF_SHARES',
 	                    name: 'Fundo de Acões'
 	                },
-	                INVESTMENT_FUND_PENSION: {
-	                    id: 'INVESTMENT_FUND_PENSION',
+	                PENSION_FUND: {
+	                    id: 'PENSION_FUND',
 	                    name: 'Fundo de Previdência'
+	                },
+	                STK: {
+	                    id: 'STK',
+	                    name: 'Carteira de Ações'
+	                },
+	                OTHERS: {
+	                    id: 'OTHERS',
+	                    name: 'Outros'
 	                }
 	            },
 	            LIQUIDITY_TYPE: {

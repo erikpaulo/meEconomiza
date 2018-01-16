@@ -48,15 +48,21 @@ public class AccountsService {
         for (Account account: accounts) {
             if (account.getType().equals(Account.Type.CKA)){
                 checkingAccountService.calcAccountBalance(account);
-                ((CheckingAccount)account).setEntries(null);
+//                ((CheckingAccount)account).setEntries(null);
             } else if (account.getType().equals(Account.Type.INV)){
                 investmentAccountService.calcAccountBalance(account);
+//                ((InvestmentAccount)account).setEntries(null);
             } else if (account.getType().equals(Account.Type.STK)){
                 stockAccountService.calcAccountBalance(account);
+//                ((StockAccount)account).setStocks(null);
             }
         }
 
     		return accounts;
+    }
+
+    public Boolean isInvestType (Account account){
+        return (account.getType().equals(Account.Type.INV)) || (account.getType().equals(Account.Type.STK));
     }
 
     /**

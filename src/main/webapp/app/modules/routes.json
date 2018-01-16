@@ -70,10 +70,18 @@
     "dependencies": [
       "modules/dashboard/controllers/index"
     ],
-    "submodules": [
+    "hasSubMenu": true,
+    "items" : [
       {
-        "id": "conciliation",
-        "name": "Conciliar Contas"
+        "id": "patrimony",
+        "name":"Patrimônio",
+        "originalPath": "/patrimony",
+        "templateUrl": "modules/patrimony/views/patrimony.html",
+        "visible": true,
+        "dependencies": [
+          "modules/patrimony/controllers/patrimony-controller"
+          ,"modules/shared/services/app-filters"
+        ]
       }
     ]
   },

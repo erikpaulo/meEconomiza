@@ -147,9 +147,18 @@ md-card.account: hover{
     height:48px;
 }
 
-.theme{
+.icon-theme-64{
     height: 64px;
     width: 64px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 38px;
+    /*background: -webkit-linear-gradient(45deg, #263238 0%,#37474F 100%);*/
+    background-color: #37474F;
+}
+
+.icon-theme-42{
+    height: 42px;
+    width: 42px;
     border: 1px solid rgba(0,0,0,.1);
     border-radius: 38px;
     /*background: -webkit-linear-gradient(45deg, #263238 0%,#37474F 100%);*/
@@ -258,4 +267,9 @@ md-progress-linear{
     position: absolute;
     top: 59px;
     z-index: 2;
+}
+
+/********** >>> TABS <<< ***********/
+md-tabs.md-no-animation md-tab-content {
+    transition: none;
 }

@@ -53,7 +53,12 @@ public class CheckingAccountEntry extends AccountEntry implements Serializable {
 	@Column(name = "TWIN_ENTRY_ID")
 	protected Integer twinEntryId;
 
-    @Transient
+	@Transient
+	public Double getBalance() {
+		return balance;
+	}
+
+	@Transient
     protected Double balance;
 
 	@Override

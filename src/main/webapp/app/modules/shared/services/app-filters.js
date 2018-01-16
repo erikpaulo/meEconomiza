@@ -1,21 +1,5 @@
 define(['./module'], function (app) {
 
-//	app.filter('mapType', function() {
-//		var typeHash = {
-//                'FC' : 'Despesa Mensal Fixa',
-//             	'VC' : 'Despesa Mensal Variável',
-//             	'IC' : 'Despesa Irregular'
-//		};
-//
-//        return function(input) {
-//            if (!input){
-//                return '';
-//			} else {
-//				return typeHash[input];
-//			}
-//		};
-//	});
-
     app.filter('accountTypeName', function () {
         var typeNameHash = {
             CKA: 'Conta Corrente',
@@ -30,13 +14,16 @@ define(['./module'], function (app) {
         };
     });
 
-//    app.filter('investEntryTypeName', function () {
-//        var typeNameHash = {
-//            B:  'Compra',
-//            S:  'Venda'
-//        }
-//        return function (input) {
-//            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
-//        };
-//    });
+    app.filter('investTypeName', function () {
+        var typeNameHash = {
+            FIXED_INCOME: 'Renda Fixa',
+            FUND_OF_SHARES: 'Fundo de Acões',
+            PENSION_FUND: 'Fundo de Previdência',
+            STK: 'Carteira de Ações',
+            OTHERS: 'Outros'
+        }
+        return function (input) {
+            return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
+        };
+    });
 });

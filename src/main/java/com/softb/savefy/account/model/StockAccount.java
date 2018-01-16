@@ -1,11 +1,12 @@
 package com.softb.savefy.account.model;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,10 +21,6 @@ public class StockAccount extends Account implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-    @Column(name="RISK")
-    @NotEmpty
-    protected String risk = "HIGH";
-
     // D+ OR DUE DATE
     @Column(name="LIQUIDITY_TYPE")
     @NotNull
@@ -31,10 +28,20 @@ public class StockAccount extends Account implements Serializable {
 
     // IF D+, DEFINE HOW MANY DAYS GET THE MONEY
     @Column(name="LIQUIDITY_DAYS")
-    protected Double liquidityDays = 3.0;
+    protected Integer liquidityDays = 3;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<StockAccountEntry> stocks;
 
+    @Override
+    public Date getLiquidityDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.clear(Calendar.HOUR);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.add(Calendar.DAY_OF_MONTH, this.liquidityDays);
+        return cal.getTime();
+    }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 @Table(name = "ACCOUNT")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name= "TYPE")
-public class Account extends BaseEntity<Integer> implements Serializable {
+public abstract class Account extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,6 +57,10 @@ public class Account extends BaseEntity<Integer> implements Serializable {
     @NotNull
     protected Date lastUpdate;
 
+    @Column(name="RISK")
+    @NotEmpty
+    protected String risk = "HIGH";
+
 	@Transient
     protected Double balance;
 
@@ -73,4 +77,6 @@ public class Account extends BaseEntity<Integer> implements Serializable {
             return this.name;
         }
     }
+
+    public abstract Date getLiquidityDate();
 }
