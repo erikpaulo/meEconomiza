@@ -1,5 +1,6 @@
 package com.softb.savefy.account.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -86,6 +87,7 @@ public class InvestmentAccount extends Account implements Serializable {
     }
 
     @Override
+    @JsonIgnore
     public Date getLiquidityDate() {
         Date date = null;
 
