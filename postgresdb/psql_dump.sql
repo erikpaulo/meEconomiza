@@ -251,8 +251,8 @@ CREATE TABLE USER_PREFERENCES (
 ----insert into conciliation_entry values (3, '2017-10-08', 'Uber', 1, 234.98, 1, 1);
 ----insert into conciliation_entry values (4, '2017-10-18', 'Combustível', 1, 1234.98, 1, 1);
 ----insert into category_prediction values (1, 'TED 237.3807CAROLINA M P', 4, 1, 0, 1);
---INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
---INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
+INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
+INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
 --
 --
 --

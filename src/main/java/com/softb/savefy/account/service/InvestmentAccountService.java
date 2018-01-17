@@ -64,14 +64,16 @@ public class InvestmentAccountService extends AbstractAccountService {
     public void calcAccountBalance(Account account) {
         InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
-        Double balance = 0.0;
+        Double balance = 0.0, grossBalance = 0.0;
         for (InvestmentAccountEntry entry: ((InvestmentAccount) account).getEntries()) {
             if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                 calcPrevisionGains(investmentAccount, entry);
                 balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
+                grossBalance += entry.getCurrentAmount();
             }
         }
-        account.setBalance(balance);
+        investmentAccount.setBalance(balance);
+        investmentAccount.setGrossBalance(grossBalance);
     }
 
     /**
@@ -255,7 +257,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         cal.setTime(entry.getDate());
 
         Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME)){
+        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
             if (age>=0 && age<=180) {
                 range.taxRange = 0.225;
                 cal.add(Calendar.DAY_OF_YEAR,180);
@@ -300,7 +302,7 @@ public class InvestmentAccountService extends AbstractAccountService {
 
     private Double getMaxTaxRange(InvestmentAccount account){
         Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME)){
+        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
             taxRange = 0.150;
         } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
             taxRange = 0.100;

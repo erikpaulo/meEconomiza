@@ -56,8 +56,11 @@ public class InvestmentAccount extends Account implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<InvestmentAccountEntry> entries;
 
+    @Transient
+    protected Double grossBalance;
+
     public enum Product {
-        FIXED_INCOME ( "Renda Fixa" ), FUND_OF_SHARES( "Fundo de Acões" ), PENSION_FUND( "Fundo de Previdência" );
+        FIXED_INCOME ( "Renda Fixa" ), MULTI_SHARES( "Multimercado" ), FUND_OF_SHARES( "Fundo de Acões" ), PENSION_FUND( "Fundo de Previdência" );
         private String name;
 
         Product(String name) {

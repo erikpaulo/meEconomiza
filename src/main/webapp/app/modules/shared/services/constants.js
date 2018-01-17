@@ -22,6 +22,10 @@ define(['./module'], function (app) {
 	                    id: 'FIXED_INCOME',
 	                    name: 'Renda Fixa'
 	                },
+	                MULTI_SHARES: {
+	                    id: 'MULTI_SHARES',
+	                    name: 'Multimercado'
+	                },
 	                FUND_OF_SHARES: {
 	                    id: 'FUND_OF_SHARES',
 	                    name: 'Fundo de Acões'
@@ -94,25 +98,3 @@ define(['./module'], function (app) {
 	    }
 	});
 });
-
-/*,
-	                SAVING_ACCOUNT: {
-	                    id: 'SVA',
-	                    name: 'Conta Poupança'
-	                },
-	                CREDIT_ACCOUNT: {
-	                    id: 'CCA',
-	                    name: 'Cartão de Crédito'
-	                },
-	                VOUCHER_ACCOUNT: {
-	                    id: 'VOA',
-	                    name: 'Voucher'
-	                },
-	                LOAN_ACCOUNT: {
-	                    id: 'LOA',
-	                    name: 'Financiamento'
-	                },
-	                CONSUMER_GOODS_ACCOUNT: {
-	                    id: 'CGA',
-	                    name: 'Bens de Consumo'
-	                }*/
