@@ -66,11 +66,13 @@ public class InvestmentAccountService extends AbstractAccountService {
         InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
         Double balance = 0.0, grossBalance = 0.0;
-        for (InvestmentAccountEntry entry: ((InvestmentAccount) account).getEntries()) {
-            if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
-                calcPrevisionGains(investmentAccount, entry);
-                balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
-                grossBalance += entry.getCurrentAmount();
+        if (((InvestmentAccount) account).getEntries() != null){
+            for (InvestmentAccountEntry entry: ((InvestmentAccount) account).getEntries()) {
+                if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
+                    calcPrevisionGains(investmentAccount, entry);
+                    balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
+                    grossBalance += entry.getCurrentAmount();
+                }
             }
         }
         investmentAccount.setBalance(balance);
