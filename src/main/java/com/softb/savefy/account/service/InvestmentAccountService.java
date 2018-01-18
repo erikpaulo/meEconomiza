@@ -41,6 +41,7 @@ public class InvestmentAccountService extends AbstractAccountService {
      */
     public InvestmentAccount saveAccount(InvestmentAccount account, Integer groupId){
         account = accountRepository.save(account);
+        calcAccountBalance(account);
         return account;
     }
 
