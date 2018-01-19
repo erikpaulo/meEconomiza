@@ -35,7 +35,7 @@ public class StockPriceTask  {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron = "0 0/15 10-18 * * MON-FRI")
+    @Scheduled(cron = "0 0/15 11-21 * * MON-FRI")
     public void reportCurrentTime() {
         List<AccountEntry> stocks = stockRepository.listAllActiveStocks();
 
