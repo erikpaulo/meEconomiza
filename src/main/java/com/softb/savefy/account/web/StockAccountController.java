@@ -88,7 +88,7 @@ public class StockAccountController extends AbstractRestController<Account, Inte
         if (!entry.getGroupId().equals(getGroupId())){
             throw new BusinessException("This entry doesn't belong to the current user");
         }
-        return stockAccountService.setLastPrice(entry, getGroupId());
+        return stockAccountService.updateCurrentPosition(entry, getGroupId());
     }
 
     /**

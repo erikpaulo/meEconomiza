@@ -1,6 +1,9 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.*;
+import com.softb.savefy.account.model.Account;
+import com.softb.savefy.account.model.QuoteSale;
+import com.softb.savefy.account.model.StockAccount;
+import com.softb.savefy.account.model.StockAccountEntry;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.AssetPriceRepository;
@@ -121,9 +124,10 @@ public class StockAccountService extends AbstractAccountService {
         return stock;
     }
 
-    public StockAccountEntry setLastPrice(StockAccountEntry stock, Integer groupId){
-        calcGains(stock);
-        return (StockAccountEntry) save(stock, groupId);
+    public StockAccountEntry updateCurrentPosition(StockAccountEntry entry, Integer groupId){
+        calcGains(entry);
+
+        return (StockAccountEntry) save(entry, groupId);
     }
 
     private StockAccountEntry buyStock(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId){

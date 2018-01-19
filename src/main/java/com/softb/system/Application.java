@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableAutoConfiguration
+@EnableScheduling
 @EnableConfigurationProperties
 @Import(value={WebMvcConfig.class, ServiceConfig.class, SecurityConfig.class, CacheConfig.class, RepositoryConfig.class})
 public class Application {
@@ -54,6 +56,9 @@ public class Application {
         addDefaultProfile(app, source);
 
         app.run(args);
+
+//        System.exit(SpringApplication.exit(SpringApplication.run(
+//                BatchConfig.class, args)));
     }
 
     /**

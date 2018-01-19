@@ -67,12 +67,7 @@
                             <td flex="10" flex-xs="10">{{ item.code }}</td>
                             <td flex="15" flex-xs="25">{{ item.date | date : 'dd/MM/yyyy' }}</td>
                             <td flex="10" hide-xs>{{ item.originalPrice | currency }}</td>
-                            <td flex="10" hide-xs>
-                                <span ng-if="item.quantity==0 || item.operation == 'SALE'">{{ item.lastPrice | currency }}</span>
-                                <md-input-container ng-if="item.quantity>0 && item.operation == 'PURCHASE'" class="md-block c-no-margin no-error">
-                                    <input aria-label="Ultimo preço" name="lastPrice" ng-model="item.lastPrice" type="text" required format="number" ng-blur="updatePrice(item)">
-                                </md-input-container>
-                            </td>
+                            <td flex="10" hide-xs>{{ item.lastPrice | currency }}</td>
                             <td flex="10" hide-xs>{{ item.brokerage | currency }}</td>
                             <td flex="10" flex-xs="25">{{ item.percentGrossProfitability | number:2 }}%</td>
                             <td flex="10" hide-xs>{{ item.percentNetProfitability | number:2 }}%</td>
