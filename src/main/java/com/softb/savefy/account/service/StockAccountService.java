@@ -55,6 +55,7 @@ public class StockAccountService extends AbstractAccountService {
      */
     public StockAccount getAccountDetailed(Integer id, Integer groupId){
         StockAccount account = (StockAccount)get(id, groupId);
+
         calcAccountBalance(account);
         return account;
     }
@@ -70,7 +71,6 @@ public class StockAccountService extends AbstractAccountService {
         Double balance = 0.0;
         for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
             if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
-//                calcGains(entry);
                 balance += entry.getCurrentValue();
             }
         }

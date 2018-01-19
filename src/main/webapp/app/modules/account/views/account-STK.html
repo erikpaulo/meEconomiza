@@ -36,13 +36,38 @@
         </div>
     </div>
     <md-divider></md-divider>
-    <div layout="row" layout-align="start start">
-        <div layout="column" flex="20" class="md-padding">
-            <div layout="row" ng-repeat="(code, stock) in activeStocks" md-colors="{color: 'blue-grey-400'}">
-                <span class="md-headline" layout="column" flex="40" layout-align="center center">{{stock.code}}:</span>
-                <span class="md-headline" layout="column" flex="30" layout-align="center center">{{(stock.gp / stock.ai)*100 | number: 2}}%</span>
+    <div layout="row">
+        <div layout="column" flex="100">
+            <div layout="row" layout-align="start center" layout-wrap>
+                <md-card ng-repeat="(code, stock) in activeStocks"
+                         class="border-radius-5 flat"
+                         style="font: 12px MontserratLight,Arial,sans-; min-width:220px"
+                         layout="column">
+                    <md-card-header class="md-body-2" layout="row">
+                        <!--<div layout="row">-->
+                        <div layout="column" flex layout-align="center start"><span class="md-subhead">{{code}}</span></div>
+                        <div layout="column" flex="20" layout-align="center center">
+                            <img  src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" alt="logo"/>
+                        </div>
+                        <!--</div>-->
+                    </md-card-header>
+                    <md-card-content>
+                        <div layout="row" style="margin-bottom:4px">
+                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.pgp | number:2}}%</div>
+                            <md-divider></md-divider>
+                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.gp | currency}}</div>
+                        </div>
+                        <div layout="row">
+                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center"><strong>{{stock.lp | currency}}</strong></div>
+                            <md-divider></md-divider>
+                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.ai | currency}}</div>
+                        </div>
+                    </md-card-content>
+                </md-card>
             </div>
         </div>
+    </div>
+    <div layout="row" layout-align="start start">
         <div layout="column" flex="60" flex-xs="100" flex-offset="5">
             <div layout="row" layout-align="center center">
                 <div layout="column" flex="90" ng-if="account.stocks.length<=0">
@@ -77,9 +102,6 @@
                                     <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">
                                         <md-icon class="material-icons step md-18">highlight_off</md-icon>
                                     </md-button>
-                                    <!--<md-button class="md-icon-button" ng-click="updatePrice(item)" aria-label="Remover">-->
-                                        <!--<md-icon class="material-icons step md-18">monetization_on</md-icon>-->
-                                    <!--</md-button>-->
                                 </div>
                             </td>
                         </tr>

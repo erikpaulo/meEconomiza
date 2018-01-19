@@ -5,8 +5,8 @@ define(['./module'
         ,'../../shared/services/utils-service'
         ,'../../shared/services/constants'], function (app) {
 
-	app.controller('AccountSTKController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'IndexResource', 'Utils', 'Constants',
-        function($scope, $filter, $mdDialog, Account, AccountEntry, Index, Utils, Constants) {
+	app.controller('AccountSTKController', ['$scope', '$interval', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'IndexResource', 'Utils', 'Constants',
+        function($scope, $interval, $filter, $mdDialog, Account, AccountEntry, Index, Utils, Constants) {
             $scope.appContext.contextMenu.addAction(
                 {icon: 'add', tooltip: 'Comprar Ação', onClick: function() {
                     $scope.register();
@@ -16,6 +16,9 @@ define(['./module'
             $scope.$watch('account', function(newValue, oldValue){
                 updateBalance();
             });
+
+            //10 seconds delay
+            $interval(getAccountDetail, 600000);
 
             $scope.register = function(){
                 $mdDialog.show({
@@ -76,15 +79,24 @@ define(['./module'
 
                         if ($scope.account.stocks[i].operation == 'PURCHASE' && $scope.account.stocks[i].quantity > 0){
                             if ($scope.activeStocks[$scope.account.stocks[i].code] == null){
-                                $scope.activeStocks[$scope.account.stocks[i].code] = {code: $scope.account.stocks[i].code,
+                                $scope.activeStocks[$scope.account.stocks[i].code] = {stock: $scope.account.stocks[i],
                                                                                       qtd: 0,
                                                                                       ai: 0.0,
-                                                                                      gp: 0.0}
+                                                                                      gp: 0.0,
+                                                                                      pgp: 0.0,
+                                                                                      lp: 0.0,
+                                                                                      date: null}
                             }
+                            $scope.activeStocks[$scope.account.stocks[i].code].qtd += $scope.account.stocks[i].quantity
                             $scope.activeStocks[$scope.account.stocks[i].code].ai += $scope.account.stocks[i].amount
                             $scope.activeStocks[$scope.account.stocks[i].code].gp += $scope.account.stocks[i].grossProfitability
+                            $scope.activeStocks[$scope.account.stocks[i].code].lp += $scope.account.stocks[i].lastPrice
+                            $scope.activeStocks[$scope.account.stocks[i].code].pgp = $scope.activeStocks[$scope.account.stocks[i].code].gp / $scope.activeStocks[$scope.account.stocks[i].code].ai*100
+                            $scope.activeStocks[$scope.account.stocks[i].code].date += $scope.account.stocks[i].date
                         }
                     }
+
+//                    $scope.activeStocks = $filter('orderBy')($scope.activeStocks)
                     $scope.totalProfit.grossPercent += $scope.totalProfit.grossValue / $scope.totalProfit.amountInvested;
                     $scope.totalProfit.netPercent   += $scope.totalProfit.netValue / $scope.totalProfit.amountInvested;
                 }
@@ -95,7 +107,7 @@ define(['./module'
                     $scope.root.account = data;
 
                     updateBalance();
-                    addSuccess($scope);
+//                    addSuccess($scope);
                 });
             }
 
