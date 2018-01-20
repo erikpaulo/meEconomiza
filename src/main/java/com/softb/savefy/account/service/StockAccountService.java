@@ -40,6 +40,9 @@ public class StockAccountService extends AbstractAccountService {
     @Inject
     private CheckingAccountService checkingAccountService;
 
+    @Inject
+    private StockPriceTask stockPriceTask;
+
     /**
      * Save a new Investment into the system
      * @param account
@@ -72,13 +75,26 @@ public class StockAccountService extends AbstractAccountService {
     public void calcAccountBalance(Account account) {
         StockAccount stockPortfolio = (StockAccount) account;
 
-        Double balance = 0.0;
+        Double grossBalance = 0.0, netBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, originalValue = 0.0;
         for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
             if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
-                balance += entry.getCurrentValue();
+                grossBalance += entry.getCurrentValue();
+                netBalance += entry.getCurrentValue() - entry.getBrokerage();
+
+                grossProfit += entry.getGrossProfitability();
+                netProfit += entry.getNetProfitability();
+
+                originalValue += entry.getAmount();
             }
         }
-        account.setBalance(balance);
+        stockPortfolio.setBalance(netBalance);
+        stockPortfolio.setGrossBalance(grossBalance);
+
+        stockPortfolio.setGrossProfit(grossProfit);
+        stockPortfolio.setNetProfit(netProfit);
+
+        stockPortfolio.setPercentGrossProfit(grossProfit / originalValue * 100);
+        stockPortfolio.setPercentNetProfit(netProfit / originalValue * 100);
     }
 
     /**
@@ -135,10 +151,14 @@ public class StockAccountService extends AbstractAccountService {
     }
 
     private StockAccountEntry buyStock(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId){
-        stock.setLastPrice(stock.getOriginalPrice());
-        calcGains(stock);
 
-//        checkingAccountService.updateEntry(entry, groupId);
+        Double lastPrice = stockPriceTask.getStockPrice(stock.getCode());
+        if (lastPrice != null) {
+            stock.setLastPrice(lastPrice);
+        } else {
+            stock.setLastPrice(stock.getOriginalPrice());
+        }
+        calcGains(stock);
 
         return (StockAccountEntry) save(stock, groupId);
     }

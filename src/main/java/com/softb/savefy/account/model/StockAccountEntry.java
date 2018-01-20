@@ -61,9 +61,9 @@ public class StockAccountEntry extends AccountEntry implements Serializable {
 	@Column(name = "IOF")
 	protected Double brokerage;
 
-	// Income Tax
-	@Column(name = "INCOME_TAX_AMOUNT")
-	protected Double incomeTaxAmount;
+//	// Income Tax
+//	@Column(name = "INCOME_TAX_AMOUNT")
+//	protected Double incomeTaxAmount;
 
 	// GROSS PROFITABILITY AMOUNT
 	@Column(name = "GROSS_PROFITABILITY")

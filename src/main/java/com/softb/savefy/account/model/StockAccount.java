@@ -39,6 +39,21 @@ public class StockAccount extends Account implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<StockAccountEntry> stocks;
 
+    @Transient
+    protected Double grossBalance;
+
+    @Transient
+    protected Double grossProfit;
+
+    @Transient
+    protected Double percentGrossProfit;
+
+    @Transient
+    protected Double netProfit;
+
+    @Transient
+    protected Double percentNetProfit;
+
     @Override
     @JsonIgnore
     public Date getLiquidityDate() {

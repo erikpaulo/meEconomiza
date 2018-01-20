@@ -63,19 +63,19 @@ define(['./module'
             function updateBalance(){
                 if ($scope.account != null){
                     $scope.account.stocks = $filter('orderBy')($scope.account.stocks, 'date', false);
-                    $scope.totalProfit = {
-                        grossValue: 0.0,
-                        grossPercent: 0.0,
-                        netValue: 0.0,
-                        netPercent: 0.0,
-
-                        amountInvested: 0.0
-                    }
+//                    $scope.totalProfit = {
+//                        grossValue: 0.0,
+//                        grossPercent: 0.0,
+//                        netValue: 0.0,
+//                        netPercent: 0.0,
+//
+//                        amountInvested: 0.0
+//                    }
                     $scope.activeStocks = {};
                     for (var i in $scope.account.stocks){
-                        $scope.totalProfit.grossValue += $scope.account.stocks[i].grossProfitability;
-                        $scope.totalProfit.amountInvested += $scope.account.stocks[i].amount;
-                        $scope.totalProfit.netValue += $scope.account.stocks[i].netProfitability;
+//                        $scope.totalProfit.grossValue += $scope.account.stocks[i].grossProfitability;
+//                        $scope.totalProfit.amountInvested += $scope.account.stocks[i].amount;
+//                        $scope.totalProfit.netValue += $scope.account.stocks[i].netProfitability;
 
                         if ($scope.account.stocks[i].operation == 'PURCHASE' && $scope.account.stocks[i].quantity > 0){
                             if ($scope.activeStocks[$scope.account.stocks[i].code] == null){
@@ -88,7 +88,7 @@ define(['./module'
                                                                                       date: null}
                             }
                             $scope.activeStocks[$scope.account.stocks[i].code].qtd += $scope.account.stocks[i].quantity
-                            $scope.activeStocks[$scope.account.stocks[i].code].ai += $scope.account.stocks[i].currentValue
+                            $scope.activeStocks[$scope.account.stocks[i].code].ai += $scope.account.stocks[i].amount
                             $scope.activeStocks[$scope.account.stocks[i].code].gp += $scope.account.stocks[i].grossProfitability
                             $scope.activeStocks[$scope.account.stocks[i].code].lp += $scope.account.stocks[i].lastPrice
                             $scope.activeStocks[$scope.account.stocks[i].code].pgp = $scope.activeStocks[$scope.account.stocks[i].code].gp / $scope.activeStocks[$scope.account.stocks[i].code].ai*100
@@ -96,9 +96,8 @@ define(['./module'
                         }
                     }
 
-//                    $scope.activeStocks = $filter('orderBy')($scope.activeStocks)
-                    $scope.totalProfit.grossPercent += $scope.totalProfit.grossValue / $scope.totalProfit.amountInvested;
-                    $scope.totalProfit.netPercent   += $scope.totalProfit.netValue / $scope.totalProfit.amountInvested;
+//                    $scope.totalProfit.grossPercent += $scope.totalProfit.grossValue / $scope.totalProfit.amountInvested;
+//                    $scope.totalProfit.netPercent   += $scope.totalProfit.netValue / $scope.totalProfit.amountInvested;
                 }
             }
 

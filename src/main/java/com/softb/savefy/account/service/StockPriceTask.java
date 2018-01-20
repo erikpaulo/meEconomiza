@@ -36,23 +36,23 @@ public class StockPriceTask  {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Scheduled(cron = "0 0/15 11-21 * * MON-FRI")
-    public void reportCurrentTime() {
+    public void updateLastPrice() {
         List<AccountEntry> stocks = stockRepository.listAllActiveStocks();
 
         for (AccountEntry entry: stocks) {
             StockAccountEntry stock = (StockAccountEntry) entry;
 
-            stock.setLastPrice( getStockPrice(stock) );
+            stock.setLastPrice( getStockPrice(stock.getCode()) );
             stockAccountService.updateCurrentPosition(stock, stock.getGroupId());
 
             log.info("Price updated for {}", stock.getCode());
         }
     }
 
-    private Double getStockPrice( StockAccountEntry stockEntry){
+    protected Double getStockPrice( String code){
         Stock stock = null;
         try {
-            stock = YahooFinance.get(stockEntry.getCode() + ".SA");
+            stock = YahooFinance.get(code + ".SA");
         } catch (IOException e){
             new SystemException(e.getMessage());
         }
