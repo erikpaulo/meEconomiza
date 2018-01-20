@@ -18,10 +18,6 @@ define(['./module'
                 }}
             );
 
-            $scope.$watch('account', function(newvalue, oldValue){
-                updateBalance();
-            });
-
             $scope.updateQuoteValue = function(){
                 $mdDialog.show({
                     controller: DialogIndexController,
@@ -93,28 +89,8 @@ define(['./module'
                 new Account($scope.account).$getDetailed(function(data){
                     $scope.root.account = data;
 
-                    updateBalance();
                     addSuccess($scope);
                 });
-            }
-
-            function updateBalance(){
-                $scope.account.entries = $filter('orderBy')($scope.account.entries, 'date', false);
-                $scope.totalProfit = {
-                    grossValue: 0.0,
-                    grossPercent: 0.0,
-                    netValue: 0.0,
-                    netPercent: 0.0,
-
-                    amountInvested: 0.0
-                }
-                for (var i in $scope.account.entries){
-                    $scope.totalProfit.grossValue += $scope.account.entries[i].grossProfitability;
-                    $scope.totalProfit.amountInvested += $scope.account.entries[i].amount;
-                    $scope.totalProfit.netValue += $scope.account.entries[i].netProfitability;
-                }
-                $scope.totalProfit.grossPercent += $scope.totalProfit.grossValue / $scope.totalProfit.amountInvested;
-                $scope.totalProfit.netPercent   += $scope.totalProfit.netValue / $scope.totalProfit.amountInvested;
             }
 
             function DialogAccountEntryController($scope, $mdDialog, Utils, Constants, entry) {

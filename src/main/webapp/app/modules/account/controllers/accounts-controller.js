@@ -41,7 +41,8 @@ define(['./module'
                     parent: angular.element(document.body),
                     locals: {
                         type: type,
-                        institutions: $scope.institutions
+                        institutions: $scope.institutions,
+                        accounts: $scope.accounts
                     },
                     clickOutsideToClose:true
                 }).then(function(newAccount){
@@ -55,11 +56,12 @@ define(['./module'
                 });
             }
 
-            function DialogController($scope, $mdDialog, Utils, Constants, type, institutions) {
+            function DialogController($scope, $mdDialog, Utils, Constants, type, institutions, accounts) {
                 $scope.newAccount = {type: type};
 
                 $scope.types = Constants.ACCOUNT.TYPE;
                 $scope.institutions = institutions;
+                $scope.accounts = accounts;
 
                 if ($scope.newAccount.type == 'CCA'){
                     SubCategory.listAll(function (subCategories){

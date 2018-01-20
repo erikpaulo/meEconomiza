@@ -17,6 +17,33 @@
             </md-input-container>
         </div>
         <div layout="row">
+            <md-input-container flex="45" flex-offset="5">
+                <label>Conta Corretora</label>
+                <md-select ng-model="newAccount.brokerAccount">
+                    <md-option ng-repeat="account in accounts" ng-value="account">
+                        {{account.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-autocomplete
+                    md-selected-item="newAccount.subCategory"
+                    md-search-text="searchText"
+                    md-items="subcategory in querySearch(searchText)"
+                    md-min-length="0"
+                    md-autoselect="true"
+                    md-floating-label="Categoria"
+                    md-no-cache="true"
+                    md-item-text="subcategory.fullName"
+                    required>
+                <md-item-template>
+                    <span md-highlight-text="searchText" md-highlight-flags="^i">{{subcategory.fullName}}</span>
+                </md-item-template>
+                <md-not-found>
+                    No matches found.
+                </md-not-found>
+            </md-autocomplete>
+        </div>
+        <div layout="row">
             <md-input-container flex="45">
                 <label>Instituição</label>
                 <md-select name="type" ng-model="newAccount.institutionId" required>

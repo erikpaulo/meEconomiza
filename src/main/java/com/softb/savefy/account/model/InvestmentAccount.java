@@ -44,10 +44,6 @@ public class InvestmentAccount extends Account implements Serializable {
     @Column(name="LIQUIDITY_DUE_DATE")
     protected Date liquidityDueDate;
 
-//    // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
-//    @Transient
-//    protected Double liquidityDate;
-
     // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
@@ -59,6 +55,18 @@ public class InvestmentAccount extends Account implements Serializable {
 
     @Transient
     protected Double grossBalance;
+
+    @Transient
+    protected Double grossProfit;
+
+    @Transient
+    protected Double percentGrossProfit;
+
+    @Transient
+    protected Double netProfit;
+
+    @Transient
+    protected Double percentNetProfit;
 
     public enum Product {
         FIXED_INCOME ( "Renda Fixa" ), MULTI_SHARES( "Multimercado" ), FUND_OF_SHARES( "Fundo de Acões" ), PENSION_FUND( "Fundo de Previdência" );

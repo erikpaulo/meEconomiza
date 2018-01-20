@@ -1,5 +1,6 @@
 package com.softb.savefy.account.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class CheckingAccount extends Account implements Serializable {
     protected Double startBalance;
 
     @Override
+    @JsonIgnore
     public Date getLiquidityDate() {
         Calendar cal = Calendar.getInstance();
         cal.clear(Calendar.HOUR);

@@ -12,6 +12,7 @@ import com.softb.savefy.utils.AppMaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -35,6 +36,9 @@ public class StockAccountService extends AbstractAccountService {
 
     @Autowired
     private AssetPriceRepository indexRepository;
+
+    @Inject
+    private CheckingAccountService checkingAccountService;
 
     /**
      * Save a new Investment into the system
@@ -134,6 +138,8 @@ public class StockAccountService extends AbstractAccountService {
         stock.setLastPrice(stock.getOriginalPrice());
         calcGains(stock);
 
+//        checkingAccountService.updateEntry(entry, groupId);
+
         return (StockAccountEntry) save(stock, groupId);
     }
 
@@ -165,7 +171,6 @@ public class StockAccountService extends AbstractAccountService {
                 quoteDiff = AppMaths.round(stockToSell.getQuantity() - quantityToSell,8);
                 if (quoteDiff >= 0){
                     stockToSell.setQuantity(stockToSell.getQuantity() - quantityToSell);
-//                    stockToSell.setAmount(stockToSell.getQuantity() * stockToSell.getOriginalPrice());
 
                     quoteSaleRepository.save(new QuoteSale(stockToSell, stock, quantityToSell));
                     calcGains(stockToSell);
@@ -178,7 +183,6 @@ public class StockAccountService extends AbstractAccountService {
                     quoteSaleRepository.save(new QuoteSale(stockToSell, stock, stockToSell.getQuantity()));
 
                     stockToSell.setQuantity(0.0);
-//                    stockToSell.setAmount(0.0);
                     calcGains(stockToSell);
                     save(stockToSell, groupId);
 

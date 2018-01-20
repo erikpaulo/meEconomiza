@@ -1,5 +1,6 @@
 package com.softb.savefy.account.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,11 +31,16 @@ public class StockAccount extends Account implements Serializable {
     @Column(name="LIQUIDITY_DAYS")
     protected Integer liquidityDays = 3;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "BROKER_ACCOUNT_ID", referencedColumnName = "ID")
+    protected CheckingAccount brokerAccount;
+
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<StockAccountEntry> stocks;
 
     @Override
+    @JsonIgnore
     public Date getLiquidityDate() {
         Calendar cal = Calendar.getInstance();
         cal.clear(Calendar.HOUR);

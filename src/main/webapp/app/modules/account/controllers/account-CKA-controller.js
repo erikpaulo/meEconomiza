@@ -31,7 +31,8 @@ define(['./module'
                     locals: {
                         subCategories: $scope.subCategories,
                         entry: entry,
-                        accountsToTransfer: $scope.accountsToTransfer
+                        accountsToTransfer: $scope.accountsToTransfer,
+                        account: $scope.account
                     },
                     clickOutsideToClose:true
                 }).then(function(newEntry){
@@ -97,14 +98,14 @@ define(['./module'
                 $scope.account.balance = balance;
             }
 
-            function DialogController($scope, $mdDialog, $filter, Utils, subCategories, entry, accountsToTransfer) {
+            function DialogController($scope, $mdDialog, $filter, Utils, subCategories, entry, accountsToTransfer, account) {
                 if (!entry) entry = {transfer: false}
 
                 $scope.editEntry = angular.copy(entry);
                 $scope.subCategories = subCategories;
                 $scope.accountsToTransfer = accountsToTransfer;
                 for (var i in accountsToTransfer){
-                    if (accountsToTransfer[i].id == entry.accountId){
+                    if (accountsToTransfer[i].id == account.id){
                         accountsToTransfer.splice(i, 1);
                     }
                 }
