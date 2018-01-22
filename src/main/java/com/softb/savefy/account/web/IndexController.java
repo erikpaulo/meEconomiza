@@ -35,7 +35,7 @@ public class IndexController extends AbstractRestController<Account, Integer> {
     }
 
     /**
-     * Create a new index value for this investment
+     * Create a new index profit for this investment
      * @param index
      */
     @RequestMapping(method = RequestMethod.POST)

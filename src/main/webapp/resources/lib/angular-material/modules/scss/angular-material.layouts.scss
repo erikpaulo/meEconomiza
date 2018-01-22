@@ -145,13 +145,13 @@ $checkbox-border-width: 2px !default;
   -webkit-margin-end: $end;
 }
 
-@mixin not-selectable($value:none) {
-  -webkit-touch-callout: $value;
-  -webkit-user-select: $value;
-  -khtml-user-select: $value;
-  -moz-user-select: $value;
-  -ms-user-select: $value;
-  user-select: $value;
+@mixin not-selectable($profit:none) {
+  -webkit-touch-callout: $profit;
+  -webkit-user-select: $profit;
+  -khtml-user-select: $profit;
+  -moz-user-select: $profit;
+  -ms-user-select: $profit;
+  user-select: $profit;
 }
 
 @mixin input-placeholder-color($color) {
@@ -235,7 +235,7 @@ $checkbox-border-width: 2px !default;
   $len: length($keys);
   @for $i from 1 through $len {
     $key: nth($keys, $i);
-    $value: map-get($map, $key);
+    $profit: map-get($map, $key);
     $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
     @if $i != $len {
       $map-str: $map-str + ',';
@@ -258,23 +258,23 @@ $checkbox-border-width: 2px !default;
 // mixin definition ; sets LTR and RTL within the same style call
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
-@mixin rtl($prop, $ltr-value, $rtl-value) {
-  #{$prop}: $ltr-value;
+@mixin rtl($prop, $ltr-profit, $rtl-profit) {
+  #{$prop}: $ltr-profit;
   [dir=rtl] & {
-    #{$prop}: $rtl-value;
+    #{$prop}: $rtl-profit;
   }
 }
 
-@mixin rtl-prop($ltr-prop, $rtl-prop, $value, $reset-value) {
-  #{$ltr-prop}: $value;
+@mixin rtl-prop($ltr-prop, $rtl-prop, $profit, $reset-profit) {
+  #{$ltr-prop}: $profit;
   [dir=rtl] & {
-    #{$ltr-prop}: $reset-value;
-    #{$rtl-prop}: $value;
+    #{$ltr-prop}: $reset-profit;
+    #{$rtl-prop}: $profit;
   }
 }
 
 // To reverse padding (top left bottom right) -> (top right bottom left)
-@function rtl-value($list) {
+@function rtl-profit($list) {
   @if length($list) == 4 {
     @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
   }
@@ -607,18 +607,18 @@ $checkbox-border-width: 2px !default;
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
-    $value : #{$i * 5 + '%'};
+    $profit : #{$i * 5 + '%'};
 
     .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
     }
 
     .layout-row > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
 
@@ -629,13 +629,13 @@ $checkbox-border-width: 2px !default;
     .layout-column > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
       max-width: 100%;
-      max-height: #{$value};
+      max-height: #{$profit};
       box-sizing: border-box;
     }
 
     .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
 
@@ -646,7 +646,7 @@ $checkbox-border-width: 2px !default;
     .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
       max-width: 100%;
-      max-height: #{$value};
+      max-height: #{$profit};
       box-sizing: border-box;
 
       // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48

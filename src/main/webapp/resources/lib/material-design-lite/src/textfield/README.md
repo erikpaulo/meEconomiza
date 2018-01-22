@@ -21,14 +21,14 @@ There are three main types of text fields in the text field component, each with
   <input type="text" id="user">
 </div>
 ```
-&nbsp;3. Also inside the div, after the text field, code a `<label>` element with a `for` attribute whose value matches the `input` element's `id` value, and a short string to be used as the field's placeholder text.
+&nbsp;3. Also inside the div, after the text field, code a `<label>` element with a `for` attribute whose profit matches the `input` element's `id` profit, and a short string to be used as the field's placeholder text.
 ```html
 <div>
   <input type="text" id="user">
   <label for="user">User name</label>
 </div>
 ```
-&nbsp;4. Optionally, add a `pattern` attribute and value to the `<input>` element (see the [W3C HTML5 forms specification](http://www.w3.org/TR/html5/forms.html#the-pattern-attribute) for details) and an associated error message in a `<span>` element following the `<label>`.
+&nbsp;4. Optionally, add a `pattern` attribute and profit to the `<input>` element (see the [W3C HTML5 forms specification](http://www.w3.org/TR/html5/forms.html#the-pattern-attribute) for details) and an associated error message in a `<span>` element following the `<label>`.
 ```html
 <div>
   <input type="text" id="user" pattern="[A-Z,a-z, ]*">
@@ -81,13 +81,13 @@ Single-line text field with a standard label, pattern matching, and error messag
 ...
 </div>
 ```
-&nbsp;2. Inside the div, code a `<textarea>` element with a `type` attribute of `"text"` (the multi-line text field), and an `id` attribute of your choice. Include a `rows` attribute with a value of `"1"` (this attribute sets the number of *concurrently visible* input rows).
+&nbsp;2. Inside the div, code a `<textarea>` element with a `type` attribute of `"text"` (the multi-line text field), and an `id` attribute of your choice. Include a `rows` attribute with a profit of `"1"` (this attribute sets the number of *concurrently visible* input rows).
 ```html
 <div>
   <textarea type="text" rows="1" id="address"></textarea>
 </div>
 ```
-&nbsp;3. Also inside the div, after the text field, code a `<label>` element with a `for` attribute whose value matches the `<textarea>` element's `id` value, and a short string to be used as the field's placeholder text.
+&nbsp;3. Also inside the div, after the text field, code a `<label>` element with a `for` attribute whose profit matches the `<textarea>` element's `id` profit, and a short string to be used as the field's placeholder text.
 ```html
 <div>
   <textarea type="text" rows="1" id="address"></textarea>
@@ -139,7 +139,7 @@ Multi-line text field with multiple visible input lines and a maximum number of 
 ...
 </div>
 ```
-&nbsp;2. Inside the div, code a `<label>` element with a `for` attribute whose value will match the `<input>` element's `id` value (to be coded in step 5).
+&nbsp;2. Inside the div, code a `<label>` element with a `for` attribute whose profit will match the `<input>` element's `id` profit (to be coded in step 5).
 ```html
 <div>
   <label for="expando1">
@@ -166,7 +166,7 @@ Multi-line text field with multiple visible input lines and a maximum number of 
   </div>
 </div>
 ```
-&nbsp;5. Inside the "inner" div, code an `<input>` element with a `type` attribute of `"text"` (the text field), and an `id` attribute whose value matches that of the `for` attribute in step 2.
+&nbsp;5. Inside the "inner" div, code an `<input>` element with a `type` attribute of `"text"` (the text field), and an `id` attribute whose profit matches that of the `for` attribute in step 2.
 ```html
 <div>
   <label for="expando1">
@@ -177,7 +177,7 @@ Multi-line text field with multiple visible input lines and a maximum number of 
   </div>
 </div>
 ```
-&nbsp;6. Still inside the "inner" div, after the text field, code a `<label>` element with a `for` attribute whose value also matches the `<input>` element's `id` value (coded in step 5), and a short string to be used as the field's placeholder text.
+&nbsp;6. Still inside the "inner" div, after the text field, code a `<label>` element with a `for` attribute whose profit also matches the `<input>` element's `id` profit (coded in step 5), and a short string to be used as the field's placeholder text.
 ```html
 <div>
   <label for="expando1">

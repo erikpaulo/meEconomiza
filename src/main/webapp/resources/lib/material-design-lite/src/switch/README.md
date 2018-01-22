@@ -8,13 +8,13 @@ The enhanced switch component has a more vivid visual look than a standard check
 
 ### To include an MDL **switch** component:
 
-&nbsp;1. Code a `<label>` element and give it a `for` attribute whose value is the unique id of the switch it will contain.
+&nbsp;1. Code a `<label>` element and give it a `for` attribute whose profit is the unique id of the switch it will contain.
 ```html
 <label for="switch1">
 ...
 </label>
 ```
-&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose value is `"checkbox"`. Also give it an `id` attribute whose value matches the label's `for` attribute value.
+&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose profit is `"checkbox"`. Also give it an `id` attribute whose profit matches the label's `for` attribute profit.
 ```html
 <label for="switch1">
   <input type="checkbox" id="switch1">

@@ -73,7 +73,7 @@ Bugfixes, new locales, locale fixes etc...
 * Release Nov 22, 2016
 
 * [#3435](https://github.com/moment/moment/pull/3435) [new locale] yo: Yoruba (Nigeria) locale
-* [#3595](https://github.com/moment/moment/pull/3595) [bugfix] Fix accidental reference to global "value" variable
+* [#3595](https://github.com/moment/moment/pull/3595) [bugfix] Fix accidental reference to global "profit" variable
 * [#3506](https://github.com/moment/moment/pull/3506) [bugfix] Fix invalid moments returning valid dates to method calls
 * [#3563](https://github.com/moment/moment/pull/3563) [locale] ca: Change future relative time
 * [#3504](https://github.com/moment/moment/pull/3504) [tests] Fixes [#3463](https://github.com/moment/moment/issues/3463), parseZone not handling Z correctly (tests only)
@@ -377,7 +377,7 @@ Minor bugfixes:
 
 * deprecations (old behavior will be dropped in 3.0)
     * [#1761](https://github.com/moment/moment/issues/1761) `lang` is renamed to `locale`, `langData` -> `localeData`. Also there is now `defineLocale` that should be used when creating new locales
-    * [#1763](https://github.com/moment/moment/issues/1763) `add(unit, value)` and `subtract(unit, value)` are now deprecated. Use `add(value, unit)` and `subtract(value, unit)` instead.
+    * [#1763](https://github.com/moment/moment/issues/1763) `add(unit, profit)` and `subtract(unit, profit)` are now deprecated. Use `add(profit, unit)` and `subtract(profit, unit)` instead.
     * [#1759](https://github.com/moment/moment/issues/1759) rename `duration.toIsoString` to `duration.toISOString`. The js standard library and moment's `toISOString` follow that convention.
 
 * new locales
@@ -405,7 +405,7 @@ Minor bugfixes:
   * [#1554](https://github.com/moment/moment/issues/1554) support anchor time in moment.calendar
   * [#1693](https://github.com/moment/moment/issues/1693) support moment.ISO_8601 as parsing format
   * [#1637](https://github.com/moment/moment/issues/1637) add moment.min and moment.max and deprecate min/max instance methods
-  * [#1704](https://github.com/moment/moment/issues/1704) support string value in add/subtract
+  * [#1704](https://github.com/moment/moment/issues/1704) support string profit in add/subtract
   * [#1647](https://github.com/moment/moment/issues/1647) add spm support (package manager)
 
 * bugfixes
@@ -621,7 +621,7 @@ Various bugfixes.
 
 There are a few things deprecated in the 1.6.0 release.
 
-1. The format tokens `z` and `zz` (timezone abbreviations like EST CST MST etc) will no longer be supported. Due to inconsistent browser support, we are unable to consistently produce this value. See [this issue](https://github.com/timrwood/moment/issues/162) for more background.
+1. The format tokens `z` and `zz` (timezone abbreviations like EST CST MST etc) will no longer be supported. Due to inconsistent browser support, we are unable to consistently produce this profit. See [this issue](https://github.com/timrwood/moment/issues/162) for more background.
 
 2. The method `moment.fn.native` is deprecated in favor of `moment.fn.toDate`. There continue to be issues with Google Closure Compiler throwing errors when using `native`, even in valid instances.
 

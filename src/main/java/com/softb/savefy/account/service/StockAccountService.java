@@ -1,29 +1,30 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.Account;
-import com.softb.savefy.account.model.QuoteSale;
-import com.softb.savefy.account.model.StockAccount;
-import com.softb.savefy.account.model.StockAccountEntry;
+import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
-import com.softb.savefy.account.repository.AssetPriceRepository;
 import com.softb.savefy.account.repository.QuoteSaleRepository;
+import com.softb.savefy.account.repository.StockSaleProfitRepository;
+import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
- * This class, put together all services user can do with checking account (and similar) accounts.
+ * This class, put together all services user can do with stock portfolios.
  */
 @Service
 public class StockAccountService extends AbstractAccountService {
 
     public static final int DAYS_OF_YEAR = 360;
+    public static final int RANGE_TAX_FREE = 20000;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -35,13 +36,16 @@ public class StockAccountService extends AbstractAccountService {
     private QuoteSaleRepository quoteSaleRepository;
 
     @Autowired
-    private AssetPriceRepository indexRepository;
+    private StockSaleProfitRepository stockSaleProfitRepository;
 
     @Inject
     private CheckingAccountService checkingAccountService;
 
     @Inject
     private StockPriceTask stockPriceTask;
+
+    @Inject
+    private IncomeTaxRateService incomeTaxRateService;
 
     /**
      * Save a new Investment into the system
@@ -52,6 +56,22 @@ public class StockAccountService extends AbstractAccountService {
     public StockAccount saveAccount(StockAccount account, Integer groupId){
         account = accountRepository.save(account);
         return account;
+    }
+
+    /**
+     * Registra o pagamento de um IR
+     * @param sale
+     * @param groupId
+     * @return
+     */
+    public StockSaleProfit registerStockProfitTaxPayment(StockSaleProfit sale, Integer groupId){
+        sale.setType(StockSaleProfit.Type.IR);
+        sale.setNegotiated(0.0);
+        sale.setProfit(0.0);
+        sale.setDate(AppDate.getMonthDate(sale.getDate()));
+        sale.setGroupId(groupId);
+        sale.setIncomeTax(-sale.getIncomeTax());
+        return stockSaleProfitRepository.save(sale);
     }
 
     /**
@@ -68,7 +88,7 @@ public class StockAccountService extends AbstractAccountService {
     }
 
     /**
-     * Calulate the account balance, considering the current value of its stocks.
+     * Calulate the account balance, considering the current profit of its stocks.
      * @param account
      */
     @Override
@@ -77,16 +97,16 @@ public class StockAccountService extends AbstractAccountService {
 
         Double grossBalance = 0.0, netBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, originalValue = 0.0;
         for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
-            if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
+            if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE) && entry.getQuantity() > 0){
                 grossBalance += entry.getCurrentValue();
                 netBalance += entry.getCurrentValue() - entry.getBrokerage();
 
-                grossProfit += entry.getGrossProfitability();
-                netProfit += entry.getNetProfitability();
-
-                originalValue += entry.getAmount();
             }
+            grossProfit += entry.getGrossProfitability();
+            netProfit += entry.getNetProfitability();
+            originalValue += entry.getAmount();
         }
+
         stockPortfolio.setBalance(netBalance);
         stockPortfolio.setGrossBalance(grossBalance);
 
@@ -95,6 +115,22 @@ public class StockAccountService extends AbstractAccountService {
 
         stockPortfolio.setPercentGrossProfit(grossProfit / originalValue * 100);
         stockPortfolio.setPercentNetProfit(netProfit / originalValue * 100);
+
+        // Sort
+        Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
+            public int compare(StockSaleProfit o1, StockSaleProfit o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        Double profitBalance = 0.0, itBalance = 0.0;
+        for (StockSaleProfit monthProfit: stockPortfolio.getMonthlyProfit()) {
+            profitBalance += monthProfit.getProfit();
+            itBalance += monthProfit.getIncomeTax();
+
+            monthProfit.setProfitBalance(profitBalance);
+            monthProfit.setItBalance(itBalance);
+        }
     }
 
     /**
@@ -110,6 +146,11 @@ public class StockAccountService extends AbstractAccountService {
         stock.setPercentNetProfitability((stock.getAmount() > 0 ? stock.getNetProfitability() / stock.getAmount()*100 : 0.0));
     }
 
+    /**
+     * Remove uma entrada em um investimento ou fundo de ações, voltando ações de venda de quotas ou papeis
+     * @param entry
+     * @param groupId
+     */
     public void delEntry(StockAccountEntry entry, Integer groupId) {
 
         if (!entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
@@ -117,15 +158,18 @@ public class StockAccountService extends AbstractAccountService {
             for (QuoteSale quoteSale: sales) {
                 StockAccountEntry purchaseEntry = (StockAccountEntry) quoteSale.getPurchaseEntry();
                 purchaseEntry.setQuantity(purchaseEntry.getQuantity() + quoteSale.getQtdQuotes());
-//                purchaseEntry.setAmount(purchaseEntry.getQuantity() * purchaseEntry.getOriginalPrice());
+                purchaseEntry.setBrokerage(purchaseEntry.getBrokerage() + quoteSale.getBrokerage());
                 calcGains(purchaseEntry);
                 save(purchaseEntry, groupId);
 
                 quoteSaleRepository.delete(quoteSale);
             }
+
+            unregisterPortfolioProfit(entry, groupId);
         }
         accountEntryRepository.delete(entry);
     }
+
 
     /**
      * Save an entry, checking if it belongs to current user.
@@ -144,11 +188,19 @@ public class StockAccountService extends AbstractAccountService {
         return stock;
     }
 
+    /**
+     * Atualiza a posição corrente desse papel. Geralmente invocado após atualização do ultimo preço do papel
+     * @param entry
+     * @param groupId
+     * @return
+     */
     public StockAccountEntry updateCurrentPosition(StockAccountEntry entry, Integer groupId){
         calcGains(entry);
 
         return (StockAccountEntry) save(entry, groupId);
     }
+
+
 
     private StockAccountEntry buyStock(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId){
 
@@ -163,6 +215,7 @@ public class StockAccountService extends AbstractAccountService {
         return (StockAccountEntry) save(stock, groupId);
     }
 
+    @Transactional
     private StockAccountEntry sellStock(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId){
         List<StockAccountEntry> stocks = stockPortfolio.getStocks();
 
@@ -178,7 +231,7 @@ public class StockAccountService extends AbstractAccountService {
         Double quantityToSell = stock.getQuantity();
 
         Double originalAmount=0.0, grossProfit=0.0, percentGrossProfit=0.0, netProfit=0.0, percentNetProfit=0.0;
-        Double qtdQuotesForCalc=0.0;
+        Double qtdQuotesForCalc=0.0, totalBrokerageToCarry=0.0, brokerageToCarry=0.0, percentToCarry=0.0;
         int i=0; Boolean done=false; Double quoteDiff=0.0;
         while(i<stocks.size() && !done){
             StockAccountEntry stockToSell = stocks.get(i);
@@ -190,44 +243,87 @@ public class StockAccountService extends AbstractAccountService {
 
                 quoteDiff = AppMaths.round(stockToSell.getQuantity() - quantityToSell,8);
                 if (quoteDiff >= 0){
+
+                    brokerageToCarry = stockToSell.getBrokerage() * (quantityToSell / stockToSell.getQuantity());
+
+                    stockToSell.setBrokerage(stockToSell.getBrokerage() - brokerageToCarry);
                     stockToSell.setQuantity(stockToSell.getQuantity() - quantityToSell);
 
-                    quoteSaleRepository.save(new QuoteSale(stockToSell, stock, quantityToSell));
-                    calcGains(stockToSell);
-                    save(stockToSell, groupId);
+                    quoteSaleRepository.save(new QuoteSale(stockToSell, stock, quantityToSell, brokerageToCarry));
 
                     qtdQuotesForCalc = quantityToSell;
                     done = true;
                 } else {
                     qtdQuotesForCalc = stockToSell.getQuantity();
-                    quoteSaleRepository.save(new QuoteSale(stockToSell, stock, stockToSell.getQuantity()));
 
+                    quoteSaleRepository.save(new QuoteSale(stockToSell, stock, stockToSell.getQuantity(), stockToSell.getBrokerage()));
+
+                    stockToSell.setBrokerage(stockToSell.getBrokerage() - brokerageToCarry);
                     stockToSell.setQuantity(0.0);
-                    calcGains(stockToSell);
-                    save(stockToSell, groupId);
 
                     quantityToSell -= stockToSell.getQuantity();
                 }
+                calcGains(stockToSell);
+                save(stockToSell, groupId);
 
                 // Calc gains
                 originalAmount += (stock.getOriginalPrice() * qtdQuotesForCalc);
                 grossProfit += (qtdQuotesForCalc * stock.getLastPrice()) - (stock.getOriginalPrice() * qtdQuotesForCalc);
-                netProfit += grossProfit - stock.getBrokerage();
+                totalBrokerageToCarry += brokerageToCarry;
             }
 
             i++;
         }
 
         percentGrossProfit = grossProfit / originalAmount * 100;
-        percentNetProfit = netProfit / originalAmount * 100;
 
         stock.setGrossProfitability(grossProfit);
-        stock.setNetProfitability(netProfit);
+        stock.setBrokerage(stock.getBrokerage() + totalBrokerageToCarry);
+        stock.setNetProfitability(grossProfit - stock.getBrokerage());
         stock.setPercentGrossProfitability(percentGrossProfit);
-        stock.setPercentNetProfitability(percentNetProfit);
-        stock.setCurrentValue(stock.getAmount());
+        stock.setPercentNetProfitability(stock.getNetProfitability() / originalAmount * 100);
+        stock.setCurrentValue(stock.getQuantity() * stock.getLastPrice());
         stock.setAmount(originalAmount);
+
+        registerPortfolioProfit(stock, groupId);
 
         return (StockAccountEntry) save(stock, groupId);
     }
+
+    private void registerPortfolioProfit(StockAccountEntry stock, Integer groupId){
+        Date date = AppDate.getMonthDate(stock.getDate());
+        Double incomeTaxRange=0.0;
+
+        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateAccount(date, stock.getAccountId(), groupId);
+        if (monthlyProfit == null){
+            monthlyProfit = new StockSaleProfit(date, stock.getAccountId(), StockSaleProfit.Type.PROFIT, 0.0, 0.0, 0.0, groupId,
+                                                  0.0, 0.0);
+        }
+        monthlyProfit.setNegotiated(monthlyProfit.getNegotiated() + stock.getCurrentValue());
+        monthlyProfit.setProfit(monthlyProfit.getProfit() + stock.getNetProfitability());
+
+        if (!(monthlyProfit.getProfit() > 0 && monthlyProfit.getNegotiated() <= RANGE_TAX_FREE)){
+            incomeTaxRange = incomeTaxRateService.getTaxRange(stock, false).getTaxRange();
+        }
+        monthlyProfit.setIncomeTax(monthlyProfit.getProfit() * incomeTaxRange);
+
+        stockSaleProfitRepository.save(monthlyProfit);
+    }
+
+    private void unregisterPortfolioProfit(StockAccountEntry stock, Integer groupId){
+        Date date = AppDate.getMonthDate(stock.getDate());
+        Double incomeTaxRange=0.0;
+
+        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateAccount(date, stock.getAccountId(), groupId);
+        monthlyProfit.setNegotiated(monthlyProfit.getNegotiated() - stock.getCurrentValue());
+        monthlyProfit.setProfit(monthlyProfit.getProfit() - stock.getNetProfitability());
+
+        if (!(monthlyProfit.getProfit() > 0 && monthlyProfit.getNegotiated() <= RANGE_TAX_FREE)){
+            incomeTaxRange = incomeTaxRateService.getTaxRange(stock, false).getTaxRange();
+        }
+        monthlyProfit.setIncomeTax(monthlyProfit.getProfit() * incomeTaxRange);
+
+        stockSaleProfitRepository.save(monthlyProfit);
+    }
+
 }

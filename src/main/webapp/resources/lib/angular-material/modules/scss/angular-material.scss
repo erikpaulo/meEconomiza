@@ -139,13 +139,13 @@ $checkbox-border-width: 2px !default;
   -webkit-margin-end: $end;
 }
 
-@mixin not-selectable($value:none) {
-  -webkit-touch-callout: $value;
-  -webkit-user-select: $value;
-  -khtml-user-select: $value;
-  -moz-user-select: $value;
-  -ms-user-select: $value;
-  user-select: $value;
+@mixin not-selectable($profit:none) {
+  -webkit-touch-callout: $profit;
+  -webkit-user-select: $profit;
+  -khtml-user-select: $profit;
+  -moz-user-select: $profit;
+  -ms-user-select: $profit;
+  user-select: $profit;
 }
 
 @mixin input-placeholder-color($color) {
@@ -229,7 +229,7 @@ $checkbox-border-width: 2px !default;
   $len: length($keys);
   @for $i from 1 through $len {
     $key: nth($keys, $i);
-    $value: map-get($map, $key);
+    $profit: map-get($map, $key);
     $map-str: $map-str + '_' + $key + '_: _' + map-get($map, $key) + '_';
     @if $i != $len {
       $map-str: $map-str + ',';
@@ -252,23 +252,23 @@ $checkbox-border-width: 2px !default;
 // mixin definition ; sets LTR and RTL within the same style call
 // @see https://css-tricks.com/almanac/properties/d/direction/
 
-@mixin rtl($prop, $ltr-value, $rtl-value) {
-  #{$prop}: $ltr-value;
+@mixin rtl($prop, $ltr-profit, $rtl-profit) {
+  #{$prop}: $ltr-profit;
   [dir=rtl] & {
-    #{$prop}: $rtl-value;
+    #{$prop}: $rtl-profit;
   }
 }
 
-@mixin rtl-prop($ltr-prop, $rtl-prop, $value, $reset-value) {
-  #{$ltr-prop}: $value;
+@mixin rtl-prop($ltr-prop, $rtl-prop, $profit, $reset-profit) {
+  #{$ltr-prop}: $profit;
   [dir=rtl] & {
-    #{$ltr-prop}: $reset-value;
-    #{$rtl-prop}: $value;
+    #{$ltr-prop}: $reset-profit;
+    #{$rtl-prop}: $profit;
   }
 }
 
 // To reverse padding (top left bottom right) -> (top right bottom left)
-@function rtl-value($list) {
+@function rtl-profit($list) {
   @if length($list) == 4 {
     @return nth($list, 1) nth($list, 4) nth($list, 3) nth($list, 2)
   }
@@ -911,18 +911,18 @@ input {
 
   // (1-20) * 5 = 0-100%
   @for $i from 0 through 20 {
-    $value : #{$i * 5 + '%'};
+    $profit : #{$i * 5 + '%'};
 
     .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
     }
 
     .layout-row > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
 
@@ -933,13 +933,13 @@ input {
     .layout-column > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
       max-width: 100%;
-      max-height: #{$value};
+      max-height: #{$profit};
       box-sizing: border-box;
     }
 
     .layout#{$name}-row > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
-      max-width: #{$value};
+      max-width: #{$profit};
       max-height: 100%;
       box-sizing: border-box;
 
@@ -950,7 +950,7 @@ input {
     .layout#{$name}-column > .#{$flexName}-#{$i * 5} {
       flex: 1 1 100%;
       max-width: 100%;
-      max-height: #{$value};
+      max-height: #{$profit};
       box-sizing: border-box;
 
       // Bug workaround for http://crbug.com/546034 - flex issues on Chrome 48
@@ -2336,7 +2336,7 @@ $contact-chip-name-width: rem(12) !default;
 .md-contact-chips {
   .md-chips {
     md-chip {
-      @include rtl(padding, $contact-chip-padding, rtl-value($contact-chip-padding));
+      @include rtl(padding, $contact-chip-padding, rtl-profit($contact-chip-padding));
       .md-contact-avatar {
         @include rtl(float, left, right);
         img {
@@ -2378,7 +2378,7 @@ $contact-chip-name-width: rem(12) !default;
   display: block;
   font-family: $font-family;
   font-size: $chip-font-size;
-  @include rtl(padding, $chip-wrap-padding, rtl-value($chip-wrap-padding));
+  @include rtl(padding, $chip-wrap-padding, rtl-profit($chip-wrap-padding));
   vertical-align: middle;
 
   &.md-readonly .md-chip-input-container {
@@ -2407,7 +2407,7 @@ $contact-chip-name-width: rem(12) !default;
     display: block;
     height: $chip-height;
     line-height: $chip-height;
-    @include rtl(margin, $chip-margin, rtl-value($chip-margin));
+    @include rtl(margin, $chip-margin, rtl-profit($chip-margin));
     padding: $chip-padding;
     @include rtl(float, left, right);
     box-sizing: border-box;
@@ -2460,7 +2460,7 @@ $contact-chip-name-width: rem(12) !default;
   .md-chip-input-container {
     display: block;
     line-height: $chip-height;
-    @include rtl(margin, $chip-margin, rtl-value($chip-margin));
+    @include rtl(margin, $chip-margin, rtl-profit($chip-margin));
     padding: $chip-input-padding;
     @include rtl(float, left, right);
     input {
@@ -2505,7 +2505,7 @@ $contact-chip-name-width: rem(12) !default;
       }
     }
     &:not(:first-child) {
-      @include rtl(margin, $chip-margin, rtl-value($chip-margin));
+      @include rtl(margin, $chip-margin, rtl-profit($chip-margin));
     }
     input {
       background:transparent;
@@ -2682,7 +2682,7 @@ md-calendar {
   height: $md-calendar-cell-size;
   font-size: $md-calendar-month-label-font-size;
   font-weight: 500; // Roboto Medium
-  @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-value( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
+  @include rtl(padding, 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding, rtl-profit( 0 0 0 $md-calendar-side-padding + $md-calendar-month-label-padding));
 
   md-calendar-month &:not(.md-calendar-month-label-disabled) {
     cursor: pointer;
@@ -2966,7 +2966,7 @@ md-datepicker[disabled] {
   }
 
   .md-datepicker-triangle-button,
-  &.md-input-has-value > label,
+  &.md-input-has-profit > label,
   &.md-input-has-placeholder > label {
     display: none;
   }
@@ -3698,22 +3698,22 @@ md-input-container {
     transform: translate3d(0, $input-placeholder-offset, 0);
   }
   // Placeholder should immediately disappear when the user starts typing
-  &.md-input-has-value .md-placeholder {
+  &.md-input-has-profit .md-placeholder {
     transition: none;
     opacity: 0;
   }
 
-  &:not( .md-input-has-value ) input:not( :focus ),
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-day-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-hour-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-millisecond-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-minute-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-month-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-second-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-week-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-year-field,
-  &:not( .md-input-has-value ) input:not( :focus )::-webkit-datetime-edit-text {
+  &:not( .md-input-has-profit ) input:not( :focus ),
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-ampm-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-day-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-hour-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-millisecond-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-minute-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-month-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-second-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-week-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-year-field,
+  &:not( .md-input-has-profit ) input:not( :focus )::-webkit-datetime-edit-text {
     color: transparent;
   }
 
@@ -3824,7 +3824,7 @@ md-input-container {
 
   &.md-input-focused,
   &.md-input-has-placeholder,
-  &.md-input-has-value {
+  &.md-input-has-profit {
     label:not(.md-no-float) {
       transform: translate3d(0, $input-label-float-offset, 0) scale($input-label-float-scale);
       transition: transform $swift-ease-out-timing-function $swift-ease-out-duration,
@@ -3832,9 +3832,9 @@ md-input-container {
     }
   }
 
-  // If we have an existing value; don't animate the transform as it happens on page load and
+  // If we have an existing profit; don't animate the transform as it happens on page load and
   // causes erratic/unnecessary animation
-  &.md-input-has-value {
+  &.md-input-has-profit {
     label {
       transition: none;
     }
@@ -5204,11 +5204,11 @@ md-input-container > md-select {
 
 // Show the asterisk on the placeholder if the element is required
 //
-// NOTE: When the input has a value and uses a floating label, the floating label will show the
+// NOTE: When the input has a profit and uses a floating label, the floating label will show the
 // asterisk denoting that it is required
-md-input-container:not(.md-input-has-value) {
+md-input-container:not(.md-input-has-profit) {
   md-select[required]:not(.md-no-asterisk), md-select.ng-required:not(.md-no-asterisk) {
-    .md-select-value span:first-child:after {
+    .md-select-profit span:first-child:after {
       content: ' *';
       font-size: 13px;
       vertical-align: top;
@@ -5218,7 +5218,7 @@ md-input-container:not(.md-input-has-value) {
 
 md-input-container.md-input-invalid {
   md-select {
-    .md-select-value {
+    .md-select-profit {
       border-bottom-style: solid;
       padding-bottom: 1px;
     }
@@ -5231,7 +5231,7 @@ md-select {
 
   &[required], &.ng-required {
     &.ng-invalid:not(.md-no-asterisk) {
-      .md-select-value span:first-child:after {
+      .md-select-profit span:first-child:after {
         content: ' *';
         font-size: 13px;
         vertical-align: top;
@@ -5239,7 +5239,7 @@ md-select {
     }
   }
 
-  &[disabled] .md-select-value {
+  &[disabled] .md-select-profit {
     background-position: 0 bottom;
     // This background-size is coordinated with a linear-gradient set in select-theme.scss
     // to create a dotted line under the input.
@@ -5259,19 +5259,19 @@ md-select {
       cursor: pointer
     }
     &.ng-invalid.ng-touched {
-      .md-select-value {
+      .md-select-profit {
         border-bottom-style: solid;
         padding-bottom: 1px;
       }
     }
     &:focus {
-      .md-select-value {
+      .md-select-profit {
         border-bottom-width: 2px;
         border-bottom-style: solid;
         padding-bottom: 0;
       }
       &.ng-invalid.ng-touched {
-        .md-select-value {
+        .md-select-profit {
           padding-bottom: 0;
         }
       }
@@ -5279,14 +5279,14 @@ md-select {
   }
 }
 
-// Fix value by 1px to align with standard text inputs (and spec)
-md-input-container.md-input-has-value .md-select-value {
+// Fix profit by 1px to align with standard text inputs (and spec)
+md-input-container.md-input-has-profit .md-select-profit {
   > span:not(.md-select-icon) {
     transform: translate3d(0, 1px, 0);
   }
 }
 
-.md-select-value {
+.md-select-profit {
   display: flex;
   align-items: center;
   padding: 2px 2px 1px;

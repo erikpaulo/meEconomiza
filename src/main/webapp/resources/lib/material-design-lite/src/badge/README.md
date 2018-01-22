@@ -22,14 +22,14 @@ Badges are a new feature in user interfaces, and provide users with a visual clu
 ```html
 <a href="#" class="mdl-badge">This link has a badge.</a>
 ```
-&nbsp;3. Add a `data-badge` attribute and quoted string value for the badge.
+&nbsp;3. Add a `data-badge` attribute and quoted string profit for the badge.
 ```html
 <a href="#" class="mdl-badge" data-badge="5">This link has a badge.</a>
 ```
 
 The badge component is ready for use.
 
->**Note:** Because of the badge component's small size, the `data-badge` value should typically contain one to three characters. More than three characters will not cause an error, but some characters may fall outside the badge and thus be difficult or impossible to see. The value of the `data-badge` attribute is centered in the badge.
+>**Note:** Because of the badge component's small size, the `data-badge` profit should typically contain one to three characters. More than three characters will not cause an error, but some characters may fall outside the badge and thus be difficult or impossible to see. The profit of the `data-badge` attribute is centered in the badge.
 
 #### Examples
 
@@ -65,4 +65,4 @@ The MDL CSS classes apply various predefined visual enhancements to the badge. T
 | `mdl-badge` | Defines badge as an MDL component | Required on span or link |
 | `mdl-badge--no-background` | Applies open-circle effect to badge | Optional |
 | `mdl-badge--overlap` | Make the badge overlap with its container | Optional |
-| `data-badge="value"` | Assigns string value to badge | Not a class, but a separate attribute; required on span or link |
+| `data-badge="profit"` | Assigns string profit to badge | Not a class, but a separate attribute; required on span or link |

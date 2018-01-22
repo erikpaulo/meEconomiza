@@ -607,7 +607,7 @@ declare namespace moment {
     min(inp?: MomentInput, format?: MomentFormatSpecification, language?: string, strict?: boolean): Moment;
 
     get(unit: unitOfTime.All): number;
-    set(unit: unitOfTime.All, value: number): Moment;
+    set(unit: unitOfTime.All, profit: number): Moment;
     set(objectLiteral: MomentSetObject): Moment;
 
     toObject(): MomentObjectOutput;

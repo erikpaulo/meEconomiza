@@ -174,48 +174,48 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     }
 
 
-    /**************************** 0-value ****************************/
-    &.is-lowest-value::-webkit-slider-thumb {
+    /**************************** 0-profit ****************************/
+    &.is-lowest-profit::-webkit-slider-thumb {
       border: 2px solid $range-bg-color;
       background: transparent;
     }
 
-    &.is-lowest-value::-moz-range-thumb {
+    &.is-lowest-profit::-moz-range-thumb {
       border: 2px solid $range-bg-color;
       background: transparent;
     }
 
-    &.is-lowest-value +
+    &.is-lowest-profit +
         .mdl-slider__background-flex > .mdl-slider__background-upper {
       left: 6px;
     }
 
-    &.is-lowest-value:focus:not(:active)::-webkit-slider-thumb {
+    &.is-lowest-profit:focus:not(:active)::-webkit-slider-thumb {
       box-shadow: 0 0 0 10px $range-bg-focus-color;
       background: $range-bg-focus-color;
     }
 
-    &.is-lowest-value:focus:not(:active)::-moz-range-thumb {
+    &.is-lowest-profit:focus:not(:active)::-moz-range-thumb {
       box-shadow: 0 0 0 10px $range-bg-focus-color;
       background: $range-bg-focus-color;
     }
 
-    &.is-lowest-value:active::-webkit-slider-thumb {
+    &.is-lowest-profit:active::-webkit-slider-thumb {
       border: 1.6px solid $range-bg-color;
       transform: scale(1.5);
     }
 
-    &.is-lowest-value:active +
+    &.is-lowest-profit:active +
         .mdl-slider__background-flex > .mdl-slider__background-upper {
       left: 9px;
     }
 
-    &.is-lowest-value:active::-moz-range-thumb {
+    &.is-lowest-profit:active::-moz-range-thumb {
       border: 1.5px solid $range-bg-color;
       transform: scale(1.5);
     }
 
-    &.is-lowest-value::-ms-thumb {
+    &.is-lowest-profit::-ms-thumb {
       background: radial-gradient(circle closest-side,
       transparent 0%,
       transparent 66.67%,
@@ -223,7 +223,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       $range-bg-color 100%);
     }
 
-    &.is-lowest-value:focus:not(:active)::-ms-thumb {
+    &.is-lowest-profit:focus:not(:active)::-ms-thumb {
       background: radial-gradient(circle closest-side,
       $range-bg-focus-color 0%,
       $range-bg-focus-color 25%,
@@ -234,7 +234,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       transform: scale(1);
     }
 
-    &.is-lowest-value:active::-ms-thumb {
+    &.is-lowest-profit:active::-ms-thumb {
       transform: scale(0.5625);
       background: radial-gradient(circle closest-side,
       transparent 0%,
@@ -243,15 +243,15 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       $range-bg-color 100%);
     }
 
-    &.is-lowest-value::-ms-fill-lower {
+    &.is-lowest-profit::-ms-fill-lower {
       background: transparent;
     }
 
-    &.is-lowest-value::-ms-fill-upper {
+    &.is-lowest-profit::-ms-fill-upper {
       margin-left: 6px;
     }
 
-    &.is-lowest-value:active::-ms-fill-upper {
+    &.is-lowest-profit:active::-ms-fill-upper {
       margin-left: 9px;
     }
 
@@ -282,23 +282,23 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       left: 6px;
     }
 
-    &.is-lowest-value:disabled:focus::-webkit-slider-thumb,
-    &.is-lowest-value:disabled:active::-webkit-slider-thumb,
-    &.is-lowest-value:disabled::-webkit-slider-thumb {
+    &.is-lowest-profit:disabled:focus::-webkit-slider-thumb,
+    &.is-lowest-profit:disabled:active::-webkit-slider-thumb,
+    &.is-lowest-profit:disabled::-webkit-slider-thumb {
       border: 3px solid $range-bg-color;
       background: transparent;
       transform: scale(0.667);
     }
 
-    &.is-lowest-value:disabled:focus::-moz-range-thumb,
-    &.is-lowest-value:disabled:active::-moz-range-thumb,
-    &.is-lowest-value:disabled::-moz-range-thumb {
+    &.is-lowest-profit:disabled:focus::-moz-range-thumb,
+    &.is-lowest-profit:disabled:active::-moz-range-thumb,
+    &.is-lowest-profit:disabled::-moz-range-thumb {
       border: 3px solid $range-bg-color;
       background: transparent;
       transform: scale(0.667);
     }
 
-    &.is-lowest-value:disabled:active +
+    &.is-lowest-profit:disabled:active +
         .mdl-slider__background-flex > .mdl-slider__background-upper {
       left: 6px;
     }
@@ -310,9 +310,9 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       background: $range-bg-color;
     }
 
-    &.is-lowest-value:disabled:focus::-ms-thumb,
-    &.is-lowest-value:disabled:active::-ms-thumb,
-    &.is-lowest-value:disabled::-ms-thumb {
+    &.is-lowest-profit:disabled:focus::-ms-thumb,
+    &.is-lowest-profit:disabled:active::-ms-thumb,
+    &.is-lowest-profit:disabled::-ms-thumb {
       transform: scale(0.25);
       background: radial-gradient(circle closest-side,
       transparent 0%,
@@ -334,7 +334,7 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
       margin-left: 6px;
     }
 
-    &.is-lowest-value:disabled:active::-ms-fill-upper {
+    &.is-lowest-profit:disabled:active::-ms-fill-upper {
       margin-left: 6px;
     }
   }

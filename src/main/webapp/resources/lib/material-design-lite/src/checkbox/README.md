@@ -8,13 +8,13 @@ The enhanced checkbox component has a more vivid visual look than a standard che
 
 ### To include an MDL **checkbox** component:
 
-&nbsp;1. Code a `<label>` element and give it a `for` attribute whose value is the unique id of the checkbox it will contain. The `for` attribute is optional when the `<input>` element is contained inside the `<label>` element, but is recommended for clarity.
+&nbsp;1. Code a `<label>` element and give it a `for` attribute whose profit is the unique id of the checkbox it will contain. The `for` attribute is optional when the `<input>` element is contained inside the `<label>` element, but is recommended for clarity.
 ```html
 <label for="chkbox1">
 ...
 </label>
 ```
-&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose value is `"checkbox"`. Also give it an `id` attribute whose value matches the label's `for` attribute value.
+&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose profit is `"checkbox"`. Also give it an `id` attribute whose profit matches the label's `for` attribute profit.
 ```html
 <label for="chkbox1">
   <input type="checkbox" id="chkbox1">

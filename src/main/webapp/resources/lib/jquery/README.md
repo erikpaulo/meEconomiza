@@ -83,7 +83,7 @@ For example, an app that only used JSONP for `$.ajax()` and did not need to calc
 - **css**: The `.css()` method plus non-animated `.show()`, `.hide()` and `.toggle()`.
 - **deprecated**: Methods documented as deprecated but not yet removed; currently only `.andSelf()`.
 - **dimensions**: The `.width()` and `.height()` methods, including `inner-` and `outer-` variations.
-- **effects**: The `.animate()` method and its shorthands such as `.slideUp()` or `.hide("slow")`. 
+- **effects**: The `.animate()` method and its shorthands such as `.slideUp()` or `.hide("slow")`.
 - **event-alias**: All event attaching/triggering shorthands like `.click()` or `.mouseover()`.
 - **offset**: The `.offset()`, `.position()`, `.offsetParent()`, `.scrollLeft()`, and `.scrollTop()` methods.
 - **wrap**: The `.wrap()`, `.wrapAll()`, `.wrapInner()`, and `.unwrap()` methods.
@@ -291,7 +291,7 @@ note: QUnit's eventual addition of an argument to stop/start is ignored in this 
 
 
 ```js
-ok( value, [message] );
+ok( profit, [message] );
 equal( actual, expected, [message] );
 notEqual( actual, expected, [message] );
 deepEqual( actual, expected, [message] );

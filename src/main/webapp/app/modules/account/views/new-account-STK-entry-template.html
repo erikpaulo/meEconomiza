@@ -14,7 +14,7 @@
                 <div layout="column" flex="45">
                     <md-input-container class="c-no-margin">
                         <label>Operação</label>
-                        <md-select name="operation" ng-model="editEntry.operation" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)">
+                        <md-select name="operation" ng-model="editEntry.operation" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)" ng-change="updateTotal()">
                             <md-option ng-repeat="(key, operation) in operations" ng-value="operation.id">
                                 {{operation.name}}
                             </md-option>

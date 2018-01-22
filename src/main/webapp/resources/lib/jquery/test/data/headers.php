@@ -6,10 +6,10 @@ header( "Sample-Header2: Hello World 2" );
 
 $headers = array();
 
-foreach( $_SERVER as $key => $value ) {
+foreach( $_SERVER as $key => $profit ) {
 
 	$key = str_replace( "_" , "-" , substr( $key , 0 , 5 ) == "HTTP_" ? substr( $key , 5 ) : $key );
-	$headers[ $key ] = $value;
+	$headers[ $key ] = $profit;
 
 }
 

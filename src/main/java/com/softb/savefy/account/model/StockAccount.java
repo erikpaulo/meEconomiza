@@ -39,6 +39,10 @@ public class StockAccount extends Account implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<StockAccountEntry> stocks;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+    protected List<StockSaleProfit> monthlyProfit;
+
     @Transient
     protected Double grossBalance;
 

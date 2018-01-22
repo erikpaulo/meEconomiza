@@ -3,6 +3,7 @@ package com.softb.savefy.account.service;
 import com.softb.savefy.account.model.AccountEntry;
 import com.softb.savefy.account.model.StockAccountEntry;
 import com.softb.savefy.account.repository.AccountEntryRepository;
+import com.softb.savefy.utils.Constants;
 import com.softb.system.errorhandler.exception.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class StockPriceTask  {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron = "0 0/15 11-21 * * MON-FRI")
+    @Scheduled(cron = "0 */15 9-18 * * MON-FRI", zone = Constants.TIMEZONE_PTBR)
     public void updateLastPrice() {
         List<AccountEntry> stocks = stockRepository.listAllActiveStocks();
 

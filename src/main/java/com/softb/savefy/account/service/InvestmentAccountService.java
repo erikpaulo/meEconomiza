@@ -58,7 +58,7 @@ public class InvestmentAccountService extends AbstractAccountService {
     }
 
     /**
-     * Calulate the account balance, considering the current value of its stocks.
+     * Calulate the account balance, considering the current profit of its stocks.
      * @param account
      */
     @Override
@@ -89,7 +89,7 @@ public class InvestmentAccountService extends AbstractAccountService {
     }
 
     /**
-     * Calculate all calculated field of an investment entry, considering its age and last index value.
+     * Calculate all calculated field of an investment entry, considering its age and last index profit.
      * @param account
      * @param entry
      */
@@ -213,7 +213,7 @@ public class InvestmentAccountService extends AbstractAccountService {
                     entryToSell.setQuotesAvailable(AppMaths.round(entryToSell.getQuotesAvailable() - qtdQuotesToSell,8));
                     entryToSell.setAmount(entryToSell.getQuotesAvailable() * entryToSell.getQuoteValue());
 
-                    quoteSaleRepository.save(new QuoteSale(entryToSell, entry, qtdQuotesToSell));
+                    quoteSaleRepository.save(new QuoteSale(entryToSell, entry, qtdQuotesToSell, 0.0));
 
                     save(entryToSell, groupId);
 
@@ -227,7 +227,7 @@ public class InvestmentAccountService extends AbstractAccountService {
                     } else {
                         qtdQuotesForCalc = entryToSell.getQuotesAvailable();
                     }
-                    quoteSaleRepository.save(new QuoteSale(entryToSell, entry, entryToSell.getQuotesAvailable()));
+                    quoteSaleRepository.save(new QuoteSale(entryToSell, entry, entryToSell.getQuotesAvailable(), 0.0));
 
                     entryToSell.setQuotesAvailable(0.0);
                     entryToSell.setAmount(0.0);

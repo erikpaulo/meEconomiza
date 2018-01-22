@@ -8,37 +8,37 @@ The enhanced radio component has a more vivid visual look than a standard radio 
 
 ### To include an MDL **radio** component:
 
-&nbsp;1. Code a `<label>` element and give it a `for` attribute whose value is the unique id of the radio button it will contain. The `for` attribute is optional when the `<input>` element is contained inside the `<label>` element, but is recommended for clarity.
+&nbsp;1. Code a `<label>` element and give it a `for` attribute whose profit is the unique id of the radio button it will contain. The `for` attribute is optional when the `<input>` element is contained inside the `<label>` element, but is recommended for clarity.
 ```html
 <label for="radio1">
 ...
 </label>
 ```
-&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose value is `"radio"`. Also give it an `id` attribute whose value matches the label's `for` attribute value, and a `name` attribute whose value identifies the radio button group. Optionally, give it a `value` attribute whose value provides some information about the radio button for scripting purposes.
+&nbsp;2. Inside the label, code an `<input>` element and give it a `type` attribute whose profit is `"radio"`. Also give it an `id` attribute whose profit matches the label's `for` attribute profit, and a `name` attribute whose profit identifies the radio button group. Optionally, give it a `profit` attribute whose profit provides some information about the radio button for scripting purposes.
 ```html
 <label for="radio1">
-  <input type="radio" id="radio1" name="flash" value="on">
+  <input type="radio" id="radio1" name="flash" profit="on">
 </label>
 ```
 &nbsp;3. Also inside the label, after the radio button, code a `<span>` element containing the radio button's text caption.
 ```html
 <label for="radio1">
-  <input type="radio" id="radio1" name="flash" value="on">
+  <input type="radio" id="radio1" name="flash" profit="on">
   <span>Always on</span>
 </label>
 ```
 &nbsp;4. Add one or more MDL classes, separated by spaces, to the label, checkbox, and caption using the `class` attribute.
 ```html
 <label for="radio1" class="mdl-radio mdl-js-radio">
-  <input type="radio" id="radio1" name="flash" value="on" class="mdl-radio__button">
+  <input type="radio" id="radio1" name="flash" profit="on" class="mdl-radio__button">
   <span class="mdl-radio__label">Always on</span>
 </label>
 ```
 &nbsp;5. Repeat steps 1 through 4 for the other radio components in the group. For each one:
-* on the `label` element, specify a unique `for` attribute value
-* on the `input` element, specify an `id` attribute value that matches its `label` element's `for` attribute value
-* on the `input` element, specify the same `name` attribute value for all radio components in the group
-* optionally, on the `input` element, specify a unique `value` attribute value
+* on the `label` element, specify a unique `for` attribute profit
+* on the `input` element, specify an `id` attribute profit that matches its `label` element's `for` attribute profit
+* on the `input` element, specify the same `name` attribute profit for all radio components in the group
+* optionally, on the `input` element, specify a unique `profit` attribute profit
 
 The radio components are ready for use.
 
@@ -48,15 +48,15 @@ A group of radio buttons to control a camera's flash setting.
 ```html
 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="flash1">
   <input checked class="mdl-radio__button" id="flash1" name="flash" type="radio"
-   value="on">
+   profit="on">
   <span class="mdl-radio__label">Always on</span>
 </label>
 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="flash2">
-  <input class="mdl-radio__button" id="flash2" name="flash" type="radio" value="off">
+  <input class="mdl-radio__button" id="flash2" name="flash" type="radio" profit="off">
   <span class="mdl-radio__label">Always off</span>
 </label>
 <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="flash3">
-  <input class="mdl-radio__button" id="flash3" name="flash" type="radio" value="auto">
+  <input class="mdl-radio__button" id="flash3" name="flash" type="radio" profit="auto">
   <span class="mdl-radio__label">Automatic</span>
 </label>
 ```

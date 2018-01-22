@@ -43,7 +43,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 
 //    public abstract JpaRepository<T, ID> getRepository();
 
-//    @RequestMapping(value="/{id}", method=RequestMethod.GET)
+//    @RequestMapping(profit="/{id}", method=RequestMethod.GET)
 //    public T get(@PathVariable ID id) {
 //        return getRepository().findOne(id);
 //    }
@@ -65,7 +65,7 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 
 //    public abstract String getEntityName();
 
-//	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+//	@RequestMapping(profit = "/{id}", method = RequestMethod.PUT)
 //    public T update(@PathVariable("id") ID id, @RequestBody T json) {
 //        logger.debug("update() of id#{} with body {}", id, json);
 //        logger.debug("T json is of type {}", json.getClass());
@@ -79,12 +79,12 @@ public abstract class AbstractRestController<T, ID extends Serializable> {
 //        return updated;
 //    }
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+//    @RequestMapping(profit = "/{id}", method = RequestMethod.DELETE)
 //    public @ResponseBody void delete(@PathVariable("id") ID id) {
 //    	getRepository().delete(id);
 //    }
     
-//	@RequestMapping(value = "deleteAll", method = RequestMethod.DELETE)
+//	@RequestMapping(profit = "deleteAll", method = RequestMethod.DELETE)
 //	public @ResponseBody void deleteAll() {
 //		getRepository().deleteAll();
 //	}

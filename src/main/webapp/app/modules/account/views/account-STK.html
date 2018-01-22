@@ -70,9 +70,9 @@
         <!--</div>-->
     </div>
     <md-divider></md-divider>
-    <div layout="row">
+    <div layout="row" class="md-padding">
         <div layout="column" flex="100">
-            <div layout="row" layout-align="start center" layout-wrap>
+            <div layout="row" layout-align="center center" layout-wrap>
                 <md-card ng-repeat="(code, stock) in activeStocks"
                          class="border-radius-5 flat"
                          style="font: 12px MontserratLight,Arial,sans-; min-width:220px"
@@ -81,7 +81,7 @@
                         <!--<div layout="row">-->
                         <div layout="column" flex layout-align="center start"><span class="md-subhead">{{code}}</span></div>
                         <div layout="column" flex="20" layout-align="center center">
-                            <img  src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" alt="logo"/>
+                            <img  ng-src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" style="max-height:16px;" alt="logo"/>
                         </div>
                         <!--</div>-->
                     </md-card-header>
@@ -94,53 +94,88 @@
                         <div layout="row">
                             <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center"><strong>{{stock.lp | currency}}</strong></div>
                             <md-divider></md-divider>
-                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.ai | currency}}</div>
+                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.cp | currency}}</div>
                         </div>
                     </md-card-content>
                 </md-card>
             </div>
         </div>
     </div>
-    <div layout="row" layout-align="start start">
-        <div layout="column" flex="60" flex-xs="100" flex-offset="5">
-            <div layout="row" layout-align="center center">
-                <div layout="column" flex="90" ng-if="account.stocks.length<=0">
-                    <h6 style="color: #7A7A7A;font-style: italic;">Não existem ações nesta carteira.</h6>
-                </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-align="center center" class="md-padding">
+        <div layout="column" flex="90">
+            <div layout="row" ng-if="account.stocks.length<=0">
+                <h6 style="color: #7A7A7A;font-style: italic;">Não existem ações nesta carteira.</h6>
+            </div>
+            <div layout="row" ng-if="account.stocks.length>0">
+                <span class="md-subhead" md-colors="{color: 'blue-grey-700'}">Extrato de Operações</span>
+            </div>
+            <div layout="row" ng-if="account.stocks.length>0">
                 <table layout="column" flex="100" class="table-striped" style="margin:10px;" ng-if="account.stocks.length>0">
                     <thead>
                     <tr layout="row">
                         <th flex="10" flex-xs="10">Ativo</th>
-                        <th flex="15" flex-xs="25">Operação</th>
-                        <th flex="15" flex-xs="25">Inclusão</th>
+                        <th flex="10" flex-xs="25">Operação</th>
+                        <th flex="10" flex-xs="25">Inclusão</th>
                         <th flex="10" hide-xs>Preço Ori.</th>
                         <th flex="10" hide-xs>Preço Ult.</th>
+                        <th flex="10" hide-xs>Quantidade</th>
                         <th flex="10" hide-xs>Taxas</th>
                         <th flex="10" flex-xs="25">Var. Bruta</th>
                         <th flex="10" hide-xs>Var. Líq.</th>
-                        <th flex="20" flex-xs="30">Posição</th>
+                        <th flex="10" flex-xs="30">Posição Líquida</th>
+                        <th flex="10" flex-xs="30">Posição Bruta</th>
                         <th flex="5" flex-xs="10"></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr layout="row" ng-repeat="item in account.stocks" ng-if="item.quantity>0"  layout-align="center center" class="c-hover">
-                            <td flex="10" flex-xs="10">{{ item.code }}</td>
-                            <td flex="15" flex-xs="25">{{ item.operation }}</td>
-                            <td flex="15" flex-xs="25">{{ item.date | date : 'dd/MM/yyyy' }}</td>
-                            <td flex="10" hide-xs>{{ item.originalPrice | currency }}</td>
-                            <td flex="10" hide-xs>{{ item.lastPrice | currency }}</td>
-                            <td flex="10" hide-xs>{{ item.brokerage | currency }}</td>
-                            <td flex="10" flex-xs="25">{{ item.percentGrossProfitability | number:2 }}%</td>
-                            <td flex="10" hide-xs>{{ item.percentNetProfitability | number:2 }}%</td>
-                            <td flex="20" flex-xs="30" my-currency="item.currentValue"></td>
-                            <td flex="5" flex-xs="10">
-                                <div layout="row">
-                                    <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">
-                                        <md-icon class="material-icons step md-18">highlight_off</md-icon>
-                                    </md-button>
-                                </div>
-                            </td>
-                        </tr>
+                    <tr layout="row" ng-repeat="item in account.stocks" ng-if="item.quantity>0"  layout-align="center center" class="c-hover">
+                        <td flex="10" flex-xs="10">{{ item.code }}</td>
+                        <td flex="10" flex-xs="25">{{ item.operation }}</td>
+                        <td flex="10" flex-xs="25">{{ item.date | date : 'dd/MM/yyyy' }}</td>
+                        <td flex="10" hide-xs>{{ item.originalPrice | currency }}</td>
+                        <td flex="10" hide-xs>{{ item.lastPrice | currency }}</td>
+                        <td flex="10" hide-xs>{{ item.quantity }}</td>
+                        <td flex="10" hide-xs>{{ item.brokerage | currency }}</td>
+                        <td flex="10" flex-xs="25">{{ item.percentGrossProfitability | number:2 }}%</td>
+                        <td flex="10" hide-xs>{{ item.percentNetProfitability | number:2 }}%</td>
+                        <td flex="10" flex-xs="30" my-currency="(item.currentValue-item.incomeTaxAmount-item.brokerage)"></td>
+                        <td flex="10" flex-xs="30" my-currency="item.currentValue"></td>
+                        <td flex="5" flex-xs="10">
+                            <div layout="row">
+                                <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">
+                                    <md-icon class="material-icons step md-18">highlight_off</md-icon>
+                                </md-button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div layout="row" ng-if="account.monthlyProfit.length>0" style="margin-top: 40px">
+                <span class="md-subhead" md-colors="{color: 'blue-grey-700'}">Extrato Lucro Realizado (Swing Trade)</span>
+            </div>
+            <div layout="row" ng-if="account.monthlyProfit.length>0">
+                <table layout="column" flex="50" class="table-striped" style="margin:10px;">
+                    <thead>
+                    <tr layout="row">
+                        <th flex="20" flex-xs="15">Mês</th>
+                        <th flex="20" flex-xs="15">Vlr Negociado</th>
+                        <th flex="15" flex-xs="25">Lucro Líquido</th>
+                        <th flex="15" flex-xs="25">IR</th>
+                        <th flex="15" hide-xs>Saldo Lucro</th>
+                        <th flex="15" hide-xs>IR Devido</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr layout="row" ng-repeat="monthProfit in account.monthlyProfit"  layout-align="center center" class="c-hover">
+                        <td flex="20" flex-xs="10">{{ monthProfit.date | date : 'MMM/yyyy' : 'UTC' }}</td>
+                        <td flex="20" flex-xs="25">{{ monthProfit.negotiated | currency }}</td>
+                        <td flex="15" flex-xs="25">{{ monthProfit.profit | currency }}</td>
+                        <td flex="15" flex-xs="25">{{ monthProfit.incomeTax | currency }}</td>
+                        <td flex="15" hide-xs>{{ monthProfit.profitBalance | currency }}</td>
+                        <td flex="15" hide-xs>{{ monthProfit.itBalance | currency }}</td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

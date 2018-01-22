@@ -3,6 +3,7 @@ package com.softb.savefy.account.web;
 import com.softb.savefy.account.model.Account;
 import com.softb.savefy.account.model.StockAccount;
 import com.softb.savefy.account.model.StockAccountEntry;
+import com.softb.savefy.account.model.StockSaleProfit;
 import com.softb.savefy.account.service.StockAccountService;
 import com.softb.system.errorhandler.exception.BusinessException;
 import com.softb.system.errorhandler.exception.FormValidationError;
@@ -52,6 +53,17 @@ public class StockAccountController extends AbstractRestController<Account, Inte
     @ResponseBody public StockAccount save(@RequestBody StockAccount account) throws FormValidationError {
         validate(OBJECT_NAME, account);
         return stockAccountService.saveAccount(account, getGroupId());
+    }
+
+    /**
+     * Registra um pagamento de IR para um lucro mensal, proveniente de vendas realizadas no mês acima de 20k
+     * @param payment
+     * @return
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/{id}/saleProfit", method = RequestMethod.POST)
+    @ResponseBody public StockSaleProfit registerProfitTaxPayment(@RequestBody StockSaleProfit payment) throws FormValidationError {
+        return stockAccountService.registerStockProfitTaxPayment(payment, getGroupId());
     }
 
     /**

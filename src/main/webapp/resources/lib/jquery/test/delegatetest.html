@@ -153,7 +153,7 @@ var events = "bind-change live-change onX-change bind-propertychange live-before
 			prev = $el.text();
 		prev = prev? prev +" | " : "";
 		return $el
-			.text(prev + ++counter+" " + (this.value.replace(/^on$/,"") || this.id || this.checked || ""))
+			.text(prev + ++counter+" " + (this.profit.replace(/^on$/,"") || this.id || this.checked || ""))
 			.css("backgroundColor","#0f0")
 			.delay(800)
 			.queue(function(next){

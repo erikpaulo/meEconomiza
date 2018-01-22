@@ -35,4 +35,7 @@ public class QuoteSale extends BaseEntity<Integer> implements Serializable {
     @Column(name = "QTD_QUOTES")
     @NotNull
     protected Double qtdQuotes;
+
+    @Column(name = "BROKERAGE")
+    protected Double brokerage=0.0;
 }

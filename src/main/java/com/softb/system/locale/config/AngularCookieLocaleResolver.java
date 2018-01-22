@@ -51,7 +51,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
 
     private void parseLocaleCookieIfNecessary(HttpServletRequest request) {
         if (request.getAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME) == null) {
-            // Retrieve and parse cookie value.
+            // Retrieve and parse cookie profit.
             Cookie cookie = WebUtils.getCookie(request, getCookieName());
             Locale locale = null;
             TimeZone timeZone = null;
@@ -73,7 +73,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
                     timeZone = StringUtils.parseTimeZoneString(timeZonePart);
                 }
                 if (logger.isTraceEnabled()) {
-                    logger.trace("Parsed cookie value [" + cookie.getValue() + "] into locale '" + locale +
+                    logger.trace("Parsed cookie profit [" + cookie.getValue() + "] into locale '" + locale +
                             "'" + (timeZone != null ? " and time zone '" + timeZone.getID() + "'" : ""));
                 }
             }

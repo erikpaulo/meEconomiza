@@ -5,6 +5,7 @@ import com.softb.savefy.account.model.InvestmentAccountEntry;
 import com.softb.savefy.account.model.StockAccountEntry;
 import com.softb.savefy.utils.AppDate;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -99,7 +100,8 @@ public class IncomeTaxRateService {
     }
 
     @AllArgsConstructor
-    private class TaxRange{
+    @Data
+    public class TaxRange{
         Double taxRange;
         Date nextRangeDate;
     }

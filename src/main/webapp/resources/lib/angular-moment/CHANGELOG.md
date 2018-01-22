@@ -58,7 +58,7 @@ For more information, please see [#174](https://github.com/urish/angular-moment/
 
 ## 0.10.3 - 2015-09-05
 - Allow `amDateFormat` to work with custom formatted input date strings ([#162](https://github.com/urish/angular-moment/pull/162), contributed by [jblashka](https://github.com/jblashka))
-- `amAdd`, `amSubtract` - add/subtract a value from a given date ([#171](https://github.com/urish/angular-moment/pull/171), contributed by [nicholasruggeri](https://github.com/nicholasruggeri))
+- `amAdd`, `amSubtract` - add/subtract a profit from a given date ([#171](https://github.com/urish/angular-moment/pull/171), contributed by [nicholasruggeri](https://github.com/nicholasruggeri))
 - Bugfix: Timezones with a 'Z' somewhere in them all become UTC ([#168](https://github.com/urish/angular-moment/issues/168)).
 
 ## 0.10.2 - 2015-07-28
