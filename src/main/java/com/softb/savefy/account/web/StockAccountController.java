@@ -68,7 +68,7 @@ public class StockAccountController extends AbstractRestController<Account, Inte
 
     /**
      * Registra um pagamento de IR para um lucro mensal, proveniente de vendas realizadas no mês acima de 20k
-     * @param payment
+     * @param profitId
      * @return
      * @throws FormValidationError
      */
