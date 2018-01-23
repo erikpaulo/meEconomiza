@@ -7,6 +7,7 @@ import com.softb.savefy.account.repository.QuoteSaleRepository;
 import com.softb.savefy.account.repository.StockSaleProfitRepository;
 import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
+import com.softb.system.errorhandler.exception.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +73,18 @@ public class StockAccountService extends AbstractAccountService {
         sale.setGroupId(groupId);
         sale.setIncomeTax(-sale.getIncomeTax());
         return stockSaleProfitRepository.save(sale);
+    }
+
+    /**
+     * Registra o pagamento de um IR
+     * @param saleProfitId
+     * @param groupId
+     * @return
+     */
+    public void removeTaxPayment(Integer saleProfitId, Integer groupId){
+        StockSaleProfit saleProfit = stockSaleProfitRepository.findOne(saleProfitId, groupId);
+        if (saleProfit == null) throw new BusinessException("This entry doesn't belong to current user");
+        stockSaleProfitRepository.delete(saleProfitId);
     }
 
     /**

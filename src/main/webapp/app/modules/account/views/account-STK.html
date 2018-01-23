@@ -156,25 +156,33 @@
                 <span class="md-subhead" md-colors="{color: 'blue-grey-700'}">Extrato Lucro Realizado (Swing Trade)</span>
             </div>
             <div layout="row" ng-if="account.monthlyProfit.length>0">
-                <table layout="column" flex="50" class="table-striped" style="margin:10px;">
+                <table layout="column" flex="60" class="table-striped" style="margin:10px;">
                     <thead>
                     <tr layout="row">
-                        <th flex="20" flex-xs="15">Mês</th>
-                        <th flex="20" flex-xs="15">Vlr Negociado</th>
+                        <th flex="15" flex-xs="15">Mês</th>
+                        <th flex="15" flex-xs="15">Vlr Negociado</th>
                         <th flex="15" flex-xs="25">Lucro Líquido</th>
                         <th flex="15" flex-xs="25">IR</th>
                         <th flex="15" hide-xs>Saldo Lucro</th>
                         <th flex="15" hide-xs>IR Devido</th>
+                        <th flex hide-xs></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr layout="row" ng-repeat="monthProfit in account.monthlyProfit"  layout-align="center center" class="c-hover">
-                        <td flex="20" flex-xs="10">{{ monthProfit.date | date : 'MMM/yyyy' : 'UTC' }}</td>
-                        <td flex="20" flex-xs="25">{{ monthProfit.negotiated | currency }}</td>
+                        <td flex="15" flex-xs="10">{{ monthProfit.date | date : 'MMM/yyyy' : 'UTC' }}</td>
+                        <td flex="15" flex-xs="25">{{ monthProfit.negotiated | currency }}</td>
                         <td flex="15" flex-xs="25">{{ monthProfit.profit | currency }}</td>
                         <td flex="15" flex-xs="25">{{ monthProfit.incomeTax | currency }}</td>
                         <td flex="15" hide-xs>{{ monthProfit.profitBalance | currency }}</td>
                         <td flex="15" hide-xs>{{ monthProfit.itBalance | currency }}</td>
+                        <td flex flex-xs="10">
+                            <div layout="row" ng-if="monthProfit.type == 'IR'">
+                                <md-button class="md-icon-button" ng-click="removeIR(monthProfit)" aria-label="Remover">
+                                    <md-icon class="material-icons step md-18">highlight_off</md-icon>
+                                </md-button>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

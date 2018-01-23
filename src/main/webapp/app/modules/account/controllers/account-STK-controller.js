@@ -72,11 +72,17 @@ define(['./module'
 
             $scope.remove = function(entry){
                 new AccountEntry(entry).$remove(function(){
-                    new Account($scope.account).$getDetailed(function(data){
-                        $scope.root.account = data;
+                    getAccountDetail();
+                }, function(err){
+                    addError($scope, 'Não foi possível remover operação.', err);
+                });
+            }
 
-                        addSuccess($scope);
-                    });
+            $scope.removeIR = function(IRPayment){
+                new StockSaleProfit(IRPayment).$remove(function(){
+                    getAccountDetail();
+                }, function(err){
+                    addError($scope, 'Não foi possível remover pagamento.', err);
                 });
             }
 

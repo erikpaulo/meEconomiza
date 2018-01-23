@@ -67,6 +67,17 @@ public class StockAccountController extends AbstractRestController<Account, Inte
     }
 
     /**
+     * Registra um pagamento de IR para um lucro mensal, proveniente de vendas realizadas no mês acima de 20k
+     * @param payment
+     * @return
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/{id}/saleProfit/{profitId}", method = RequestMethod.DELETE)
+    @ResponseBody public void removeTaxPayment(@PathVariable Integer profitId) throws FormValidationError {
+        stockAccountService.removeTaxPayment(profitId, getGroupId());
+    }
+
+    /**
      * Get this account with no calculation, just the account.
      * @param id
      * @return

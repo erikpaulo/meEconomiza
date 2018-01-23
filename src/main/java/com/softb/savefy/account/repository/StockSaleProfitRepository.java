@@ -14,4 +14,7 @@ public interface StockSaleProfitRepository extends JpaRepository<StockSaleProfit
 
     @Query("select s from StockSaleProfit s where s.date = :date and s.accountId = :accountId and type = '0' and s.groupId = :groupId")
     StockSaleProfit findProfitByDateAccount(@Param("date") Date date, @Param("accountId") Integer accountId, @Param("groupId") Integer groupId) throws DataAccessException;
+
+    @Query("select s from StockSaleProfit s where s.id = :id and s.groupId = :groupId")
+    StockSaleProfit findOne(@Param("id") Integer id, @Param("groupId") Integer groupId) throws DataAccessException;
 }
