@@ -47,13 +47,25 @@ public class PatrimonyEntry extends BaseEntity<Integer> implements Serializable 
 	@NotNull
 	protected Double balance;
 
+    @Column(name="INCREASED_BALANCE")
+    @NotNull
+    protected Double increasedBalance;
+
+    @Column(name="PCT_INCREASED_BALANCE")
+    @NotNull
+    protected Double percentIncreasedBalance;
+
     @Column(name="PROFIT")
     @NotNull
     protected Double profit;
 
-    @Column(name="PERCENT_PROFIT")
+    @Column(name="INCREASED_PROFIT")
     @NotNull
-    protected Double percentProfit;
+    protected Double increasedProfit;
+
+    @Column(name="PCT_INCREASED_PROFIT")
+    @NotNull
+    protected Double pctIncreasedProfit;
 
     @Column(name="USER_GROUP_ID")
 	@NotNull

@@ -34,7 +34,7 @@ define(['./module'
                 for(var date in $scope.patrimony.liquidityMap){
                     total += $scope.patrimony.liquidityMap[date];
                     $scope.liquidityChart.series[0].data.push({name: date, y:total});
-                    $scope.liquidityChart.xAxis.categories.push($filter('date')(date, 'dd-MMM-yy').toUpperCase())
+                    $scope.liquidityChart.xAxis.categories.push($filter('date')(date, 'dd-MMM-yy', 'UTC').toUpperCase())
                 }
             });
 
@@ -44,23 +44,26 @@ define(['./module'
                 $scope.patrimonyEvolutionChart.series[2].data = [];
                 $scope.patrimonyEvolutionChart.xAxis.categories = [];
 
+                $scope.portfolioEvolutionChart.series[0].data = [];
+                $scope.portfolioEvolutionChart.series[1].data = [];
+                $scope.portfolioEvolutionChart.xAxis.categories = [];
                 angular.forEach($scope.patrimony.history, function(history){
-                    $scope.portfolioEvolutionChart.series[0].data.push(history.profitInvested)
-                    $scope.portfolioEvolutionChart.series[1].data.push(history.percentProfitInvested*100)
-                    $scope.portfolioEvolutionChart.xAxis.categories.push($filter('date')(history.date, 'MMM/yy').toUpperCase())
+                    $scope.portfolioEvolutionChart.series[0].data.push(history.increasedProfit)
+                    $scope.portfolioEvolutionChart.series[1].data.push(history.pctIncreasedProfit)
+                    $scope.portfolioEvolutionChart.xAxis.categories.push($filter('date')(history.date, "MMM/yy", 'UTC').toUpperCase())
 
-                    $scope.patrimonyEvolutionChart.series[0].data.push(history.profitTotal)
-                    $scope.patrimonyEvolutionChart.series[1].data.push(history.percentProfitTotal*100)
-                    $scope.patrimonyEvolutionChart.series[2].data.push(history.balanceTotal)
-                    $scope.patrimonyEvolutionChart.xAxis.categories.push($filter('date')(history.date, 'MMM/yy').toUpperCase())
+                    $scope.patrimonyEvolutionChart.series[0].data.push(history.increasedBalance)
+                    $scope.patrimonyEvolutionChart.series[1].data.push(history.pctIncreasedBalance)
+                    $scope.patrimonyEvolutionChart.series[2].data.push(history.balance)
+                    $scope.patrimonyEvolutionChart.xAxis.categories.push($filter('date')(history.date, "MMM/yy", 'UTC').toUpperCase())
                 });
-                $scope.portfolioEvolutionChart.series[0].data.push($scope.patrimony.profitInvested)
-                $scope.portfolioEvolutionChart.series[1].data.push($scope.patrimony.percentProfitInvested*100)
+                $scope.portfolioEvolutionChart.series[0].data.push($scope.patrimony.increasedProfit)
+                $scope.portfolioEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedProfit)
                 $scope.portfolioEvolutionChart.xAxis.categories.push('Hoje')
 
-                $scope.patrimonyEvolutionChart.series[0].data.push($scope.patrimony.profitTotal)
-                $scope.patrimonyEvolutionChart.series[1].data.push($scope.patrimony.percentProfitTotal*100)
-                $scope.patrimonyEvolutionChart.series[2].data.push($scope.patrimony.balanceTotal)
+                $scope.patrimonyEvolutionChart.series[0].data.push($scope.patrimony.increasedBalance)
+                $scope.patrimonyEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedBalance)
+                $scope.patrimonyEvolutionChart.series[2].data.push($scope.patrimony.balance)
                 $scope.patrimonyEvolutionChart.xAxis.categories.push('Hoje')
             }
 

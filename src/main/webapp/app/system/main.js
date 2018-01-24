@@ -40,6 +40,7 @@ require.config({
 
         // OTHER PLUGINS
         'moment': 'resources/lib/moment/min/moment.min',
+        'angular-moment': 'resources/lib/angular-moment/angular-moment.min',
 
         // APP CORE MODULES
 		'layout-core': 'system/layout-core',
@@ -64,7 +65,9 @@ require.config({
 
         'angular-aria': ['angular'],
         'angular-material-icons': ['angular'],
-		'angular-material': ['angular', 'angular-aria', 'angular-animate', 'moment'],
+		'angular-material': ['angular', 'angular-aria', 'angular-animate'],
+
+		'angular-moment': ['angular', 'moment'],
 
         'highcharts-more': ['jquery', 'highcharts'],
         'highcharts-solidgauge': ['highcharts', 'highcharts-more'],
@@ -102,12 +105,13 @@ require.config({
                 'highcharts-solidgauge',
                 'highcharts-more',
 
-                'ng-file-upload'
+                'ng-file-upload',
+
+                'angular-moment'
 		    ]
 		},
 	}
 });
-
 
 define(['layout-core', 'app'], function(app) {
     // angular.bootstrap(document, ['app']);
@@ -115,7 +119,7 @@ define(['layout-core', 'app'], function(app) {
      * place operations that need to initialize prior to app start here
      * using the `run` function on the top-level module
      */
-    require( ['material-design']);
+//    require( ['material-design']);
 
     require(['domReady!'], function (document) {
         angular.bootstrap(document, ['app']);

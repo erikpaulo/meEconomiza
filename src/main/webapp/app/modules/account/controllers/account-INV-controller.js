@@ -89,7 +89,7 @@ define(['./module'
                 new Account($scope.account).$getDetailed(function(data){
                     $scope.root.account = data;
 
-                    addSuccess($scope);
+//                    addSuccess($scope);
                 });
             }
 
@@ -113,9 +113,11 @@ define(['./module'
             function DialogIndexController($scope, $mdDialog, indexValues) {
                 $scope.indexes = indexValues;
 
-                $scope.percentGain = null;
+                $scope.percentGain = 0.0;
                 $scope.calcGain = function(newQuoteValue){
-                    $scope.percentGain = (newQuoteValue - indexValues[indexValues.length-1])
+                    if (indexValues.length>0) {
+                        $scope.percentGain = ((newQuoteValue - indexValues[0].value)/indexValues[0].value)*100
+                    }
                 }
 
                 $scope.hide = function() {

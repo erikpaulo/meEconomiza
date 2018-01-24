@@ -3,18 +3,34 @@
         <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
             <span class="md-subhead">Patrimônio Total</span>
             <div layout="row" md-colors="{color: 'blue-grey-700'}">
-                <span class="md-body-2">{{patrimony.balanceTotal | currency}}</span>
-                <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profitTotal | currency}}</span>
-                <span class="md-body-2">({{patrimony.percentProfitTotal | number:2}}%)</span>
+                <div layout="column" layout-align="center center">
+                    <span class="md-body-2">{{patrimony.balance | currency}}</span>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Total</span>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div layout="row">
+                        <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.increasedBalance | currency}}</span>
+                        <span class="md-body-2">({{patrimony.pctIncreasedBalance | number:2}}%)</span>
+                    </div>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Aporte</span>
+                </div>
             </div>
         </div>
         <md-divider></md-divider>
         <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
             <span class="md-subhead">Patrimônio Investido</span>
             <div layout="row" md-colors="{color: 'blue-grey-700'}">
-                <span class="md-body-2">{{patrimony.balanceInvested | currency}}</span>
-                <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profitInvested | currency}}</span>
-                <span class="md-body-2">({{patrimony.percentProfitInvested | number:2}}%)</span>
+                <div layout="column" layout-align="center center">
+                    <span class="md-body-2">{{patrimony.balanceInvested | currency}}</span>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Total</span>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div layout="row">
+                        <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profit | currency}}</span>
+                        <span class="md-body-2">({{patrimony.pctIncreasedProfit | number:2}}%)</span>
+                    </div>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Lucro</span>
+                </div>
             </div>
         </div>
         <div layout="column" flex></div>
@@ -34,7 +50,7 @@
     <md-divider></md-divider>
     <div layout="row" style="background:white" layout-padding>
         <div layout="column" flex="100">
-            <div layout="row">
+            <div layout="row" layout-padding>
                 <div layout="column" flex="35" layout-align="center center">
                     <highchart id="distribution" config="distributionChart"></highchart>
                 </div>
@@ -42,7 +58,7 @@
                     <highchart id="portfolioEvolution" config="portfolioEvolutionChart"></highchart>
                 </div>
             </div>
-            <div layout="row">
+            <div layout="row" layout-padding>
                 <div layout="column" flex="35" layout-align="center center">
                     <!--<div layout="row" layout-wrap style="margin-top:30px">-->
                         <!--<div layout="column" flex="50" ng-repeat="(key, profit) in patrimony.investTypeMap">-->
@@ -65,7 +81,7 @@
         </div>
     </div>
     <md-divider></md-divider>
-    <div layout="row" >
+    <div layout="row" layout-padding>
         <div layout="column" flex="100">
             <div layout="row" layout-padding layout-align="center center">
 
@@ -92,7 +108,7 @@
                                 <div layout="column" flex layout-align="center start">{{entry.name}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{entry.institution}}</div>
                                 <div layout="column" flex="20" layout-align="center center">{{entry.profit | currency}}</div>
-                                <div layout="column" flex="15" layout-align="center center">{{entry.percentProfit | number: 2}}%</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.percentMonthProfit | number: 2}}%</div>
                                 <div layout="column" flex="15" layout-align="center center">{{entry.balance | currency}}</div>
                                 <div layout="column" flex="5">
                                     <md-button class="md-icon-button" ng-click="open(entry)" aria-label="Detalhes">
@@ -104,20 +120,29 @@
                             <div layout="row" layout-align="center center" ng-show="entry.open">
                                 <table layout="column" flex="60" class="table-striped" style="margin:10px;">
                                     <thead>
-                                    <tr layout="row">
-                                        <th flex>Mês</th>
-                                        <th flex="25">Variação (R$)</th>
-                                        <th flex="15">Variação (%)</th>
-                                        <th flex="25">Posição</th>
-                                    </tr>
+                                        <tr layout="row">
+                                            <th flex="20">Mês</th>
+                                            <th flex="20">Lucro</th>
+                                            <th flex="20">Variação (R$)</th>
+                                            <th flex="20">Variação (%)</th>
+                                            <th flex="20">Posição</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr layout="row" ng-repeat="eHistory in entry.history"  layout-align="center center" class="c-hover">
-                                        <td flex>{{ eHistory.date | date: 'MMM/yyyy' }}</td>
-                                        <td flex="25">{{ eHistory.profit | currency }}</td>
-                                        <td flex="15">{{ eHistory.percentProfit | number:2 }}%</td>
-                                        <td flex="25" my-currency="eHistory.balance"></td>
-                                    </tr>
+                                        <tr layout="row" ng-repeat="eHistory in entry.history"  layout-align="center center" class="c-hover">
+                                            <td flex="20">{{ eHistory.date | date: 'MMM/yyyy' : 'UTC' }}</td>
+                                            <td flex="20">{{ eHistory.profit | currency }}</td>
+                                            <td flex="20">{{ eHistory.increasedProfit | currency }}</td>
+                                            <td flex="20">{{ eHistory.pctIncreasedProfit | number:2 }}%</td>
+                                            <td flex="20" my-currency="eHistory.balance"></td>
+                                        </tr>
+                                        <tr layout="row"  layout-align="center center" class="c-hover">
+                                            <td flex="20">Hoje</td>
+                                            <td flex="20">{{ entry.profit | currency }}</td>
+                                            <td flex="20">{{ entry.increasedProfit | currency }}</td>
+                                            <td flex="20">{{ entry.pctIncreasedProfit | number:2 }}%</td>
+                                            <td flex="20" my-currency="entry.balance"></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

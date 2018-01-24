@@ -29,12 +29,13 @@ public class Patrimony extends BaseEntity<Integer> implements Serializable {
 
 	public Patrimony(Date date, Integer groupId){
         this.date = date;
-        this.balanceTotal = 0.0;
         this.balanceInvested = 0.0;
-        this.profitTotal = 0.0;
-        this.profitInvested = 0.0;
-        this.percentProfitTotal = 0.0;
-        this.percentProfitInvested = 0.0;
+        this.balance = 0.0;
+        this.increasedBalance = 0.0;
+        this.pctIncreasedBalance = 0.0;
+        this.profit = 0.0;
+        this.increasedProfit = 0.0;
+        this.pctIncreasedProfit = 0.0;
         this.entries = new ArrayList<>();
         this.groupId = groupId;
     }
@@ -43,29 +44,33 @@ public class Patrimony extends BaseEntity<Integer> implements Serializable {
 	@NotNull
 	private Date date;
 
-	@Column(name = "BALANCE_TOTAL")
+	@Column(name = "BALANCE")
 	@NotNull
-	private Double balanceTotal;
+	private Double balance;
 
 	@Column(name = "BALANCE_INVESTED")
 	@NotNull
     private Double balanceInvested;
 
-	@Column(name = "PROFIT_TOTAL")
+	@Column(name = "INCREASED_BALANCE")
 	@NotNull
-	private Double profitTotal;
+	private Double increasedBalance;
 
-	@Column(name = "PROFIT_INVESTED")
+	@Column(name = "PCT_INCREASED_BALANCE")
 	@NotNull
-	private Double profitInvested;
+	private Double pctIncreasedBalance;
 
-	@Column(name = "PERCENT_PROFIT_TOTAL")
+	@Column(name = "PROFIT")
 	@NotNull
-	private Double percentProfitTotal;
+	private Double profit;
 
-	@Column(name = "PERCENT_PROFIT_INVESTED")
+	@Column(name = "INCREASED_PROFIT")
 	@NotNull
-	private Double percentProfitInvested;
+	private Double increasedProfit;
+
+	@Column(name = "PCT_INCREASED_PROFIT")
+	@NotNull
+	private Double pctIncreasedProfit;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PATRIMONY_ID", referencedColumnName = "ID")

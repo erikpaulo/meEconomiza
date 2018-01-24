@@ -16,13 +16,12 @@
             </md-input-container>
             <md-input-container class="md-block">
                 <label>Valor</label>
-                <input name="amount" ng-model="newIndex.profit" type="number" required step="0.00000001" ng-change="calcGain()">
+                <input name="value" ng-model="newIndex.value" type="number" required step="0.00000001" ng-change="calcGain(newIndex.value)">
             </md-input-container>
         </div>
         <div layout="row" layout-align="center center">
             <span style="margin-right: 8px;">Ganho Bruto: </span>
-            <span ng-show="newIndex.profit <= 0">0%</span>
-            <span ng-show="newIndex.profit > 0">{{(newIndex.profit - indexes[0].profit)/ indexes[indexes.length-1].profit *100 | number : 2}}%</span>
+            <span>{{percentGain | number : 2}}%</span>
         </div>
         <md-divider></md-divider>
         <div layout="row">
@@ -35,8 +34,8 @@
                 </thead>
                 <tbody>
                     <tr layout="row" ng-repeat="index in indexes"  layout-align="center center" class="c-hover">
-                        <td flex="50" flex-xs="33">{{ index.date | date: 'dd/MM/yyyy' }}</td>
-                        <td flex="50" hide-xs>{{ index.profit | currency }}</td>
+                        <td flex="50" flex-xs="33">{{ index.date | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+                        <td flex="50" hide-xs>{{ index.value | currency }}</td>
                     </tr>
                 </tbody>
             </table>

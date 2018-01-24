@@ -28,6 +28,8 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 
         'ngFileUpload',
 
+        'angularMoment',
+
         errorHandler.name,
         authHandler.name,
         indexHandler.name,
@@ -45,9 +47,9 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         '$filterProvider',
         '$provide',
         '$mdThemingProvider',
-        '$mdDateLocaleProvider',
+        '$mdDateLocaleProvider', 'moment',
 
-        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $mdThemingProvider, $mdDateLocaleProvider)
+        function($routeProvider, $locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $mdThemingProvider, $mdDateLocaleProvider, moment)
         {
             app.controller = $controllerProvider.register;
             app.directive  = $compileProvider.directive;
@@ -70,6 +72,10 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
 
             // Configuring default Material Design Theme
             $mdThemingProvider.theme('default').accentPalette('blue-grey');
+
+            $mdDateLocaleProvider.formatDate = function(date) {
+               return moment.utc(date).format('DD/MM/YYYY');
+            };
 
             $compileProvider.debugInfoEnabled(true);
         }
@@ -104,28 +110,28 @@ function(angular, layout, config, dependencyResolverFor, errorHandler, authHandl
         
     });
 
-    app.service('Constants', function() {
-		this.ACCOUNT = {
-		    TYPE: {
-                CKA: {id: 'CKA',  name: 'Conta Corrente'}, // checking account
-                SVA: {id: 'SVA',  name: 'Conta Poupança'}, // saving account
-                INV: {id: 'INV',  name: 'Conta Investimento',
-                    type:{
-                        ST:  {id: 'ST',  name: 'Ações'}, // stocks
-                        DB:  {id: 'DB',  name: 'Debêntures'}, // debentures
-                        FCP: {id: 'FCP', name: 'Fundo Curto Prazo'}, // fundo short-term
-                        FR:  {id: 'FR',  name: "Fundo Referenciado"},
-                        FRF: {id: 'FRF', name: 'Fundo de Renda Fixa'},
-                        FA:  {id: 'FA',  name: 'Fundo de Ações'},
-                        FC:  {id: 'FC',  name: 'Fundo Cambial'},
-                        FDE: {id: 'FDE', name: 'Fundo de Dívida Externa'},
-                        FM:  {id: 'FM',  name: 'Fundo Multimercado'}
-                    }
-                }, // investment account
-                CCA: {id: 'CCA', name: 'Cartão de Crédito'} // credit card account
-            }
-		}
-	});
+//    app.service('Constants', function() {
+//		this.ACCOUNT = {
+//		    TYPE: {
+//                CKA: {id: 'CKA',  name: 'Conta Corrente'}, // checking account
+//                SVA: {id: 'SVA',  name: 'Conta Poupança'}, // saving account
+//                INV: {id: 'INV',  name: 'Conta Investimento',
+//                    type:{
+//                        ST:  {id: 'ST',  name: 'Ações'}, // stocks
+//                        DB:  {id: 'DB',  name: 'Debêntures'}, // debentures
+//                        FCP: {id: 'FCP', name: 'Fundo Curto Prazo'}, // fundo short-term
+//                        FR:  {id: 'FR',  name: "Fundo Referenciado"},
+//                        FRF: {id: 'FRF', name: 'Fundo de Renda Fixa'},
+//                        FA:  {id: 'FA',  name: 'Fundo de Ações'},
+//                        FC:  {id: 'FC',  name: 'Fundo Cambial'},
+//                        FDE: {id: 'FDE', name: 'Fundo de Dívida Externa'},
+//                        FM:  {id: 'FM',  name: 'Fundo Multimercado'}
+//                    }
+//                }, // investment account
+//                CCA: {id: 'CCA', name: 'Cartão de Crédito'} // credit card account
+//            }
+//		}
+//	});
 
 
    return app;
