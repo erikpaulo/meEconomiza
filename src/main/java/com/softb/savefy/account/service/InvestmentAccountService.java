@@ -67,6 +67,7 @@ public class InvestmentAccountService extends AbstractAccountService {
      */
     @Override
     public void calcAccountBalance(Account account) {
+        Double balance = 0.0, grossBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, amountInvested = 0.0;
         InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
         if (investmentAccount.getEntries() != null){
@@ -77,7 +78,6 @@ public class InvestmentAccountService extends AbstractAccountService {
                 }
             });
 
-            Double balance = 0.0, grossBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, amountInvested = 0.0;
             for (InvestmentAccountEntry entry: investmentAccount.getEntries()) {
                 if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                     calcPrevisionGains(investmentAccount, entry);
@@ -89,7 +89,7 @@ public class InvestmentAccountService extends AbstractAccountService {
                     amountInvested += entry.getAmount();
                 }
             }
-            }
+        }
         investmentAccount.setBalance(balance);
         investmentAccount.setGrossBalance(grossBalance);
 
