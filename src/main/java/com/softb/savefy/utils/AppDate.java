@@ -25,4 +25,19 @@ public final class AppDate {
         cal.set(Calendar.DAY_OF_MONTH, 01);
         return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
     }
+
+    public static Date addBussinessDays(Date date, Integer days){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        while (days > 0){
+            cal.add(Calendar.DAY_OF_MONTH, 1);
+
+            if ( !(cal.get(Calendar.DAY_OF_WEEK) == 0 || cal.get(Calendar.DAY_OF_WEEK) == 0 )){
+                days--;
+            }
+        }
+
+        return cal.getTime();
+    }
 }

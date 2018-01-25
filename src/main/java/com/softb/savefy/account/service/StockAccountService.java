@@ -56,6 +56,7 @@ public class StockAccountService extends AbstractAccountService {
      */
     public StockAccount saveAccount(StockAccount account, Integer groupId){
         account = accountRepository.save(account);
+        calcAccountBalance(account);
         return account;
     }
 
@@ -214,7 +215,13 @@ public class StockAccountService extends AbstractAccountService {
     }
 
 
-
+    /**
+     * Realiza a compra de um papel
+     * @param stockPortfolio
+     * @param stock
+     * @param groupId
+     * @return
+     */
     private StockAccountEntry buyStock(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId){
 
         Double lastPrice = stockPriceTask.getStockPrice(stock.getCode());
@@ -225,7 +232,20 @@ public class StockAccountService extends AbstractAccountService {
         }
         calcGains(stock);
 
+        createLiquidationEntry(stockPortfolio, stock, groupId);
+
         return (StockAccountEntry) save(stock, groupId);
+    }
+
+    private void createLiquidationEntry(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId) {
+        Integer signal = (stock.getOperation().equals(StockAccountEntry.Operation.PURCHASE) ? -1 : 1);
+
+        CheckingAccount brokerAccount = stockPortfolio.getBrokerAccount();
+        Date liquidationDate = AppDate.addBussinessDays(stock.getDate(),3);
+        Double total = signal * ( stock.getAmount() + ((-signal) * stock.getBrokerage()) );
+        CheckingAccountEntry entry = new CheckingAccountEntry(liquidationDate, stockPortfolio.getDefaultSubcategory(), total, false,
+                                                              brokerAccount.getId(),null, null, groupId, 0.0, Account.Type.CKA);
+        checkingAccountService.updateEntry(entry, groupId);
     }
 
     @Transactional
@@ -238,6 +258,8 @@ public class StockAccountService extends AbstractAccountService {
                 return o1.getDate().compareTo(o2.getDate());
             }
         });
+
+        createLiquidationEntry(stockPortfolio, stock, groupId);
 
         stock = (StockAccountEntry) save(stock, groupId);
 

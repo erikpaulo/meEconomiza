@@ -106,21 +106,22 @@ CREATE TABLE INSTITUTION (
 );
 
 CREATE TABLE ACCOUNT (
-	ID                  SERIAL PRIMARY KEY,
-	NAME                VARCHAR(50),
-	INSTITUTION         INTEGER NOT NULL REFERENCES INSTITUTION(id),
-	TYPE                VARCHAR(3), --CKA - checking account, SVA - saving account, INV - investment, CCA - credit card account
-	ACTIVATED           BOOLEAN NOT NULL,
-	START_BALANCE       DECIMAL,
-	LAST_UPDATE         TIMESTAMP NOT NULL,
-	USER_GROUP_ID       INTEGER NOT NULL REFERENCES USER_GROUP(id),
-    PRODUCT             VARCHAR(50),
-    ADMIN_TAX           DECIMAL,
-    RISK                VARCHAR(10),
-    LIQUIDITY_TYPE      VARCHAR(10),
-    LIQUIDITY_DAYS      INTEGER,
-    LIQUIDITY_DUE_DATE  TIMESTAMP,
-    BROKER_ACCOUNT_ID   INTEGER REFERENCES ACCOUNT(ID)
+	ID                          SERIAL PRIMARY KEY,
+	NAME                        VARCHAR(50),
+	INSTITUTION                 INTEGER NOT NULL REFERENCES INSTITUTION(id),
+	TYPE                        VARCHAR(3), --CKA - checking account, SVA - saving account, INV - investment, CCA - credit card account
+	ACTIVATED                   BOOLEAN NOT NULL,
+	START_BALANCE               DECIMAL,
+	LAST_UPDATE                 TIMESTAMP NOT NULL,
+	USER_GROUP_ID               INTEGER NOT NULL REFERENCES USER_GROUP(id),
+    PRODUCT                     VARCHAR(50),
+    ADMIN_TAX                   DECIMAL,
+    RISK                        VARCHAR(10),
+    LIQUIDITY_TYPE              VARCHAR(10),
+    LIQUIDITY_DAYS              INTEGER,
+    LIQUIDITY_DUE_DATE          TIMESTAMP,
+    BROKER_ACCOUNT_ID           INTEGER REFERENCES ACCOUNT(ID),
+    DFLT_SUBCATEGORY_ID         INTEGER REFERENCES SUBCATEGORY(ID)
 );
 
 CREATE TABLE ACCOUNT_ENTRY (
@@ -269,8 +270,8 @@ CREATE TABLE USER_PREFERENCES (
 ----insert into conciliation_entry values (3, '2017-10-08', 'Uber', 1, 234.98, 1, 1);
 ----insert into conciliation_entry values (4, '2017-10-18', 'Combustível', 1, 1234.98, 1, 1);
 ----insert into category_prediction values (1, 'TED 237.3807CAROLINA M P', 4, 1, 0, 1);
-INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
-INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
+--INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
+--INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
 --
 --
 --

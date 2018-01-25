@@ -132,14 +132,16 @@ define(['./module'
             function DialogStockController($scope, $mdDialog, Constants, Utils) {
                 $scope.operations = Constants.ACCOUNT_ENTRY.STOCK_OPERATION;
 
+                $scope.total = 0.0;
                 $scope.updateTotal = function(){
                     if ($scope.editEntry.quantity && $scope.editEntry.originalPrice && $scope.editEntry.brokerage){
                         $scope.editEntry.amount = ($scope.editEntry.quantity * Utils.currencyToNumber($scope.editEntry.originalPrice));
 
+                        $scope.total = $scope.editEntry.amount;
                         if ($scope.editEntry.operation == "SALE"){
-                            $scope.editEntry.amount -= Utils.currencyToNumber($scope.editEntry.brokerage);
+                            $scope.total -= Utils.currencyToNumber($scope.editEntry.brokerage);
                         } else {
-                            $scope.editEntry.amount += Utils.currencyToNumber($scope.editEntry.brokerage);
+                            $scope.total += Utils.currencyToNumber($scope.editEntry.brokerage);
                         }
                     }
                 }

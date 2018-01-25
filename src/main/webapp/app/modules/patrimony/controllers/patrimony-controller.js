@@ -328,9 +328,6 @@ define(['./module'
                 },
                 title: {
                     text: 'Risco',
-//                    align: 'center',
-//                    verticalAlign: 'middle',
-//                    y:130
                 },
                 func: function(chart) {
                     $timeout(function() {
@@ -339,7 +336,6 @@ define(['./module'
                 },
                 series: [{
                     name: 'Risco',
-//                    innerSize: '45%',
                     data: [
                     ]
                 }],

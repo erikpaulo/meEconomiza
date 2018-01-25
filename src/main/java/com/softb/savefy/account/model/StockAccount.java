@@ -1,6 +1,7 @@
 package com.softb.savefy.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.softb.savefy.categorization.model.SubCategory;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -34,6 +35,10 @@ public class StockAccount extends Account implements Serializable {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "BROKER_ACCOUNT_ID", referencedColumnName = "ID")
     protected CheckingAccount brokerAccount;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "DFLT_SUBCATEGORY_ID", referencedColumnName = "ID")
+    protected SubCategory defaultSubcategory;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")

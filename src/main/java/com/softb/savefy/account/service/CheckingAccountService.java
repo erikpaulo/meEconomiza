@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -31,6 +32,24 @@ public class CheckingAccountService extends AbstractAccountService {
 
     @Inject
     private UserAccountService userAccountService;
+
+    /**
+     * Retorna contas corrente ativas.
+     * @param groupId
+     * @return
+     */
+    public List<Account> getAllActiveAccounts(Integer groupId) {
+        List<Account> retList = new ArrayList<>();
+
+        List<Account> accounts = accountRepository.findAllActive(groupId);
+        for (Account account: accounts) {
+            if (account.getType().equals(Account.Type.CKA)){
+                retList.add(account);
+            }
+        }
+
+        return retList;
+    }
 
     /**
      * Update or create the account
@@ -139,15 +158,15 @@ public class CheckingAccountService extends AbstractAccountService {
      */
     public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
     }
-
+    //        return accountRepository.findOne(accountId, groupId);
+    //    public Account get(Integer accountId, Integer groupId) {
+    //     */
+    //     * @return
+    //     * @param groupId
+    //     * @param accountId
+    //     * Used by conciliation process
 //    /**
-//     * Used by conciliation process
-//     * @param accountId
-//     * @param groupId
-//     * @return
-//     */
-//    public Account get(Integer accountId, Integer groupId) {
-//        return accountRepository.findOne(accountId, groupId);
+
 //    }
 
     private CheckingAccountEntry createTwinEntry(CheckingAccountEntry entry, Integer groupId) {

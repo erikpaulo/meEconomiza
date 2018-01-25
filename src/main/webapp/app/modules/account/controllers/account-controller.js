@@ -2,12 +2,13 @@ define(['./module'
         ,'../services/account-resources'
         ,'../../shared/services/utils-service'
         ,'../../shared/services/constants'
+        ,'../../categorization/services/subcategory-resources'
         ,'./account-CKA-controller'
         ,'./account-INV-controller'
         ,'./account-STK-controller'], function (app) {
 
-	app.controller('AccountController', ['$scope', '$location', '$mdDialog', '$routeParams', 'AccountResource', 'Constants', 'Utils',
-        function($scope, $location, $mdDialog, $routeParams, Account, Constants, Utils,) {
+	app.controller('AccountController', ['$scope', '$location', '$mdDialog', '$routeParams', 'AccountResource', 'SubCategoryResource', 'Constants', 'Utils',
+        function($scope, $location, $mdDialog, $routeParams, Account, SubCategory, Constants, Utils,) {
             $scope.root = $scope;
             $scope.appContext.contextMenu.setActions([
                 {icon: 'close', tooltip: 'Inativar Conta', onClick: function() {
@@ -50,7 +51,7 @@ define(['./module'
             }
 
 
-            function DialogController($scope, $mdDialog, Utils, account) {
+            function DialogController($scope, $mdDialog, $filter, Utils, account) {
                 $scope.newAccount = angular.copy(account);
 
                 // Get all enabled institutions
@@ -58,10 +59,26 @@ define(['./module'
                     $scope.institutions = institutions;
                 });
 
-                if ($scope.newAccount.type == 'INV'){
+                $scope.querySearch = function(query){
+                    return $filter('filter')($scope.subCategories, query);
+                }
+
+                if ($scope.newAccount.type == 'CCA'){
+                    SubCategory.listAll(function (subCategories){
+                        $scope.subCategories = subCategories;
+                    });
+                } else if ($scope.newAccount.type == 'INV'){
                     $scope.products = Constants.ACCOUNT.INVESTMENT_PRODUCTS;
                     $scope.liquidityTypes = Constants.ACCOUNT.LIQUIDITY_TYPE;
                     $scope.risks = Constants.ACCOUNT.INVESTMENT_RISK;
+                } else if ($scope.newAccount.type == 'STK'){
+                    SubCategory.listInvestments(function (subCategories){
+                        $scope.subCategories = subCategories;
+                    });
+
+                    Account.listAllCKA(function(accounts){
+                        $scope.ckaAccounts = accounts;
+                    });
                 }
 
                 $scope.hide = function() {

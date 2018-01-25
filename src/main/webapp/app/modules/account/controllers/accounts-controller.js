@@ -56,12 +56,16 @@ define(['./module'
                 });
             }
 
-            function DialogController($scope, $mdDialog, Utils, Constants, type, institutions, accounts) {
+            function DialogController($scope, $mdDialog, $filter, Utils, Constants, type, institutions) {
                 $scope.newAccount = {type: type};
 
                 $scope.types = Constants.ACCOUNT.TYPE;
                 $scope.institutions = institutions;
-                $scope.accounts = accounts;
+                // Get all registered accounts;
+
+                $scope.querySearch = function(query){
+                    return $filter('filter')($scope.subCategories, query);
+                }
 
                 if ($scope.newAccount.type == 'CCA'){
                     SubCategory.listAll(function (subCategories){
@@ -71,6 +75,14 @@ define(['./module'
                     $scope.products = Constants.ACCOUNT.INVESTMENT_PRODUCTS;
                     $scope.liquidityTypes = Constants.ACCOUNT.LIQUIDITY_TYPE;
                     $scope.risks = Constants.ACCOUNT.INVESTMENT_RISK;
+                } else if ($scope.newAccount.type == 'STK'){
+                    SubCategory.listInvestments(function (subCategories){
+                        $scope.subCategories = subCategories;
+                    });
+
+                    Account.listAllCKA(function(accounts){
+                        $scope.ckaAccounts = accounts;
+                    });
                 }
 
                 $scope.hide = function() {

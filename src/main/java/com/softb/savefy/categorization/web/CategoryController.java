@@ -76,6 +76,42 @@ public class CategoryController extends AbstractRestController<Category, Integer
     }
 
     /**
+     * Gets all subcategories registered for this user with its full name
+     * @return
+     * @throws FormValidationError
+     */
+    @RequestMapping(value = "/category/investment/subcategory", method = RequestMethod.GET)
+    public List<SubCategory> listInvestmentSubcategories() throws FormValidationError {
+        List<SubCategory> listToReturn = new ArrayList<>(  );
+
+        // Gets all categories of the logged user, grouping by category types
+        List<Category> categories = categoryRepository.listAllByUser( getGroupId() );
+        Iterator<Category> categs = categories.iterator ();
+        while (categs.hasNext ()){
+            Category category = categs.next ();
+            if (category.getType().equals(Category.Type.INV)){
+                // Define each subcategory full name.
+                List<SubCategory> subcategories = category.getSubcategories();
+                Iterator<SubCategory> s = subcategories.iterator();
+                while (s.hasNext()){
+                    SubCategory subCategory = s.next();
+                    if (subCategory.getActivated()){
+                        listToReturn.add( subCategory );
+                    }
+                }
+            }
+        }
+
+        Collections.sort(listToReturn, new Comparator<SubCategory>(){
+            public int compare(SubCategory o1, SubCategory o2) {
+                return o1.getFullName().compareTo(o2.getFullName());
+            }
+        });
+
+        return listToReturn;
+    }
+
+    /**
      * This point creates a new Category into the system.
      * @param category Category to create
      * @return Category created

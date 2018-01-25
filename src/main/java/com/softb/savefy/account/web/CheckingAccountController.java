@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Calendar;
+import java.util.List;
 
 @RestController("AppCheckingAccountController")
 @RequestMapping("/api/account/CKA")
@@ -23,6 +24,16 @@ public class CheckingAccountController extends AbstractRestController<Account, I
     @Inject
     private CheckingAccountService checkingAccountService;
 
+
+    /**
+     * Lists all account (CKA) registered for this user, but its stocks aren't loaded.
+     *
+     * @return List Accounts without its stocks
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Account> listAll() {
+        return checkingAccountService.getAllActiveAccounts(getGroupId());
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody public Account create(@RequestBody CheckingAccount checkingAccount) {

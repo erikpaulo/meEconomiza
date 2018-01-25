@@ -7,6 +7,7 @@ function (module) {
 	        {id: '@id', type: '@type'},
 	        {
 	            listAll:                { method :'GET',  params: {}, isArray : true },
+	            listAllCKA:             { method :'GET',  params: {type: 'CKA'}, isArray : true },
 	            get:                    { method :'GET',  params: {}, isArray : false },
 	            getDetailed:            { method :'GET',  params: {action: 'detail'}, isArray : false },
 	            save:                   { method :'POST', params: {}, isArray : false},

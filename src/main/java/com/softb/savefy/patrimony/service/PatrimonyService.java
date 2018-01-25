@@ -47,10 +47,6 @@ public class PatrimonyService {
         patrimony = generate(month, groupId);
         patrimonyRepository.save(patrimony);
 
-//        for (PatrimonyEntry entry: patrimony.getEntries()) {
-//            entry.setDate(month);
-//        }
-
         return load(AppDate.getMonthDate(new Date()), groupId);
     }
 
@@ -109,7 +105,6 @@ public class PatrimonyService {
 
             Double profit = getProfit(account);
             Double balance = account.getBalance();
-//            Double originalAmount = account.get
 
             PatrimonyEntry pEntry = patrimonyEntryRepository.findByDateAccount(AppDate.getMonthDate(prevMonth.getTime()), account.getId(), groupId);
             if (pEntry != null) {
