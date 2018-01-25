@@ -107,18 +107,36 @@ public class StockAccountService extends AbstractAccountService {
      */
     @Override
     public void calcAccountBalance(Account account) {
+        Double grossBalance = 0.0, netBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, originalValue = 0.0;
         StockAccount stockPortfolio = (StockAccount) account;
 
-        Double grossBalance = 0.0, netBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, originalValue = 0.0;
-        for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
-            if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE) && entry.getQuantity() > 0){
-                grossBalance += entry.getCurrentValue();
-                netBalance += entry.getCurrentValue() - entry.getBrokerage();
+        if (stockPortfolio.getStocks() != null){
+            for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
+                if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE) && entry.getQuantity() > 0){
+                    grossBalance += entry.getCurrentValue();
+                    netBalance += entry.getCurrentValue() - entry.getBrokerage();
 
+                }
+                grossProfit += entry.getGrossProfitability();
+                netProfit += entry.getNetProfitability();
+                originalValue += entry.getAmount();
             }
-            grossProfit += entry.getGrossProfitability();
-            netProfit += entry.getNetProfitability();
-            originalValue += entry.getAmount();
+            
+            // Sort
+            Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
+                public int compare(StockSaleProfit o1, StockSaleProfit o2) {
+                    return o1.getDate().compareTo(o2.getDate());
+                }
+            });
+
+            Double profitBalance = 0.0, itBalance = 0.0;
+            for (StockSaleProfit monthProfit: stockPortfolio.getMonthlyProfit()) {
+                profitBalance += monthProfit.getProfit();
+                itBalance += monthProfit.getIncomeTax();
+
+                monthProfit.setProfitBalance(profitBalance);
+                monthProfit.setItBalance(itBalance);
+            }
         }
 
         stockPortfolio.setBalance(netBalance);
@@ -130,21 +148,6 @@ public class StockAccountService extends AbstractAccountService {
         stockPortfolio.setPercentGrossProfit(grossProfit / originalValue * 100);
         stockPortfolio.setPercentNetProfit(netProfit / originalValue * 100);
 
-        // Sort
-        Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
-            public int compare(StockSaleProfit o1, StockSaleProfit o2) {
-                return o1.getDate().compareTo(o2.getDate());
-            }
-        });
-
-        Double profitBalance = 0.0, itBalance = 0.0;
-        for (StockSaleProfit monthProfit: stockPortfolio.getMonthlyProfit()) {
-            profitBalance += monthProfit.getProfit();
-            itBalance += monthProfit.getIncomeTax();
-
-            monthProfit.setProfitBalance(profitBalance);
-            monthProfit.setItBalance(itBalance);
-        }
     }
 
     /**
