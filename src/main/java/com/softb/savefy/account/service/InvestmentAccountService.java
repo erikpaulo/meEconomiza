@@ -69,9 +69,16 @@ public class InvestmentAccountService extends AbstractAccountService {
     public void calcAccountBalance(Account account) {
         InvestmentAccount investmentAccount = (InvestmentAccount) account;
 
+        // Sort Conciliations DESC
+        Collections.sort(investmentAccount.getEntries(), new Comparator<InvestmentAccountEntry>(){
+            public int compare(InvestmentAccountEntry o1, InvestmentAccountEntry o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
         Double balance = 0.0, grossBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, amountInvested = 0.0;
-        if (((InvestmentAccount) account).getEntries() != null){
-            for (InvestmentAccountEntry entry: ((InvestmentAccount) account).getEntries()) {
+        if (investmentAccount.getEntries() != null){
+            for (InvestmentAccountEntry entry: investmentAccount.getEntries()) {
                 if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                     calcPrevisionGains(investmentAccount, entry);
                     balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
