@@ -1,8 +1,8 @@
 package com.softb.savefy.account.web;
 
 import com.softb.savefy.account.model.*;
-import com.softb.savefy.account.service.IndexService;
 import com.softb.savefy.account.service.InvestmentAccountService;
+import com.softb.savefy.account.web.resource.AssetPrice;
 import com.softb.system.errorhandler.exception.BusinessException;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
@@ -23,9 +23,6 @@ public class InvestmentAccountController extends AbstractRestController<Account,
 
     @Inject
     private InvestmentAccountService investmentAccountService;
-
-    @Inject
-    private IndexService indexService;
 
 
     /**
@@ -132,22 +129,19 @@ public class InvestmentAccountController extends AbstractRestController<Account,
      * @throws FormValidationError
      */
     @RequestMapping(value = "/{accountId}/index", method = RequestMethod.POST)
-    @ResponseBody public AssetPrice createIndexValue(@RequestBody AssetPrice index) throws FormValidationError {
-        index.setGroupId(getGroupId());
-
-        validate(OBJECT_INDEX_NAME, index);
-        return indexService.save(index, getGroupId());
+    @ResponseBody public void updateLastValue(@RequestBody AssetPrice index) throws FormValidationError {
+        investmentAccountService.updateLastPrice(index, getGroupId());
     }
 
-    /**
-     * Remove this entry, checking if it belongs to current user first
-     * @param id
-     * @throws FormValidationError
-     */
-    @RequestMapping(value = "/{accountId}/index/{id}", method = RequestMethod.DELETE)
-    @ResponseBody public void removeIndexValue(@PathVariable Integer id) throws FormValidationError {
-        indexService.delIndexValue(id, getGroupId());
-    }
+//    /**
+//     * Remove this entry, checking if it belongs to current user first
+//     * @param id
+//     * @throws FormValidationError
+//     */
+//    @RequestMapping(value = "/{accountId}/index/{id}", method = RequestMethod.DELETE)
+//    @ResponseBody public void removeIndexValue(@PathVariable Integer id) throws FormValidationError {
+//        indexService.delIndexValue(id, getGroupId());
+//    }
 
 }
 

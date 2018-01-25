@@ -80,7 +80,7 @@ public class IncomeTaxRateService {
         return range;
     }
 
-    private Double getMaxTaxRange(InvestmentAccount account){
+    public Double getMaxTaxRange(InvestmentAccount account){
         Double taxRange = 0.0;
         if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
             taxRange = 0.150;

@@ -12,10 +12,6 @@
 --
 --\connect savefy;
 
---DROP TABLE IF EXISTS user_role;
---DROP TABLE IF EXISTS user_account;
--- DROP TABLE IF EXISTS USER_GROUP;
--- DROP TABLE IF EXISTS remember_me_token;
  DROP TABLE IF EXISTS ASSET_PRICE;
  DROP TABLE IF EXISTS QUOTE_SALE;
  DROP TABLE IF EXISTS CONCILIATION_ENTRY;
@@ -31,39 +27,43 @@
  DROP TABLE IF EXISTS CATEGORY;
  DROP TABLE IF EXISTS USER_PREFERENCES;
  DROP TABLE IF EXISTS INSTITUTION;
+ DROP TABLE IF EXISTS user_role;
+ DROP TABLE IF EXISTS user_account;
+ DROP TABLE IF EXISTS USER_GROUP;
+ DROP TABLE IF EXISTS remember_me_token;
 
 
---CREATE TABLE remember_me_token (
---	id 			SERIAL PRIMARY KEY,
---	date 		TIMESTAMP,
---	series 		VARCHAR(255),
---	token_value VARCHAR(255),
---	username 	VARCHAR(255)
---);
---
---CREATE TABLE USER_GROUP (
---	ID   SERIAL PRIMARY KEY,
---	NAME VARCHAR(255)
---);
---
---CREATE TABLE user_account (
---	id 				SERIAL PRIMARY KEY,
---	account_locked 	BOOLEAN,
---	display_name 	VARCHAR(255),
---	email 			VARCHAR(255) UNIQUE,
---	image_url 		VARCHAR(255),
---	password 		VARCHAR(64),
---	trusted_account BOOLEAN,
---	google_id       VARCHAR(255) UNIQUE,
---	web_site 		VARCHAR(255),
---	GROUP_ID        INTEGER REFERENCES USER_GROUP(ID)
---);
---
---CREATE TABLE user_role (
---	user_id INTEGER REFERENCES user_account(id),
---	role    VARCHAR(255),
---	PRIMARY KEY (user_id, role)
---);
+CREATE TABLE remember_me_token (
+	id 			SERIAL PRIMARY KEY,
+	date 		TIMESTAMP,
+	series 		VARCHAR(255),
+	token_value VARCHAR(255),
+	username 	VARCHAR(255)
+);
+
+CREATE TABLE USER_GROUP (
+	ID   SERIAL PRIMARY KEY,
+	NAME VARCHAR(255)
+);
+
+CREATE TABLE user_account (
+	id 				SERIAL PRIMARY KEY,
+	account_locked 	BOOLEAN,
+	display_name 	VARCHAR(255),
+	email 			VARCHAR(255) UNIQUE,
+	image_url 		VARCHAR(255),
+	password 		VARCHAR(64),
+	trusted_account BOOLEAN,
+	google_id       VARCHAR(255) UNIQUE,
+	web_site 		VARCHAR(255),
+	GROUP_ID        INTEGER REFERENCES USER_GROUP(ID)
+);
+
+CREATE TABLE user_role (
+	user_id INTEGER REFERENCES user_account(id),
+	role    VARCHAR(255),
+	PRIMARY KEY (user_id, role)
+);
 
 CREATE TABLE CATEGORY (
 	ID      SERIAL PRIMARY KEY,
@@ -240,16 +240,16 @@ CREATE TABLE USER_PREFERENCES (
 
 -- Initial load for user and roles
 
---insert into user_group values (1, 'Lacerda&Moreira');
---insert into user_group values (2, 'Lacerda Young');
---
---insert into user_account values(1,false,'Erik Lacerda','erik.lacerda@gmail.com','resources/images/avatar-male.png','admin',true,'erik.lacerda@gmail.com',null,1);
---insert into user_account values(2,false,'Carolina Moreira','carolinalle.paula@gmail.com','resources/images/avatar-female.png','user',true,'carolinalle.paula@gmail.com',null,1);
---insert into user_account values(3,false,'Marcus Lacerda','marcus.lacerda@gmail.com','resources/images/avatar-male.png','paraiba',true,'marcus.lacerda@gmail.com',null,2);
---
---insert into user_role values(1, 'ROLE_ADMIN');
---insert into user_role values(2, 'ROLE_USER');
---insert into user_role values(3, 'ROLE_ADMIN');
+insert into user_group values (1, 'Lacerda & Moreira');
+insert into user_group values (2, 'Lacerda Young');
+
+insert into user_account values(1,false,'Erik Lacerda','erik.lacerda@gmail.com','resources/images/avatar-male.png','admin',true,'erik.lacerda@gmail.com',null,1);
+insert into user_account values(2,false,'Carolina Moreira','carolinalle.paula@gmail.com','resources/images/avatar-female.png','user',true,'carolinalle.paula@gmail.com',null,1);
+insert into user_account values(3,false,'Marcus Lacerda','marcus.lacerda@gmail.com','resources/images/avatar-male.png','paraiba',true,'marcus.lacerda@gmail.com',null,2);
+
+insert into user_role values(1, 'ROLE_ADMIN');
+insert into user_role values(2, 'ROLE_USER');
+insert into user_role values(3, 'ROLE_ADMIN');
 --
 ----Temporário até termos as inserções de conta e categoria
 --insert into category values (1, 'Transporte', 'EXP', 1);

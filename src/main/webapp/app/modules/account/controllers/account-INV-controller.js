@@ -23,19 +23,20 @@ define(['./module'
                     controller: DialogIndexController,
                     templateUrl: 'modules/account/views/new-index-template.html',
                     parent: angular.element(document.body),
-                    locals: {
-                        indexValues: $scope.account.indexValues
-                    },
+//                    locals: {
+//                        indexValues: $scope.account.indexValues
+//                    },
                     clickOutsideToClose:true
                 }).then(function(newIndex){
                     var indexValue = new Index(newIndex);
                     indexValue.accountId = $scope.account.id
                     indexValue.$save(function(data){
-                        new Account($scope.account).$getDetailed(function(data){
-                            $scope.root.account = data;
-
-                            addSuccess($scope);
-                        });
+                        getAccountDetail();
+                        addSuccess($scope);
+//                        new Account($scope.account).$getDetailed(function(data){
+//                            $scope.root.account = data;
+//
+//                        });
                     });
                 });
             }
@@ -66,6 +67,7 @@ define(['./module'
                         var accountEntry = new AccountEntry(newEntry);
                         accountEntry.type = 'INV';
                         accountEntry.accountId = $scope.account.id;
+                        accountEntry.quoteLastValue = accountEntry.quoteValue;
 
                         if (entry){
                             accountEntry.$save(function(e){
@@ -110,15 +112,7 @@ define(['./module'
                 };
             }
 
-            function DialogIndexController($scope, $mdDialog, indexValues) {
-                $scope.indexes = indexValues;
-
-                $scope.percentGain = 0.0;
-                $scope.calcGain = function(newQuoteValue){
-                    if (indexValues.length>0) {
-                        $scope.percentGain = ((newQuoteValue - indexValues[0].value)/indexValues[0].value)*100
-                    }
-                }
+            function DialogIndexController($scope, $mdDialog/*, indexValues*/) {
 
                 $scope.hide = function() {
                     $mdDialog.hide();

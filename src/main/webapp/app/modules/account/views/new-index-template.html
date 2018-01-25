@@ -19,27 +19,6 @@
                 <input name="value" ng-model="newIndex.value" type="number" required step="0.00000001" ng-change="calcGain(newIndex.value)">
             </md-input-container>
         </div>
-        <div layout="row" layout-align="center center">
-            <span style="margin-right: 8px;">Ganho Bruto: </span>
-            <span>{{percentGain | number : 2}}%</span>
-        </div>
-        <md-divider></md-divider>
-        <div layout="row">
-            <table layout="column" flex="100" class="table-striped" style="margin: 10px; max-height: 200px; overflow: auto;">
-                <thead>
-                    <tr layout="row">
-                        <th flex="50" flex-xs="33">Data</th>
-                        <th flex="50" hide-xs>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr layout="row" ng-repeat="index in indexes"  layout-align="center center" class="c-hover">
-                        <td flex="50" flex-xs="33">{{ index.date | date: 'dd/MM/yyyy' : 'UTC' }}</td>
-                        <td flex="50" hide-xs>{{ index.value | currency }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">
         <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>

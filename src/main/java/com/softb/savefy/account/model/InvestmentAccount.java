@@ -44,10 +44,10 @@ public class InvestmentAccount extends Account implements Serializable {
     @Column(name="LIQUIDITY_DUE_DATE")
     protected Date liquidityDueDate;
 
-    // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
-    protected List<AssetPrice> indexValues;
+//    // DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+//    protected List<AssetPrice> indexValues;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")

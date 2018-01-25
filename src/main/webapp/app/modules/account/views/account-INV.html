@@ -58,10 +58,11 @@
                         <th flex="15" flex-xs="33">Data</th>
                         <th flex="10" hide-xs>Operação</th>
                         <th flex="10" flex-xs="33">Qtd Cotas</th>
+                        <th flex="10" hide-xs>Ult. Preço</th>
                         <th flex="10" hide-xs>Faixa IR</th>
                         <th flex="15" hide-xs>Data Próx. Faixa IR</th>
-                        <th flex="15" hide-xs>IR</th>
-                        <th flex="20" hide-xs>Valor Bruto</th>
+                        <th flex="10" hide-xs>IR</th>
+                        <th flex="15" hide-xs>Valor Bruto</th>
                         <th flex="5" flex-xs="33"></th>
                     </tr>
                     </thead>
@@ -70,10 +71,11 @@
                             <td flex="15" flex-xs="33">{{ item.date | date: 'dd/MM/yyyy' }}</td>
                             <td flex="10" hide-xs>{{ item.operation }}</td>
                             <td flex="10" flex-xs="33">{{ item.quotesAvailable | number:2 }}</td>
+                            <td flex="10" flex-xs="33">{{ item.quoteLastValue | currency }}</td>
                             <td flex="10" flex-xs="33">{{ item.incomeTaxPercent*100 | number:2 }}%</td>
                             <td flex="15" flex-xs="33">{{ item.nextTaxRangeDate | date: 'dd/MM/yyyy' }}</td>
-                            <td flex="15" flex-xs="33">{{ item.incomeTaxAmount | currency }}</td>
-                            <td flex="20" flex-xs="33" my-currency="item.currentAmount"></td>
+                            <td flex="10" flex-xs="33">{{ item.incomeTaxAmount | currency }}</td>
+                            <td flex="15" flex-xs="33" my-currency="item.currentAmount"></td>
                             <td flex="5" flex-xs="33">
                                 <div layout="row">
                                     <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">

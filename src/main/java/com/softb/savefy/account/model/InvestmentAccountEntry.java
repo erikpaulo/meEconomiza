@@ -39,6 +39,11 @@ public class InvestmentAccountEntry extends AccountEntry implements Serializable
 	@NotNull
 	protected Double quoteValue;
 
+	// LAST STOCK PRICE
+	@Column(name = "LAST_PRICE")
+	@NotNull
+	protected Double quoteLastValue;
+
 	// QTD QUOTES AVAILABLE NOW
 	@Column(name = "QUOTES_AVAILABLE")
 	@NotNull

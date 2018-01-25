@@ -1,17 +1,23 @@
 package com.softb.savefy.account.service;
 
-import com.softb.savefy.account.model.*;
+import com.softb.savefy.account.model.Account;
+import com.softb.savefy.account.model.InvestmentAccount;
+import com.softb.savefy.account.model.InvestmentAccountEntry;
+import com.softb.savefy.account.model.QuoteSale;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
-import com.softb.savefy.account.repository.AssetPriceRepository;
 import com.softb.savefy.account.repository.QuoteSaleRepository;
+import com.softb.savefy.account.web.resource.AssetPrice;
 import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 /**
  * This class, put together all services user can do with checking account (and similar) accounts.
@@ -28,10 +34,10 @@ public class InvestmentAccountService extends AbstractAccountService {
     private AccountEntryRepository accountEntryRepository;
 
     @Autowired
-    private AssetPriceRepository indexRepository;
-
-    @Autowired
     private QuoteSaleRepository quoteSaleRepository;
+
+    @Inject
+    private IncomeTaxRateService incomeTaxRateService;
 
     /**
      * Save a new Investment into the system
@@ -94,10 +100,10 @@ public class InvestmentAccountService extends AbstractAccountService {
      * @param entry
      */
     private void calcPrevisionGains(InvestmentAccount account, InvestmentAccountEntry entry){
-        TaxRange taxRange = getTaxRange(account, entry);
+        IncomeTaxRateService.TaxRange taxRange = getTaxRange(account, entry);
 
-        AssetPrice currentIndex = getLastIndex(account, account.getGroupId());
-        entry.setCurrentAmount(entry.getQuotesAvailable() * currentIndex.getValue());
+//        AssetPrice currentIndex = getLastIndex(account, account.getGroupId());
+        entry.setCurrentAmount(entry.getQuotesAvailable() * entry.getQuoteLastValue());
 
         Double currentOriginalValue = (entry.getQuotesAvailable()*entry.getQuoteValue());
 
@@ -134,9 +140,7 @@ public class InvestmentAccountService extends AbstractAccountService {
      * @return
      */
     public InvestmentAccountEntry saveEntry(InvestmentAccountEntry entry, Integer groupId){
-        if (entry.getId() == null){
-            indexRepository.save(new AssetPrice(entry.getAccountId(), null, entry.getDate(), entry.getQuoteValue(), groupId));
-        }
+        entry.setQuoteLastValue(entry.getQuoteValue());
         InvestmentAccount account = (InvestmentAccount) accountRepository.findOne(entry.getAccountId(), groupId);
 
         if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
@@ -150,24 +154,17 @@ public class InvestmentAccountService extends AbstractAccountService {
         return entry;
     }
 
-    private AssetPrice getLastIndex(InvestmentAccount account, Integer groupId){
-        AssetPrice index = null;
-
-        // Sort Conciliations DESC
-        Collections.sort(account.getIndexValues(), new Comparator<AssetPrice>(){
-            public int compare(AssetPrice o1, AssetPrice o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
-
-        List<AssetPrice> indexValues = account.getIndexValues();
-        if (indexValues==null || indexValues.size() <= 0){
-            index = new AssetPrice(account.getId(), null, new Date(), 0.0, groupId);
-        } else {
-            index = indexValues.get(0);
+    /**
+     * Update all entries in this account with this new last quote value.
+     * @param price
+     * @param groupId
+     */
+    public void updateLastPrice(AssetPrice price, Integer groupId){
+        InvestmentAccount account = (InvestmentAccount)accountRepository.findOne(price.getAccountId(), groupId);
+        for (InvestmentAccountEntry entry: account.getEntries()) {
+            entry.setQuoteLastValue(price.getValue());
         }
-
-        return index;
+        accountRepository.save(account);
     }
 
     private InvestmentAccountEntry saveIRLawEntry(InvestmentAccount account, InvestmentAccountEntry entry, Integer groupId){
@@ -200,7 +197,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         Double qtdQuotesToSell = AppMaths.round(entry.getAmount() / entry.getQuoteValue(), 8);
 
         Double originalAmount=0.0, grossProfit=0.0, percentGrossProfit=0.0, netProfit=0.0, percentNetProfit=0.0;
-        Double incomeTaxAmount=0.0, qtdQuotesForCalc=0.0;
+        Double qtdQuotesForCalc=0.0;
         Double incomeTaxPercent = getTaxRange(account, entry).taxRange;
         int i=0; Boolean done=false; Double quoteDiff=0.0;
         while(i<entries.size() && !done){
@@ -261,68 +258,70 @@ public class InvestmentAccountService extends AbstractAccountService {
         return entry;
     }
 
-    private TaxRange getTaxRange(InvestmentAccount account, InvestmentAccountEntry entry){
-        TaxRange range = new TaxRange(0.0, new Date());
-
-        Long age = getAge(entry);
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(entry.getDate());
-
-        Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
-            if (age>=0 && age<=180) {
-                range.taxRange = 0.225;
-                cal.add(Calendar.DAY_OF_YEAR,180);
-            } else if (age>=181 && age<=360) {
-                range.taxRange = 0.200;
-                cal.add(Calendar.DAY_OF_YEAR,360);
-            } else if (age>=361 && age<=720) {
-                range.taxRange = 0.175;
-                cal.add(Calendar.DAY_OF_YEAR,720);
-            } else if (age>720) {
-                range.taxRange = 0.150;
-                cal = null;
-            }
-        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
-            if (age>=0 && age<=720) {
-                range.taxRange = 0.350;
-                cal.add(Calendar.DAY_OF_YEAR,720);
-            } else if (age>=721 && age<=1440) {
-                range. taxRange = 0.300;
-                cal.add(Calendar.DAY_OF_YEAR,1440);
-            } else if (age>=1441 && age<=2160) {
-                range.taxRange = 0.250;
-                cal.add(Calendar.DAY_OF_YEAR,2160);
-            } else if (age>=2161 && age<=2880) {
-                range.taxRange = 0.200;
-                cal.add(Calendar.DAY_OF_YEAR,2880);
-            } else if (age>=2881 && age<=3600) {
-                range.taxRange = 0.150;
-                cal.add(Calendar.DAY_OF_YEAR,3600);
-            } else if (age>3600) {
-                range.taxRange = 0.100;
-                cal = null;
-            }
-        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
-            range.taxRange = 0.150;
-            cal = null;
-        }
-        range.nextRangeDate = (cal != null ? cal.getTime() : null);
-
-        return range;
+    private IncomeTaxRateService.TaxRange getTaxRange(InvestmentAccount account, InvestmentAccountEntry entry){
+        return incomeTaxRateService.getTaxRange(account, entry);
+//        TaxRange range = new TaxRange(0.0, new Date());
+//
+//        Long age = getAge(entry);
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(entry.getDate());
+//
+//        Double taxRange = 0.0;
+//        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
+//            if (age>=0 && age<=180) {
+//                range.taxRange = 0.225;
+//                cal.add(Calendar.DAY_OF_YEAR,180);
+//            } else if (age>=181 && age<=360) {
+//                range.taxRange = 0.200;
+//                cal.add(Calendar.DAY_OF_YEAR,360);
+//            } else if (age>=361 && age<=720) {
+//                range.taxRange = 0.175;
+//                cal.add(Calendar.DAY_OF_YEAR,720);
+//            } else if (age>720) {
+//                range.taxRange = 0.150;
+//                cal = null;
+//            }
+//        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
+//            if (age>=0 && age<=720) {
+//                range.taxRange = 0.350;
+//                cal.add(Calendar.DAY_OF_YEAR,720);
+//            } else if (age>=721 && age<=1440) {
+//                range. taxRange = 0.300;
+//                cal.add(Calendar.DAY_OF_YEAR,1440);
+//            } else if (age>=1441 && age<=2160) {
+//                range.taxRange = 0.250;
+//                cal.add(Calendar.DAY_OF_YEAR,2160);
+//            } else if (age>=2161 && age<=2880) {
+//                range.taxRange = 0.200;
+//                cal.add(Calendar.DAY_OF_YEAR,2880);
+//            } else if (age>=2881 && age<=3600) {
+//                range.taxRange = 0.150;
+//                cal.add(Calendar.DAY_OF_YEAR,3600);
+//            } else if (age>3600) {
+//                range.taxRange = 0.100;
+//                cal = null;
+//            }
+//        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
+//            range.taxRange = 0.150;
+//            cal = null;
+//        }
+//        range.nextRangeDate = (cal != null ? cal.getTime() : null);
+//
+//        return range;
     }
 
     private Double getMaxTaxRange(InvestmentAccount account){
-        Double taxRange = 0.0;
-        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
-            taxRange = 0.150;
-        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
-            taxRange = 0.100;
-        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
-            taxRange = 0.150;
-        }
-
-        return taxRange;
+        return incomeTaxRateService.getMaxTaxRange(account);
+//        Double taxRange = 0.0;
+//        if (account.getProduct().equals(InvestmentAccount.Product.FIXED_INCOME) || account.getProduct().equals(InvestmentAccount.Product.MULTI_SHARES)){
+//            taxRange = 0.150;
+//        } else if (account.getProduct().equals(InvestmentAccount.Product.PENSION_FUND)){
+//            taxRange = 0.100;
+//        } else if (account.getProduct().equals(InvestmentAccount.Product.FUND_OF_SHARES)){
+//            taxRange = 0.150;
+//        }
+//
+//        return taxRange;
 
     }
 
@@ -331,9 +330,9 @@ public class InvestmentAccountService extends AbstractAccountService {
         return AppDate.getDifferenceDays(entry.getDate(), curDate);
     }
 
-    @AllArgsConstructor
-    private class TaxRange{
-        Double taxRange;
-        Date nextRangeDate;
-    }
+//    @AllArgsConstructor
+//    private class TaxRange{
+//        Double taxRange;
+//        Date nextRangeDate;
+//    }
 }

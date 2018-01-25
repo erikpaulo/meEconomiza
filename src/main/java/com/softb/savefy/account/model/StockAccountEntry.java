@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Classe que representa um papel de ação
@@ -23,10 +24,10 @@ public class StockAccountEntry extends AccountEntry implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 
-	// DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ACCOUNT_ENTRY_ID", referencedColumnName = "ID")
-	protected List<AssetPrice> assetPrices;
+//	// DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
+//	@OneToMany(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "ACCOUNT_ENTRY_ID", referencedColumnName = "ID")
+//	protected List<AssetPrice> assetPrices;
 
 	// PURCHASE OR SALE
 	@Column(name = "STOCK_CODE")
