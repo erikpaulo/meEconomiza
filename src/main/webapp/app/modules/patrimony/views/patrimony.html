@@ -73,14 +73,15 @@
         <div layout="column" flex="100">
             <div layout="row" layout-padding layout-align="center center">
 
-                <div layout="column" flex="80">
+                <div layout="column" flex="90">
                     <div layout="row" class="md-title" style="margin-top: 15px">
                         <div layout="column" flex="5">
                         </div>
-                        <div layout="column" flex layout-align="center start">Ativo</div>
-                        <div layout="column" flex="20" layout-align="center center">Instituição</div>
-                        <div layout="column" flex="20" layout-align="center center">Variação (R$)</div>
-                        <div layout="column" flex="15" layout-align="center center">Variação (%)</div>
+                        <div layout="column" flex="30" layout-align="center start">Ativo</div>
+                        <div layout="column" flex="15" layout-align="center center">Instituição</div>
+                        <div layout="column" flex="10" layout-align="center center">Lucro Total</div>
+                        <div layout="column" flex="15" layout-align="center center">Var. Lucro</div>
+                        <div layout="column" flex="10" layout-align="center center">Aporte</div>
                         <div layout="column" flex="15" layout-align="center center">Saldo</div>
                         <div layout="column" flex="5" layout-align="center center"></div>
                     </div>
@@ -93,10 +94,11 @@
                                          style="cursor:pointer"
                                          class="icon-theme-42"/>
                                 </div>
-                                <div layout="column" flex layout-align="center start">{{entry.name}}</div>
-                                <div layout="column" flex="20" layout-align="center center">{{entry.institution}}</div>
-                                <div layout="column" flex="20" layout-align="center center">{{entry.profit | currency}}</div>
-                                <div layout="column" flex="15" layout-align="center center">{{entry.percentMonthProfit | number: 2}}%</div>
+                                <div layout="column" flex="30" layout-align="center start">{{entry.name}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.institution}}</div>
+                                <div layout="column" flex="10" layout-align="center center">{{entry.profit | currency}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.increasedProfit | currency}} ({{entry.pctIncreasedProfit| number: 2}}%)</div>
+                                <div layout="column" flex="10" layout-align="center center">{{entry.increasedBalance - increasedProfit | currency}}</div>
                                 <div layout="column" flex="15" layout-align="center center">{{entry.balance | currency}}</div>
                                 <div layout="column" flex="5">
                                     <md-button class="md-icon-button" ng-click="open(entry)" aria-label="Detalhes">
