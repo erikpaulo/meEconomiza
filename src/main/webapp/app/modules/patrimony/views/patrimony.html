@@ -98,7 +98,7 @@
                                 <div layout="column" flex="15" layout-align="center center">{{entry.institution}}</div>
                                 <div layout="column" flex="10" layout-align="center center">{{entry.profit | currency}}</div>
                                 <div layout="column" flex="15" layout-align="center center">{{entry.increasedProfit | currency}} ({{entry.pctIncreasedProfit| number: 2}}%)</div>
-                                <div layout="column" flex="10" layout-align="center center">{{entry.increasedBalance - increasedProfit | currency}}</div>
+                                <div layout="column" flex="10" layout-align="center center">{{entry.increasedBalance - entry.increasedProfit | currency}}</div>
                                 <div layout="column" flex="15" layout-align="center center">{{entry.balance | currency}}</div>
                                 <div layout="column" flex="5">
                                     <md-button class="md-icon-button" ng-click="open(entry)" aria-label="Detalhes">
