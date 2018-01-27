@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
@@ -44,7 +45,7 @@ public class BenchmarkTask {
 
     @Scheduled(cron = "0 0 20 * * *", zone = Constants.TIMEZONE_PTBR)
     public void updateBenchmarks(){
-        Benchmark benchmark = benchmarkRepository.findOneByDate(AppDate.getMonthDate(new Date()));
+        Benchmark benchmark = benchmarkRepository.findOneByDate(AppDate.getMonthDate(AppDate.today()));
         if (benchmark == null){
             benchmark = new Benchmark(AppDate.getMonthDate(new Date()), null, null);
         }
@@ -71,19 +72,20 @@ public class BenchmarkTask {
      */
     private Double getIBOV(){
         log.info("Getting current iBov index...");
-        Stock stock = null;
+        Stock stock;
 
-        Calendar thisMonth = Calendar.getInstance();
-        thisMonth.setTime(AppDate.getMonthDate(new Date()));
+        Calendar monthBegin = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        monthBegin.set(Calendar.DAY_OF_MONTH, 01);
+        Calendar monthEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
         try {
-            stock = YahooFinance.get(IBOV_CODE, thisMonth, Interval.MONTHLY);
+            stock = YahooFinance.get(IBOV_CODE, monthBegin, monthEnd, Interval.MONTHLY);
         } catch (IOException e){
             log.error("Couldn't get IBOV", e);
             return null;
         }
 
-        BigDecimal startValue=null, endValue=null;
+        BigDecimal startValue, endValue;
         try {
             startValue = stock.getHistory().get(0).getOpen();
             endValue = stock.getHistory().get(1).getClose();

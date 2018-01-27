@@ -1,9 +1,12 @@
 package com.softb.savefy.utils;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,10 +23,20 @@ public final class AppDate {
     }
 
     public static Date getMonthDate(Date date){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         cal.setTime(date);
         cal.set(Calendar.DAY_OF_MONTH, 01);
-        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneOffset.UTC).toInstant());
+        return DateUtils.truncate(Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneOffset.UTC).toInstant()), java.util.Calendar.DAY_OF_MONTH);
+    }
+
+    public static Date today(){
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
+        return DateUtils.truncate(Date.from(today.atStartOfDay(ZoneOffset.UTC).toInstant()), java.util.Calendar.DAY_OF_MONTH);
+    }
+
+    public static Date month(){
+        LocalDate today = LocalDate.now(ZoneOffset.UTC);
+        return getMonthDate(DateUtils.truncate(today, java.util.Calendar.DAY_OF_MONTH));
     }
 //
 //    public static Date getDateNoTime(Date date){
