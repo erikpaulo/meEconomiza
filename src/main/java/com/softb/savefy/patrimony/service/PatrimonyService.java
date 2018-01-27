@@ -6,8 +6,10 @@ import com.softb.savefy.account.model.InvestmentAccount;
 import com.softb.savefy.account.model.StockAccount;
 import com.softb.savefy.account.service.AccountsService;
 import com.softb.savefy.account.service.CheckingAccountService;
+import com.softb.savefy.patrimony.model.Benchmark;
 import com.softb.savefy.patrimony.model.Patrimony;
 import com.softb.savefy.patrimony.model.PatrimonyEntry;
+import com.softb.savefy.patrimony.repository.BenchmarkRepository;
 import com.softb.savefy.patrimony.repository.PatrimonyEntryRepository;
 import com.softb.savefy.patrimony.repository.PatrimonyRepository;
 import com.softb.savefy.utils.AppDate;
@@ -30,11 +32,15 @@ public class PatrimonyService {
     @Autowired
     private PatrimonyEntryRepository patrimonyEntryRepository;
 
+    @Autowired
+    private BenchmarkRepository benchmarkRepository;
+
     @Inject
     private AccountsService accountsService;
 
     @Inject
     private CheckingAccountService checkingAccountService;
+
 
     public Patrimony baseline (Patrimony patrimony, Integer groupId){
         Date month = AppDate.getMonthDate(patrimony.getDate());
@@ -60,8 +66,11 @@ public class PatrimonyService {
         Map<String, Double> riskMap = new HashMap<>();
         Map<String, Double> investTypeMap = new HashMap<>();
         Map<Date, Double> liquidityMap = new TreeMap<>();
+        Map<Date, Benchmark> benchmarkMap = new TreeMap<>();
 
         List<Account> accounts = accountsService.getAllActiveAccounts(groupId);
+
+        benchmarkMap = getBenchmarkMap(month);
 
         List<Institution> institutions = accountsService.getInstitutions();
         Map<Integer, String> institutionMap = new HashMap<>();
@@ -150,9 +159,22 @@ public class PatrimonyService {
         patrimony.setRiskMap(riskMap);
         patrimony.setInvestTypeMap(investTypeMap);
         patrimony.setLiquidityMap(liquidityMap);
+        patrimony.setBenchmarkMap(benchmarkMap);
+
         patrimony.setHistory(history);
 
         return patrimony;
+    }
+
+    private Map<Date, Benchmark> getBenchmarkMap(Date month) {
+        Map<Date, Benchmark> benchmarkMap = new TreeMap<>();
+
+        List<Benchmark> benchmarks = benchmarkRepository.findAll();
+        for (Benchmark benchmark: benchmarks) {
+            benchmarkMap.put(benchmark.getDate(), benchmark);
+        }
+
+        return benchmarkMap;
     }
 
     private Double getProfit(Account account){

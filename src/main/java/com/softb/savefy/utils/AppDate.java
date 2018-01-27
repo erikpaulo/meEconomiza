@@ -26,6 +26,12 @@ public final class AppDate {
         return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
     }
 
+    public static Date getDateNoTime(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
+    }
+
     public static Date addBussinessDays(Date date, Integer days){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);

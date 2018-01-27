@@ -16,7 +16,6 @@ import yahoofinance.YahooFinance;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -34,9 +33,8 @@ public class StockPriceTask  {
 
     private static final Logger log = LoggerFactory.getLogger(StockPriceTask.class);
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(cron = "0 */15 9-18 * * MON-FRI", zone = Constants.TIMEZONE_PTBR)
+    @Scheduled(cron = "0 */15 9-19 * * MON-FRI", zone = Constants.TIMEZONE_PTBR)
     public void updateLastPrice() {
         List<AccountEntry> stocks = stockRepository.listAllActiveStocks();
 
@@ -59,9 +57,6 @@ public class StockPriceTask  {
         }
 
         BigDecimal price = stock.getQuote().getPrice();
-//        BigDecimal change = stock.getQuote().getChangeInPercent();
-//        BigDecimal peg = stock.getStats().getPeg();
-//        BigDecimal dividend = stock.getDividend().getAnnualYieldPercent();
 
         return price.doubleValue();
     }

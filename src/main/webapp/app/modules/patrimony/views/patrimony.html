@@ -108,30 +108,36 @@
                             </div>
                             <md-divider style="margin-top:10px" ng-if="entry.open"></md-divider>
                             <div layout="row" layout-align="center center" ng-show="entry.open">
-                                <table layout="column" flex="60" class="table-striped" style="margin:10px;">
+                                <table layout="column" flex="80" class="table-striped" style="margin:10px;">
                                     <thead>
                                         <tr layout="row">
-                                            <th flex="20">Mês</th>
-                                            <th flex="20">Lucro</th>
-                                            <th flex="20">Variação (R$)</th>
-                                            <th flex="20">Variação (%)</th>
-                                            <th flex="20">Posição</th>
+                                            <th flex="10">Mês</th>
+                                            <th flex="15">Lucro</th>
+                                            <th flex="15">Variação (R$)</th>
+                                            <th flex="15">Variação (%)</th>
+                                            <th flex="15">% do CDI</th>
+                                            <th flex="15">% do IBovespa</th>
+                                            <th flex="15">Posição</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr layout="row" ng-repeat="eHistory in entry.history"  layout-align="center center" class="c-hover">
-                                            <td flex="20">{{ eHistory.date | date: 'MMM/yyyy' : 'UTC' }}</td>
-                                            <td flex="20">{{ eHistory.profit | currency }}</td>
-                                            <td flex="20">{{ eHistory.increasedProfit | currency }}</td>
-                                            <td flex="20">{{ eHistory.pctIncreasedProfit | number:2 }}%</td>
-                                            <td flex="20" my-currency="eHistory.balance"></td>
+                                            <td flex="10">{{ eHistory.date | date: 'MMM/yyyy' : 'UTC' }}</td>
+                                            <td flex="15">{{ eHistory.profit | currency }}</td>
+                                            <td flex="15">{{ eHistory.increasedProfit | currency }}</td>
+                                            <td flex="15">{{ eHistory.pctIncreasedProfit | number:2 }}%</td>
+                                            <td flex="15">{{ (eHistory.pctIncreasedProfit/patrimony.benchmarkMap[eHistory.date].cdi)*100 | number:2 }}%</td>
+                                            <td flex="15">{{ (eHistory.pctIncreasedProfit/patrimony.benchmarkMap[eHistory.date].ibovespa)*100 | number:2 }}%</td>
+                                            <td flex="15" my-currency="eHistory.balance"></td>
                                         </tr>
                                         <tr layout="row"  layout-align="center center" class="c-hover">
-                                            <td flex="20">Hoje</td>
-                                            <td flex="20">{{ entry.profit | currency }}</td>
-                                            <td flex="20">{{ entry.increasedProfit | currency }}</td>
-                                            <td flex="20">{{ entry.pctIncreasedProfit | number:2 }}%</td>
-                                            <td flex="20" my-currency="entry.balance"></td>
+                                            <td flex="10">Hoje</td>
+                                            <td flex="15">{{ entry.profit | currency }}</td>
+                                            <td flex="15">{{ entry.increasedProfit | currency }}</td>
+                                            <td flex="15">{{ entry.pctIncreasedProfit | number:2 }}%</td>
+                                            <td flex="15">{{ (entry.pctIncreasedProfit / patrimony.benchmarkMap[patrimony.date].cdi)*100 | number:2 }}%</td>
+                                            <td flex="15">{{ (entry.pctIncreasedProfit / patrimony.benchmarkMap[patrimony.date].ibovespa)*100 | number:2 }}%</td>
+                                            <td flex="15" my-currency="entry.balance"></td>
                                         </tr>
                                     </tbody>
                                 </table>

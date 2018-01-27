@@ -46,10 +46,14 @@ define(['./module'
 
                 $scope.portfolioEvolutionChart.series[0].data = [];
                 $scope.portfolioEvolutionChart.series[1].data = [];
+                $scope.portfolioEvolutionChart.series[2].data = [];
+                $scope.portfolioEvolutionChart.series[3].data = [];
                 $scope.portfolioEvolutionChart.xAxis.categories = [];
                 angular.forEach($scope.patrimony.history, function(history){
                     $scope.portfolioEvolutionChart.series[0].data.push(history.increasedProfit)
                     $scope.portfolioEvolutionChart.series[1].data.push(history.pctIncreasedProfit)
+                    $scope.portfolioEvolutionChart.series[2].data.push($scope.patrimony.benchmarkMap[history.date].cdi)
+                    $scope.portfolioEvolutionChart.series[3].data.push($scope.patrimony.benchmarkMap[history.date].ibovespa)
                     $scope.portfolioEvolutionChart.xAxis.categories.push($filter('date')(history.date, "MMM/yy", 'UTC').toUpperCase())
 
                     $scope.patrimonyEvolutionChart.series[0].data.push(history.increasedBalance)
@@ -59,6 +63,8 @@ define(['./module'
                 });
                 $scope.portfolioEvolutionChart.series[0].data.push($scope.patrimony.increasedProfit)
                 $scope.portfolioEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedProfit)
+                $scope.portfolioEvolutionChart.series[2].data.push($scope.patrimony.benchmarkMap[$scope.patrimony.date].cdi)
+                $scope.portfolioEvolutionChart.series[3].data.push($scope.patrimony.benchmarkMap[$scope.patrimony.date].ibovespa)
                 $scope.portfolioEvolutionChart.xAxis.categories.push('Hoje')
 
                 $scope.patrimonyEvolutionChart.series[0].data.push($scope.patrimony.increasedBalance)
@@ -156,7 +162,7 @@ define(['./module'
                     formatter: function () {
                         return '<b>' + this.x + '</b><br/>' +
                                 this.series.name + ': ' +
-                                (this.series.name == 'Variação (%)' ? $filter('number')(this.y, 2) + '%' : $filter('currency')(this.y)) + '<br/>'
+                                (this.series.name == 'Variação (R$)' ? $filter('currency')(this.y)  : $filter('number')(this.y, 2) + '%') + '<br/>'
                     }
                 },
                 series: [ {
@@ -170,7 +176,21 @@ define(['./module'
                     type: 'spline',
                     yAxis: 1,
                     data: [],
+                    color: $scope.productColors[0]
+                },
+                {
+                    name: 'CDI',
+                    type: 'spline',
+                    yAxis: 1,
+                    data: [],
                     color: $scope.productColors[2]
+                },
+                {
+                    name: 'IBovespa',
+                    type: 'spline',
+                    yAxis: 1,
+                    data: [],
+                    color: $scope.productColors[3]
                 }
                 ],
                 credits: {enabled: false},

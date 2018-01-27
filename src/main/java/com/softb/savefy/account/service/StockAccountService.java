@@ -121,7 +121,7 @@ public class StockAccountService extends AbstractAccountService {
                 netProfit += entry.getNetProfitability();
                 originalValue += entry.getAmount();
             }
-            
+
             // Sort
             Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
                 public int compare(StockSaleProfit o1, StockSaleProfit o2) {

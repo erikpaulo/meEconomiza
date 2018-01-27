@@ -92,4 +92,7 @@ public class Patrimony extends BaseEntity<Integer> implements Serializable {
     @Transient
     protected Map<String, Double> investTypeMap;
 
+    @Transient
+    protected Map<Date, Benchmark> BenchmarkMap;
+
 }

@@ -5,15 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Classe que representa o patrimônio total do user
+ * Classe que representa as Contas bancárias do usuário
  * @author Erik Lacerda 
  *
  */
@@ -26,18 +24,16 @@ public class Benchmark extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Transient
-	private Date date;
+	@Column(name = "DATE")
+	@NotNull
+	protected Date date;
 
-	@Transient
-	private Double ipca;
+	@Column(name = "CDI")
+	@NotNull
+	protected Double cdi;
 
-	@Transient
-	private Double cdi;
+    @Column(name="IBOVESPA")
+    @NotNull
+    protected Double iBovespa;
 
-	@Transient
-	private Double ibovespa;
-
-	@Transient
-	private List<Benchmark> entries;
 }
