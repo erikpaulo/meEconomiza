@@ -66,7 +66,7 @@ public class PatrimonyService {
         Map<String, Double> riskMap = new HashMap<>();
         Map<String, Double> investTypeMap = new HashMap<>();
         Map<Date, Double> liquidityMap = new TreeMap<>();
-        Map<Date, Benchmark> benchmarkMap = new TreeMap<>();
+        Map<Date, Benchmark> benchmarkMap;
 
         List<Account> accounts = accountsService.getAllActiveAccounts(groupId);
 

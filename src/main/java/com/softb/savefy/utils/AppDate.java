@@ -1,7 +1,7 @@
 package com.softb.savefy.utils;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -16,23 +16,23 @@ public final class AppDate {
     }
 
     public static LocalDate getLocalDateFor(Date date){
-        return date.toInstant().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDate();
+        return date.toInstant().atZone(ZoneOffset.UTC).toLocalDate();
     }
 
     public static Date getMonthDate(Date date){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.DAY_OF_MONTH, 01);
-        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
+        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneOffset.UTC).toInstant());
     }
+//
+//    public static Date getDateNoTime(Date date){
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(date);
+//        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
+//    }
 
-    public static Date getDateNoTime(Date date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
-    }
-
-    public static Date addBussinessDays(Date date, Integer days){
+    public static Date addBusinessDays(Date date, Integer days){
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
 

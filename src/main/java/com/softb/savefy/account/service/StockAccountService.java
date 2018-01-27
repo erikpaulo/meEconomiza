@@ -244,7 +244,7 @@ public class StockAccountService extends AbstractAccountService {
         Integer signal = (stock.getOperation().equals(StockAccountEntry.Operation.PURCHASE) ? -1 : 1);
 
         CheckingAccount brokerAccount = stockPortfolio.getBrokerAccount();
-        Date liquidationDate = AppDate.addBussinessDays(stock.getDate(),3);
+        Date liquidationDate = AppDate.addBusinessDays(stock.getDate(),3);
         Double total = signal * ( stock.getAmount() + ((-signal) * stock.getBrokerage()) );
         CheckingAccountEntry entry = new CheckingAccountEntry(liquidationDate, stockPortfolio.getDefaultSubcategory(), total, false,
                                                               brokerAccount.getId(),null, null, groupId, 0.0, Account.Type.CKA);
