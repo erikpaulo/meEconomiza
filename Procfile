@@ -1,1 +1,1 @@
-web: java -Djdbc.drivers=org.postgresql.Driver -Dserver.port=$PORT -jar target/savefy-2017.01.jar --spring.profiles.active=prod
+web: java -Djdbc.drivers=org.postgresql.Driver -Dserver.port=$PORT -jar target/savefy-2017.01.jar --spring.profiles.active=prod  -Duser.timezone="UTC"

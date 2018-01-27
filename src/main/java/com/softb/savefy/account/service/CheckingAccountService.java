@@ -4,6 +4,7 @@ import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.InstitutionRepository;
+import com.softb.savefy.utils.AppMaths;
 import com.softb.system.errorhandler.exception.SystemException;
 import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,7 +148,7 @@ public class CheckingAccountService extends AbstractAccountService {
                 entry.setBalance(balance);
             }
         }
-        checkingAccount.setBalance(balance);
+        checkingAccount.setBalance(AppMaths.round(balance,2));
     }
 
 

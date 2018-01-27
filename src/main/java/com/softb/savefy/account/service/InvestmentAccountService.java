@@ -90,13 +90,13 @@ public class InvestmentAccountService extends AbstractAccountService {
                 }
             }
         }
-        investmentAccount.setBalance(balance);
-        investmentAccount.setGrossBalance(grossBalance);
+        investmentAccount.setBalance(AppMaths.round(balance,2));
+        investmentAccount.setGrossBalance(AppMaths.round(grossBalance,2));
 
-        investmentAccount.setGrossProfit(grossProfit);
-        investmentAccount.setNetProfit(netProfit);
-        investmentAccount.setPercentGrossProfit(grossProfit / amountInvested * 100);
-        investmentAccount.setPercentNetProfit(netProfit / amountInvested * 100);
+        investmentAccount.setGrossProfit(AppMaths.round(grossProfit,2));
+        investmentAccount.setNetProfit(AppMaths.round(netProfit,2));
+        investmentAccount.setPercentGrossProfit(AppMaths.round(grossProfit / amountInvested * 100,2));
+        investmentAccount.setPercentNetProfit(AppMaths.round(netProfit / amountInvested * 100,2));
     }
 
     /**

@@ -1,8 +1,8 @@
 /**
 * Changeset 2017.01
 * Criação da aplicação.
-* heroku pg:psql postgresql-convex-43609 --app savefy-staging < /Users/eriklacerda/Dev-Projects/savefy/postgresdb/psql_dump.sql
-* Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/src/main/resources/config/postgres/data/db-postgres-savefy-2017.01.sql
+* heroku pg:psql postgresql-convex-43609 --app savefy-staging < /Users/eriklacerda/Dev-Projects/savefy/postgresdb/database-savefy-0.1.0.sql
+* Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/postgresdb/database-savefy-0.1.0.sql
 */
 
 --CREATE DATABASE savefy;

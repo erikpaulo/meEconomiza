@@ -139,14 +139,14 @@ public class StockAccountService extends AbstractAccountService {
             }
         }
 
-        stockPortfolio.setBalance(netBalance);
-        stockPortfolio.setGrossBalance(grossBalance);
+        stockPortfolio.setBalance(AppMaths.round(netBalance,2));
+        stockPortfolio.setGrossBalance(AppMaths.round(grossBalance,2));
 
-        stockPortfolio.setGrossProfit(grossProfit);
-        stockPortfolio.setNetProfit(netProfit);
+        stockPortfolio.setGrossProfit(AppMaths.round(grossProfit,2));
+        stockPortfolio.setNetProfit(AppMaths.round(netProfit,2));
 
-        stockPortfolio.setPercentGrossProfit(grossProfit / originalValue * 100);
-        stockPortfolio.setPercentNetProfit(netProfit / originalValue * 100);
+        stockPortfolio.setPercentGrossProfit(AppMaths.round(grossProfit / originalValue * 100,2));
+        stockPortfolio.setPercentNetProfit(AppMaths.round(netProfit / originalValue * 100,2));
 
     }
 
