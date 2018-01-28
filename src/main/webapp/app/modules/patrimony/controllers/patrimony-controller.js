@@ -52,8 +52,8 @@ define(['./module'
                 angular.forEach($scope.patrimony.history, function(history){
                     $scope.portfolioEvolutionChart.series[0].data.push(history.increasedProfit)
                     $scope.portfolioEvolutionChart.series[1].data.push(history.pctIncreasedProfit)
-                    $scope.portfolioEvolutionChart.series[2].data.push($scope.patrimony.benchmarkMap[history.date].cdi)
-                    $scope.portfolioEvolutionChart.series[3].data.push($scope.patrimony.benchmarkMap[history.date].ibovespa)
+                    $scope.portfolioEvolutionChart.series[2].data.push(getCDI(history.date))
+                    $scope.portfolioEvolutionChart.series[3].data.push(getIBovespa(history.date))
                     $scope.portfolioEvolutionChart.xAxis.categories.push($filter('date')(history.date, "MMM/yy", 'UTC').toUpperCase())
 
                     $scope.patrimonyEvolutionChart.series[0].data.push(history.increasedBalance)
@@ -63,8 +63,8 @@ define(['./module'
                 });
                 $scope.portfolioEvolutionChart.series[0].data.push($scope.patrimony.increasedProfit)
                 $scope.portfolioEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedProfit)
-                $scope.portfolioEvolutionChart.series[2].data.push($scope.patrimony.benchmarkMap[$scope.patrimony.date].cdi)
-                $scope.portfolioEvolutionChart.series[3].data.push($scope.patrimony.benchmarkMap[$scope.patrimony.date].ibovespa)
+                $scope.portfolioEvolutionChart.series[2].data.push(getCDI($scope.patrimony.date))
+                $scope.portfolioEvolutionChart.series[3].data.push(getIBovespa($scope.patrimony.date))
                 $scope.portfolioEvolutionChart.xAxis.categories.push('Hoje')
 
                 $scope.patrimonyEvolutionChart.series[0].data.push($scope.patrimony.increasedBalance)
@@ -86,6 +86,26 @@ define(['./module'
 
             $scope.detail = function(entry){
                 $location.path('/account/'+ entry.assetType +'/'+ entry.accountId +'/detail');
+            }
+
+            function getCDI(date){
+                var cdi = null;
+
+                if ($scope.patrimony.benchmarkMap[date]) {
+                    cdi = $scope.patrimony.benchmarkMap[date].cdi;
+                }
+
+                return cdi;
+            }
+
+            function getIBovespa(date){
+                var ibovespa = null;
+
+                if ($scope.patrimony.benchmarkMap[date]){
+                    ibovespa = $scope.patrimony.benchmarkMap[date].ibovespa;
+                }
+
+                return ibovespa;
             }
 
             function getRiskName(code){
