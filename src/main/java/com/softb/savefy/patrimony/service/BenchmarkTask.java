@@ -127,7 +127,7 @@ public class BenchmarkTask {
             } catch (IOException e1) {
                 log.error("Couldn't get CDI", e1);
                 return null;
-            } catch (InterruptedException e3){
+            } catch (InterruptedException e2){
                 throw new SystemException(e.getMessage());
             }
         }

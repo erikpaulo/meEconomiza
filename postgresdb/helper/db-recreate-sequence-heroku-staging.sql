@@ -5,7 +5,7 @@
 
 /**
 * heroku pg:psql postgresql-convex-43609 --app savefy-staging < /Users/eriklacerda/Dev-Projects/savefy/postgresdb/helper/db-recreate-sequence-heroku-staging.sql
-* Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/src/main/resources/config/postgres/data/db-postgres-savefy-2017.01.sql
+* Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/postgresdb/helper/db-recreate-sequence-heroku-staging.sql
 */
 
 CREATE SEQUENCE IF NOT EXISTS QUOTE_SALE_id_seq OWNED BY QUOTE_SALE.id;

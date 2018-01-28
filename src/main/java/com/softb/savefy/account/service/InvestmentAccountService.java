@@ -148,6 +148,8 @@ public class InvestmentAccountService extends AbstractAccountService {
         entry.setQuoteLastValue(entry.getQuoteValue());
         InvestmentAccount account = (InvestmentAccount) accountRepository.findOne(entry.getAccountId(), groupId);
 
+        updateLastPrice(new AssetPrice(account.getId(), entry.getDate(), entry.getQuoteLastValue()), groupId);
+
         if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
             entry = savePurchaseEntry(account, entry, groupId);
         } else if (entry.getOperation().equals(InvestmentAccountEntry.Operation.SALE)) {
@@ -155,8 +157,6 @@ public class InvestmentAccountService extends AbstractAccountService {
         } else if (entry.getOperation().equals(InvestmentAccountEntry.Operation.IR_LAW)){
             entry = saveIRLawEntry(account, entry, groupId);
         }
-
-        updateLastPrice(new AssetPrice(account.getId(), entry.getDate(), entry.getQuoteLastValue()), groupId);
 
         return entry;
     }
@@ -205,8 +205,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         Double qtdQuotesToSell = AppMaths.round(entry.getAmount() / entry.getQuoteValue(), 8);
 
         Double originalAmount=0.0, grossProfit=0.0, percentGrossProfit=0.0, netProfit=0.0, percentNetProfit=0.0;
-        Double qtdQuotesForCalc=0.0;
-        Double incomeTaxPercent = getTaxRange(account, entry).taxRange;
+        Double qtdQuotesForCalc=0.0, incomeTaxPercent = 0.0, currentValue=0.0;
         int i=0; Boolean done=false; Double quoteDiff=0.0;
         while(i<entries.size() && !done){
             InvestmentAccountEntry entryToSell = entries.get(i);
@@ -242,6 +241,7 @@ public class InvestmentAccountService extends AbstractAccountService {
 
                 // Calc gains
                 originalAmount += (entryToSell.getQuoteValue() * qtdQuotesForCalc);
+                currentValue += (entryToSell.getQuoteLastValue() * qtdQuotesForCalc);
                 grossProfit += (qtdQuotesForCalc * entry.getQuoteValue()) - (entryToSell.getQuoteValue() * qtdQuotesForCalc);
                 incomeTaxPercent = (getTaxRange(account, entryToSell).taxRange > incomeTaxPercent ? getTaxRange(account, entryToSell).taxRange : incomeTaxPercent);
                 netProfit += grossProfit - entry.getIncomeTaxAmount();
@@ -259,7 +259,7 @@ public class InvestmentAccountService extends AbstractAccountService {
         entry.setPercentGrossProfitability(percentGrossProfit);
         entry.setIncomeTaxPercent(incomeTaxPercent);
         entry.setPercentNetProfitability(percentNetProfit);
-        entry.setCurrentAmount(entry.getAmount());
+        entry.setCurrentAmount(currentValue);
         entry.setAmount(originalAmount);
         entry = (InvestmentAccountEntry) save(entry, groupId);
 
