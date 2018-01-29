@@ -158,17 +158,10 @@ public class CheckingAccountService extends AbstractAccountService {
      * @param groupId
      */
     public void deleteEntries(List<CheckingAccountEntry> entriesToDelete, Integer groupId) {
+        for (CheckingAccountEntry entry: entriesToDelete) {
+            accountEntryRepository.delete(entry);
+        }
     }
-    //        return accountRepository.findOne(accountId, groupId);
-    //    public Account get(Integer accountId, Integer groupId) {
-    //     */
-    //     * @return
-    //     * @param groupId
-    //     * @param accountId
-    //     * Used by conciliation process
-//    /**
-
-//    }
 
     private CheckingAccountEntry createTwinEntry(CheckingAccountEntry entry, Integer groupId) {
         CheckingAccountEntry twinEntry;

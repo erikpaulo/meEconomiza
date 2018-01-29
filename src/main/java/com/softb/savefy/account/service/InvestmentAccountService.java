@@ -80,14 +80,14 @@ public class InvestmentAccountService extends AbstractAccountService {
 
             for (InvestmentAccountEntry entry: investmentAccount.getEntries()) {
                 if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
-                    calcPrevisionGains(investmentAccount, entry);
+                    calcEstimatedGains(investmentAccount, entry);
                     balance += (entry.getCurrentAmount() - entry.getIncomeTaxAmount());
                     grossBalance += entry.getCurrentAmount();
-
-                    grossProfit += entry.getGrossProfitability();
-                    netProfit += entry.getNetProfitability();
                     amountInvested += entry.getAmount();
                 }
+
+                grossProfit += entry.getGrossProfitability();
+                netProfit += entry.getNetProfitability();
             }
         }
         investmentAccount.setBalance(AppMaths.round(balance,2));
@@ -95,8 +95,8 @@ public class InvestmentAccountService extends AbstractAccountService {
 
         investmentAccount.setGrossProfit(AppMaths.round(grossProfit,2));
         investmentAccount.setNetProfit(AppMaths.round(netProfit,2));
-        investmentAccount.setPercentGrossProfit(AppMaths.round(grossProfit / amountInvested * 100,2));
-        investmentAccount.setPercentNetProfit(AppMaths.round(netProfit / amountInvested * 100,2));
+        investmentAccount.setPercentGrossProfit(AppMaths.round((amountInvested>0?grossProfit / amountInvested * 100:0),2));
+        investmentAccount.setPercentNetProfit(AppMaths.round((amountInvested>0?netProfit / amountInvested * 100:0),2));
     }
 
     /**
@@ -104,20 +104,19 @@ public class InvestmentAccountService extends AbstractAccountService {
      * @param account
      * @param entry
      */
-    private void calcPrevisionGains(InvestmentAccount account, InvestmentAccountEntry entry){
+    private void calcEstimatedGains(InvestmentAccount account, InvestmentAccountEntry entry){
         IncomeTaxRateService.TaxRange taxRange = getTaxRange(account, entry);
 
-//        AssetPrice currentIndex = getLastIndex(account, account.getGroupId());
-        entry.setCurrentAmount(entry.getQuotesAvailable() * entry.getQuoteLastValue());
+        entry.setCurrentAmount(AppMaths.round(entry.getQuotesAvailable() * entry.getQuoteLastValue(),2));
 
         Double currentOriginalValue = (entry.getQuotesAvailable()*entry.getQuoteValue());
 
         entry.setIncomeTaxPercent(taxRange.taxRange);
         entry.setNextTaxRangeDate(taxRange.nextRangeDate);
-        entry.setGrossProfitability(entry.getCurrentAmount() - currentOriginalValue);
+        entry.setGrossProfitability(AppMaths.round(entry.getCurrentAmount() - currentOriginalValue,2));
 
-        entry.setIncomeTaxAmount(entry.getGrossProfitability() * (entry.getIncomeTaxPercent()));
-        entry.setNetProfitability(entry.getGrossProfitability() - entry.getIncomeTaxAmount());
+        entry.setIncomeTaxAmount(AppMaths.round(entry.getGrossProfitability() * entry.getIncomeTaxPercent(),2));
+        entry.setNetProfitability(AppMaths.round(entry.getGrossProfitability() - entry.getIncomeTaxAmount(),2));
 
         entry.setPercentGrossProfitability(entry.getGrossProfitability() / currentOriginalValue);
         entry.setPercentNetProfitability(entry.getNetProfitability() / currentOriginalValue);
@@ -169,7 +168,10 @@ public class InvestmentAccountService extends AbstractAccountService {
     public void updateLastPrice(AssetPrice price, Integer groupId){
         InvestmentAccount account = (InvestmentAccount)accountRepository.findOne(price.getAccountId(), groupId);
         for (InvestmentAccountEntry entry: account.getEntries()) {
-            entry.setQuoteLastValue(price.getValue());
+            if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
+                entry.setQuoteLastValue(price.getValue());
+//                calcEstimatedGains(account, entry);
+            }
         }
         accountRepository.save(account);
     }

@@ -147,10 +147,10 @@ public class PatrimonyService {
         }
 
 
-        patrimony.setBalanceInvested(investedBalance);
-        patrimony.setBalance(totalBalance);
-        patrimony.setIncreasedBalance(totalIncreasedBalance);
-        patrimony.setPctIncreasedBalance(pctTotalIncreasedBalance);
+        patrimony.setBalanceInvested(AppMaths.round(investedBalance,2));
+        patrimony.setBalance(AppMaths.round(totalBalance,2));
+        patrimony.setIncreasedBalance(AppMaths.round(totalIncreasedBalance,2));
+        patrimony.setPctIncreasedBalance(AppMaths.round(pctTotalIncreasedBalance,2));
 
         patrimony.setProfit(totalProfit);
         patrimony.setIncreasedProfit(totalIncreasedProfit);

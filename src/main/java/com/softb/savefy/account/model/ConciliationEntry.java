@@ -40,7 +40,7 @@ public class ConciliationEntry extends BaseEntity<Integer> implements Serializab
     @JoinColumn(name = "SUBCATEGORY_ID", referencedColumnName = "ID")
     protected SubCategory subCategory;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "ACCOUNT_ENTRY_ID", referencedColumnName = "ID")
     protected CheckingAccountEntry accountEntry;
 
