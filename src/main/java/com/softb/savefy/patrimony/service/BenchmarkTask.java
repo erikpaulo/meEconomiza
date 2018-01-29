@@ -7,10 +7,10 @@ import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
 import com.softb.savefy.utils.Constants;
 import com.softb.system.errorhandler.exception.SystemException;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,7 @@ import yahoofinance.Stock;
 import yahoofinance.YahooFinance;
 import yahoofinance.histquotes.Interval;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -33,8 +34,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class BenchmarkTask {
-    protected static final String CETIP_URL = "https://www.cetip.com.br/";
-    protected static final String CETIP_CDI_SELECTOR = "ctl00_Banner_lblTaxDI";
+    protected static final String CETIP_DI_QUERY = "http://www.cetip.com.br/astec/series_v05/paginas/simulador/simulador_v04_grupo_01_b.asp";
+    protected static final String CETIP_CDI_LOGIN = "https://www.cetip.com.br/Paginas/LogarDI.aspx";
 
     protected static final String IBOV_CODE = "^BVSP";
 
@@ -42,6 +43,11 @@ public class BenchmarkTask {
 
     @Autowired
     private BenchmarkRepository benchmarkRepository;
+
+    @PostConstruct
+    public void updateBenchmarksOnStartUp(){
+        updateBenchmarks();
+    }
 
     @Scheduled(cron = "0 0 20 * * *", zone = Constants.TIMEZONE_PTBR)
     public void updateBenchmarks(){
@@ -103,27 +109,59 @@ public class BenchmarkTask {
      */
     private  Double getCdI(){
 
-        Element element = getElementById(CETIP_URL, CETIP_CDI_SELECTOR);
+        Calendar monthBegin = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        monthBegin.set(Calendar.DAY_OF_MONTH, 01);
+        Calendar monthEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+        Element element = getElementById(monthBegin, monthEnd);
         if (element == null){
             return null;
         }
 
-        Node nCDI = element.childNode(0);
-        String sCDI = nCDI.toString();
+        String sCDI = element.text();
 
-        return Double.parseDouble(sCDI.replace("%", "").replace(",", "."));
+        return Double.parseDouble(sCDI.replace("%", "").replace(",", ".").replace(" ", ""));
     }
 
-    private Element getElementById(String url, String id){
+    private Element getElementById(Calendar begin, Calendar end){
         Document doc = null;
+        Connection query = null;
 
         try {
-            doc = Jsoup.connect(url).get();
+
+            Connection.Response loginDI = Jsoup.connect(CETIP_CDI_LOGIN)
+                    .data("Navegador", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
+                    .referrer("https://www.cetip.com.br/Paginas/AcumuleDI.aspx")
+                    .userAgent("Mozilla/5.0")
+                    .method(Connection.Method.GET)
+                    .execute();
+
+            query =  Jsoup.connect(CETIP_DI_QUERY)
+                    .cookies(loginDI.cookies())
+                    .data("Navegador", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
+                    .data("__VIEWSTATE", "rmYIMO8+B22Enuq48gJ2Sy6QtsYr6h/ip558oCZiXFbd7WwojjuFawTE5BcbYCBa9EQUkNSYxtFslJB4EbcJP7WTy9B8ylR21ltg2VyEHKmj5FaWNuc+3rRz5HQJSaCRqcYtJJy4xWYo0+w6FerOzkaKoxPtbQjhJluSFM4tYp76wJtbVWY94FPzw8HAyL5GNRtameDPn71M93T6UCe1iOPmT3Um8lTE01ZxGmXnFIkzduDo")
+                    .data("__VIEWSTATEGENERATOR", "4D16475F")
+                    .data("__EVENTVALIDATION", "hO+qfNHt9OMOo0t2nCykn+/gZ+/Qxt9o3P13HD84PETv0Ua753mI9ZHY25ZfxIzS9anfD19+25eG5OHWw1rg+Sy9L1k8OoNZtFq3GCKD7Y4vbWLecfNoHGCMWdMFuOW/YfcEZand+8pM3cJ+ZKsGp+/WvVZMd4ezn+2zr6VuHpWSbYydxsiLnShzOkVLqjq/gCB04Zjuk8Sk/Nv4xsmaA4NVQYX6JsttzITCj0mdcNS5Fo3a3/dIKrfTfV6EGRvyngmVl7eX7aOaW7YziC6tfb7dXx8jvnfsgmbXrw4TFzJ/4gSJh4d5+45ACHxSzRhO/CXkechU/e5tTIBNOiDKFREF8Vm+yX8JLDx7Y/peaB1YmVd5V2jOJfXqlVR/Zc3wKaa7Bg==")
+                    .data("DT_DIA_DE", Integer.toString(begin.get(Calendar.DAY_OF_MONTH)))
+                    .data("DT_MES_DE", Integer.toString(begin.get(Calendar.MONTH))+1)
+                    .data("DT_ANO_DE", Integer.toString(begin.get(Calendar.YEAR)))
+                    .data("DT_DIA_ATE", Integer.toString(end.get(Calendar.DAY_OF_MONTH)))
+                    .data("DT_MES_ATE", Integer.toString(end.get(Calendar.MONTH))+1)
+                    .data("DT_ANO_ATE", Integer.toString(end.get(Calendar.YEAR)))
+                    .data("var_perc", "100,00")
+                    .data("var_valor", "100,00")
+                    .data("var_indice", "3")
+                    .data("var_idioma", "1")
+                    .userAgent("Mozilla/5.0")
+                    .referrer("https://www.cetip.com.br/Paginas/AcumuleDI.aspx")
+                    .method(Connection.Method.GET);
+
+            doc = query.post();
         } catch (IOException e) {
             log.error("Connection error, trying again in 1 minute", e);
             try {
                 TimeUnit.MINUTES.sleep(1);
-                doc = Jsoup.connect(url).get();
+                doc = query.post();
             } catch (IOException e1) {
                 log.error("Couldn't get CDI", e1);
                 return null;
@@ -132,7 +170,7 @@ public class BenchmarkTask {
             }
         }
 
-        return doc.getElementById(id);
+        return doc.select(":containsOwn(Taxa:) + td").get(0);
     }
 }
 
