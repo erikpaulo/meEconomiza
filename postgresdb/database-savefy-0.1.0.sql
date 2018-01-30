@@ -1,16 +1,9 @@
 /**
-* Changeset 2017.01
+* Production em: v11
 * Criação da aplicação.
 * heroku pg:psql postgresql-convex-43609 --app savefy-staging < /Users/eriklacerda/Dev-Projects/savefy/postgresdb/database-savefy-0.1.0.sql
 * Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/postgresdb/database-savefy-0.1.0.sql
 */
-
---CREATE DATABASE savefy;
---
---CREATE USER eriklacerda;
---ALTER ROLE eriklacerda WITH LOGIN;
---
---\connect savefy;
 
  DROP TABLE IF EXISTS ASSET_PRICE;
  DROP TABLE IF EXISTS QUOTE_SALE;
@@ -31,6 +24,15 @@
  DROP TABLE IF EXISTS user_account;
  DROP TABLE IF EXISTS USER_GROUP;
  DROP TABLE IF EXISTS remember_me_token;
+ DROP TABLE IF EXISTS BENCHMARK;
+
+
+CREATE TABLE BENCHMARK (
+    ID          SERIAL PRIMARY KEY,
+    DATE        TIMESTAMP NOT NULL,
+    CDI         DECIMAL,
+    IBOVESPA    DECIMAL
+);
 
 
 CREATE TABLE remember_me_token (
@@ -226,48 +228,3 @@ CREATE TABLE USER_PREFERENCES (
 
     CONSTRAINT U_CONST_04 UNIQUE (USER_GROUP_ID)
 );
-
-
-
-
-
--- Initial load for user and roles
-
-insert into user_group values (1, 'Lacerda & Moreira');
-insert into user_group values (2, 'Lacerda Young');
-
-insert into user_account values(1,false,'Erik Lacerda','erik.lacerda@gmail.com','resources/images/avatar-male.png','admin',true,'erik.lacerda@gmail.com',null,1);
-insert into user_account values(2,false,'Carolina Moreira','carolinalle.paula@gmail.com','resources/images/avatar-female.png','user',true,'carolinalle.paula@gmail.com',null,1);
-insert into user_account values(3,false,'Marcus Lacerda','marcus.lacerda@gmail.com','resources/images/avatar-male.png','paraiba',true,'marcus.lacerda@gmail.com',null,2);
-
-insert into user_role values(1, 'ROLE_ADMIN');
-insert into user_role values(2, 'ROLE_USER');
-insert into user_role values(3, 'ROLE_ADMIN');
---
-----Temporário até termos as inserções de conta e categoria
---insert into category values (1, 'Transporte', 'EXP', 1);
---insert into category values (2, 'Salário', 'INC', 1);
---insert into subcategory values (1, 'Uber/Taxi/Cabify', TRUE, 'F', 1, 1);
---insert into subcategory values (2, 'Combustível', TRUE, 'F', 1, 1);
---insert into subcategory values (3, 'Estacionamento', TRUE, 'F', 1, 1);
---insert into subcategory values (4, 'Carol', TRUE, 'F', 2, 1);
---insert into account values (1, 'CC Personnalité', 'Itaú', 'P', 'CKA', TRUE, '1000', '2017-04-09', 1);
---insert into account values (2, 'Visa Person', 'Itaú', 'N', 'CCA', TRUE, '0', '2017-04-09', 1);
-----insert into account_entry values (1, '2017-11-12', 283.54, 1, NULL, FALSE, 1, 1);
-----insert into conciliation values (1, '2017-11-13', 1, TRUE, 1);
-----insert into conciliation values (2, '2017-11-15', 1, FALSE, 1);
-----insert into conciliation values (3, '2017-11-13', 1, TRUE, 1);
-----insert into conciliation values (4, '2017-11-15', 1, FALSE, 1);
-----insert into conciliation_entry values (1, '2017-10-08', 'Uber', 1, 234.98, 1, 1);
-----insert into conciliation_entry values (2, '2017-10-18', 'Combustível', 1, 1234.98, 1, 1);
-----insert into conciliation_entry values (3, '2017-10-08', 'Uber', 1, 234.98, 1, 1);
-----insert into conciliation_entry values (4, '2017-10-18', 'Combustível', 1, 1234.98, 1, 1);
-----insert into category_prediction values (1, 'TED 237.3807CAROLINA M P', 4, 1, 0, 1);
---INSERT INTO SANITIZE_PATTERN VALUES (1, '\d{2}\/\d{2}', '');
---INSERT INTO SANITIZE_PATTERN VALUES (2, 'Uber UBER.*', 'Uber UBER');
---
---
---
---
---GRANT ALL PRIVILEGES ON DATABASE savefy TO eriklacerda;
---GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO eriklacerda;
