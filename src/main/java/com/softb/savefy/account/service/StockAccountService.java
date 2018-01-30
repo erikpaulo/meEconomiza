@@ -145,8 +145,8 @@ public class StockAccountService extends AbstractAccountService {
         stockPortfolio.setGrossProfit(AppMaths.round(grossProfit,2));
         stockPortfolio.setNetProfit(AppMaths.round(netProfit,2));
 
-        stockPortfolio.setPercentGrossProfit(AppMaths.round(grossProfit / originalValue * 100,2));
-        stockPortfolio.setPercentNetProfit(AppMaths.round(netProfit / originalValue * 100,2));
+        stockPortfolio.setPercentGrossProfit(AppMaths.round((originalValue>0 ? grossProfit / originalValue * 100 : 0.0),2));
+        stockPortfolio.setPercentNetProfit(AppMaths.round((originalValue>0 ? netProfit / originalValue * 100 : 0.0),2));
 
     }
 
