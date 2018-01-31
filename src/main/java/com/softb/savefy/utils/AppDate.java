@@ -52,7 +52,7 @@ public final class AppDate {
         while (days > 0){
             cal.add(Calendar.DAY_OF_MONTH, 1);
 
-            if ( !(cal.get(Calendar.DAY_OF_WEEK) == 0 || cal.get(Calendar.DAY_OF_WEEK) == 0 )){
+            if ( !(cal.get(Calendar.DAY_OF_WEEK) == 1 || cal.get(Calendar.DAY_OF_WEEK) == 7 )){
                 days--;
             }
         }
