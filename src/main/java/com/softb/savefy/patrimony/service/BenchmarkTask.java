@@ -22,7 +22,6 @@ import yahoofinance.histquotes.Interval;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -91,16 +90,20 @@ public class BenchmarkTask {
             return null;
         }
 
-        BigDecimal startValue, endValue;
+        Double startValue, endValue;
         try {
-            startValue = stock.getHistory().get(0).getOpen();
-            endValue = stock.getHistory().get(1).getClose();
+            startValue = stock.getHistory().get(0).getOpen().doubleValue();
+            if (stock.getHistory().size()>1){
+                endValue = stock.getHistory().get(1).getClose().doubleValue();
+            } else {
+                endValue = stock.getHistory().get(0).getClose().doubleValue();
+            }
         } catch (IOException e) {
             log.error("Couldn't get IBOV", e);
             return null;
         }
 
-        return AppMaths.round( ((endValue.doubleValue() - startValue.doubleValue()) / startValue.doubleValue())*100,2);
+        return AppMaths.round( ((endValue - startValue) / startValue)*100,2);
     }
 
     /**
