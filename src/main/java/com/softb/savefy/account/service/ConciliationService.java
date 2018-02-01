@@ -113,7 +113,7 @@ public class ConciliationService {
         String[] dateFormat = {"dd/MM/yyyy'T'HH:mm:ss"};
         NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt","BR"));
 
-        UserPreferences userPreferences = userPreferencesService.get(groupId);
+
         Conciliation conciliation = new Conciliation(Calendar.getInstance().getTime(), account.getId(), new ArrayList<>(), false, groupId);
         conciliation = conciliationRepository.save(conciliation);
 
@@ -137,16 +137,25 @@ public class ConciliationService {
                                                         conciliation.getId(), groupId);
 
                 checkConflicts(account.getId(), entryToImport, groupId);
-                if (account.getType().equals(Account.Type.CCA)
-                        && (userPreferences.getUpdateInstallmentDate() == null || userPreferences.getUpdateInstallmentDate())){
-                    checkInstallmentEntry(entryToImport, userPreferences);
-                }
+
                 conciliation.getEntries().add(entryToImport);
             }
             reader.close();
         }
 
         return conciliation;
+    }
+
+    public void checkInstallment(Conciliation conciliation, Integer groupId){
+        UserPreferences userPreferences = userPreferencesService.get(groupId);
+        Account account = checkingAccountService.get(conciliation.getAccountId(), groupId);
+
+        if (account.getType().equals(Account.Type.CCA)
+                && (userPreferences.getUpdateInstallmentDate() == null || userPreferences.getUpdateInstallmentDate())){
+            for (ConciliationEntry entry: conciliation.getEntries()) {
+                checkInstallmentEntry(entry, userPreferences);
+            }
+        }
     }
 
     private void checkInstallmentEntry(ConciliationEntry entryToImport, UserPreferences userPreferences) {
