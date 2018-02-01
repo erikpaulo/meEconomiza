@@ -44,10 +44,6 @@ public class ConciliationEntry extends BaseEntity<Integer> implements Serializab
     @JoinColumn(name = "ACCOUNT_ENTRY_ID", referencedColumnName = "ID")
     protected CheckingAccountEntry accountEntry;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "CONCILIATION_ID", referencedColumnName = "ID")
-//    protected Conciliation conciliation;
-
 	@Column(name = "AMOUNT")
 	@NotNull
 	protected Double amount;

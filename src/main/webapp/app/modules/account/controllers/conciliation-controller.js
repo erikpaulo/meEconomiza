@@ -9,9 +9,13 @@ define(['./module',
         function($scope, $filter, $mdDialog, Account, SubCategory, Conciliation, CategoryService, UserPreferences) {
             $scope.appContext.contextMenu.setActions([]);
 
-            Account.listAll(function(accounts){
-                $scope.accounts = accounts;
-            })
+//            Account.listAll(function(accounts){
+//                $scope.accounts = accounts;
+//            })
+
+            Account.listAllForTransferable(function (data){
+                $scope.accounts = data;
+            });
 
             SubCategory.listAll(function (subCategories){
                 $scope.subCategories = subCategories;

@@ -8,6 +8,10 @@ define(['./module'], function (app) {
 	                    id: 'CKA',
 	                    name: 'Conta Corrente'
 	                },
+	                CREDIT_CARD_ACCOUNT: {
+	                    id: 'CCA',
+	                    name: 'Cartão de Crédito'
+	                },
 	                INVESTMENT_ACCOUNT: {
 	                    id: 'INV',
 	                    name: 'Conta Investmento'

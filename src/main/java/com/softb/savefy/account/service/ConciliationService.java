@@ -117,6 +117,11 @@ public class ConciliationService {
         Conciliation conciliation = new Conciliation(Calendar.getInstance().getTime(), account.getId(), new ArrayList<>(), false, groupId);
         conciliation = conciliationRepository.save(conciliation);
 
+        Integer sign = 1;
+        if (account.getType().equals(Account.Type.CCA)){
+            sign = -1;
+        }
+
         // Caso tenha sido enviado mais de um arquivo, itera por eles.
         while (fileIterator.hasNext()) {
             FileItemStream stream = fileIterator.next();
@@ -128,7 +133,7 @@ public class ConciliationService {
             for(CSVRecord record : CSVFormat.EXCEL.withDelimiter(delimiter).parse(reader).getRecords()) {
                 entryToImport = new ConciliationEntry(  DateUtils.parseDate(record.get(0)+"T03:00:00", dateFormat),
                                                         record.get(1), categoryPredictionService.getCategoryForDescription(record.get(1), groupId),
-                                                        null, nf.parse(record.get(2)).doubleValue(), false, false, false,
+                                                        null, nf.parse(record.get(2)).doubleValue() * sign, false, false, false,
                                                         conciliation.getId(), groupId);
 
                 checkConflicts(account.getId(), entryToImport, groupId);
@@ -198,6 +203,7 @@ public class ConciliationService {
 
         for (ConciliationEntry entry: conciliation.getEntries()) {
             if (!entry.getReject()){
+
                 // Update categorization for future predictions;
                 categoryPredictionService.register(entry.getDescription(), entry.getSubCategory(), groupId);
 
@@ -255,7 +261,6 @@ public class ConciliationService {
 
         if (conciliation.getImported()) throw new BusinessException("Esta conciliação já foi sincronizada no sistema e não pode ser removida.");
         if (!conciliation.getGroupId().equals(groupId)) throw new BusinessException("Esta conciliação não pertence ao usuário corrente");
-//        conciliationEntryRepository.delete(conciliation.getStocks());
         conciliationRepository.delete(conciliation);
     }
 

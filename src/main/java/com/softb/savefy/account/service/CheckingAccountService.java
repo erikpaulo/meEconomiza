@@ -3,14 +3,11 @@ package com.softb.savefy.account.service;
 import com.softb.savefy.account.model.*;
 import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
-import com.softb.savefy.account.repository.InstitutionRepository;
 import com.softb.savefy.utils.AppMaths;
 import com.softb.system.errorhandler.exception.SystemException;
-import com.softb.system.security.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,11 +25,6 @@ public class CheckingAccountService extends AbstractAccountService {
     @Autowired
     private AccountEntryRepository accountEntryRepository;
 
-    @Autowired
-    private InstitutionRepository institutionRepository;
-
-    @Inject
-    private UserAccountService userAccountService;
 
     /**
      * Retorna contas corrente ativas.

@@ -38,12 +38,6 @@ public final class AppDate {
         LocalDate today = LocalDate.now(ZoneOffset.UTC);
         return getMonthDate(DateUtils.truncate(today, java.util.Calendar.DAY_OF_MONTH));
     }
-//
-//    public static Date getDateNoTime(Date date){
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(date);
-//        return Date.from(getLocalDateFor(cal.getTime()).atStartOfDay(ZoneId.of("America/Sao_Paulo")).toInstant());
-//    }
 
     public static Date addBusinessDays(Date date, Integer days){
         Calendar cal = Calendar.getInstance();

@@ -31,6 +31,9 @@ public class AccountsService {
     private CheckingAccountService checkingAccountService;
 
     @Inject
+    private CreditCardAccountService creditCardAccountService;
+
+    @Inject
     private InvestmentAccountService investmentAccountService;
 
     @Inject
@@ -50,6 +53,8 @@ public class AccountsService {
                 checkingAccountService.calcAccountBalance(account);
             } else if (account.getType().equals(Account.Type.INV)){
                 investmentAccountService.calcAccountBalance(account);
+            } else if (account.getType().equals(Account.Type.CCA)){
+                creditCardAccountService.calcAccountBalance(account);
             } else if (account.getType().equals(Account.Type.STK)){
                 stockAccountService.calcAccountBalance(account);
             }
