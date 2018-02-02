@@ -54,12 +54,12 @@
                          style="font: 12px MontserratLight,Arial,sans-; min-width:220px"
                          layout="column">
                     <md-card-header class="md-body-2" layout="row">
-                        <!--<div layout="row">-->
-                        <div layout="column" flex layout-align="center start"><span class="md-subhead">{{code}}</span></div>
-                        <div layout="column" flex="20" layout-align="center center">
+                        <div layout="column" flex layout-align="center start">
+                            <span class="md-subhead">{{code}}</span>
+                            <span class="md-caption" style="margin: -10px -54px 0px 8px;">({{stock.weight | number:0}}%)</span></div>
+                        <div layout="column" flex="30" layout-align="start center">
                             <img  ng-src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" style="max-height:16px;" alt="logo"/>
                         </div>
-                        <!--</div>-->
                     </md-card-header>
                     <md-card-content>
                         <div layout="row" style="margin-bottom:4px">

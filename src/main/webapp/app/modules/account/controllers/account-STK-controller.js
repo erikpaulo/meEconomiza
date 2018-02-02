@@ -108,6 +108,7 @@ define(['./module'
                                                                                       gp: 0.0,
                                                                                       pgp: 0.0,
                                                                                       lp: 0.0,
+                                                                                      weight:0.0,
                                                                                       date: null}
                             }
                             $scope.activeStocks[$scope.account.stocks[i].code].qtd += $scope.account.stocks[i].quantity
@@ -116,6 +117,7 @@ define(['./module'
                             $scope.activeStocks[$scope.account.stocks[i].code].gp += $scope.account.stocks[i].grossProfitability
                             $scope.activeStocks[$scope.account.stocks[i].code].lp += $scope.account.stocks[i].lastPrice
                             $scope.activeStocks[$scope.account.stocks[i].code].pgp = $scope.activeStocks[$scope.account.stocks[i].code].gp / $scope.activeStocks[$scope.account.stocks[i].code].ai*100
+                            $scope.activeStocks[$scope.account.stocks[i].code].weight = $scope.account.stocks[i].currentValue / $scope.account.grossBalance * 100
                             $scope.activeStocks[$scope.account.stocks[i].code].date += $scope.account.stocks[i].date
                         }
                     }
