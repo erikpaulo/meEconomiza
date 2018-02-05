@@ -115,7 +115,7 @@ define(['./module'
                             $scope.activeStocks[$scope.account.stocks[i].code].ai += $scope.account.stocks[i].amount
                             $scope.activeStocks[$scope.account.stocks[i].code].cp += $scope.account.stocks[i].currentValue
                             $scope.activeStocks[$scope.account.stocks[i].code].gp += $scope.account.stocks[i].grossProfitability
-                            $scope.activeStocks[$scope.account.stocks[i].code].lp += $scope.account.stocks[i].lastPrice
+                            $scope.activeStocks[$scope.account.stocks[i].code].lp = $scope.account.stocks[i].lastPrice
                             $scope.activeStocks[$scope.account.stocks[i].code].pgp = $scope.activeStocks[$scope.account.stocks[i].code].gp / $scope.activeStocks[$scope.account.stocks[i].code].ai*100
                             $scope.activeStocks[$scope.account.stocks[i].code].weight = $scope.account.stocks[i].currentValue / $scope.account.grossBalance * 100
                             $scope.activeStocks[$scope.account.stocks[i].code].date += $scope.account.stocks[i].date
