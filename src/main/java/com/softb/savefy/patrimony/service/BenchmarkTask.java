@@ -48,7 +48,7 @@ public class BenchmarkTask {
         updateBenchmarks();
     }
 
-    @Scheduled(cron = "0 0 20 * * *", zone = Constants.TIMEZONE_PTBR)
+    @Scheduled(cron = "0 */60 8-18 * * MON-FRI", zone = Constants.TIMEZONE_PTBR)
     public void updateBenchmarks(){
         Benchmark benchmark = benchmarkRepository.findOneByDate(AppDate.getMonthDate(AppDate.today()));
         if (benchmark == null){
@@ -146,10 +146,10 @@ public class BenchmarkTask {
                     .data("__VIEWSTATEGENERATOR", "4D16475F")
                     .data("__EVENTVALIDATION", "hO+qfNHt9OMOo0t2nCykn+/gZ+/Qxt9o3P13HD84PETv0Ua753mI9ZHY25ZfxIzS9anfD19+25eG5OHWw1rg+Sy9L1k8OoNZtFq3GCKD7Y4vbWLecfNoHGCMWdMFuOW/YfcEZand+8pM3cJ+ZKsGp+/WvVZMd4ezn+2zr6VuHpWSbYydxsiLnShzOkVLqjq/gCB04Zjuk8Sk/Nv4xsmaA4NVQYX6JsttzITCj0mdcNS5Fo3a3/dIKrfTfV6EGRvyngmVl7eX7aOaW7YziC6tfb7dXx8jvnfsgmbXrw4TFzJ/4gSJh4d5+45ACHxSzRhO/CXkechU/e5tTIBNOiDKFREF8Vm+yX8JLDx7Y/peaB1YmVd5V2jOJfXqlVR/Zc3wKaa7Bg==")
                     .data("DT_DIA_DE", Integer.toString(begin.get(Calendar.DAY_OF_MONTH)))
-                    .data("DT_MES_DE", Integer.toString(begin.get(Calendar.MONTH))+1)
+                    .data("DT_MES_DE", Integer.toString(begin.get(Calendar.MONTH)+1))
                     .data("DT_ANO_DE", Integer.toString(begin.get(Calendar.YEAR)))
                     .data("DT_DIA_ATE", Integer.toString(end.get(Calendar.DAY_OF_MONTH)))
-                    .data("DT_MES_ATE", Integer.toString(end.get(Calendar.MONTH))+1)
+                    .data("DT_MES_ATE", Integer.toString(end.get(Calendar.MONTH)+1))
                     .data("DT_ANO_ATE", Integer.toString(end.get(Calendar.YEAR)))
                     .data("var_perc", "100,00")
                     .data("var_valor", "100,00")
