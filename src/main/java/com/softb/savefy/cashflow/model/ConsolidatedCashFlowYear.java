@@ -30,6 +30,8 @@ public class ConsolidatedCashFlowYear extends BaseEntity<Integer> implements Ser
 	private List<Double> perMonthIncVariation;
 	private List<Double> perMonthExpAverage;
 	private List<Double> perMonthExpVariation;
+	private List<Double> perMonthExpSuperfluous;
+	private List<Double> perMonthExpEssential;
 
 	protected List<ConsolidatedCashFlowYear> incomes;
 	protected List<ConsolidatedCashFlowYear> expenses;
@@ -43,6 +45,8 @@ public class ConsolidatedCashFlowYear extends BaseEntity<Integer> implements Ser
 		this.perMonthIncVariation = AppArray.initMonthValues();
 		this.perMonthExpAverage = AppArray.initMonthValues();
 		this.perMonthExpVariation = AppArray.initMonthValues();
+		this.perMonthExpSuperfluous = AppArray.initMonthValues();
+		this.perMonthExpEssential = AppArray.initMonthValues();
 
 		this.incomes = new ArrayList<>();
 		this.expenses = new ArrayList<>();

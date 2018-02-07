@@ -12,7 +12,25 @@ define(['./module'
                 $scope.consolidatedCF = data;
 
                 updateIncomeExpenses();
+                updateSubCategoryType();
             });
+
+            function updateSubCategoryType(){
+                var months = []
+                var date = new Date($scope.consolidatedCF.year, 0, 01);
+
+                $scope.supCategoryType.series[0].data = [];
+                $scope.supCategoryType.series[1].data = [];
+                for(var i=0;i<12;i++){
+                    if ($scope.consolidatedCF.perMonthExpSuperfluous[i]!=0 || $scope.consolidatedCF.perMonthExpEssential[i]!=0){
+                        $scope.supCategoryType.series[0].data.push($scope.consolidatedCF.perMonthExpSuperfluous[i] * -1)
+                        $scope.supCategoryType.series[1].data.push($scope.consolidatedCF.perMonthExpEssential[i] * -1)
+
+                        date.setMonth(i);
+                        $scope.supCategoryType.xAxis.categories.push($filter('date')(date, "MMM/yy", 'UTC').toUpperCase())
+                    }
+                }
+            }
 
             function updateIncomeExpenses(){
                 var months = []
@@ -35,12 +53,62 @@ define(['./module'
                 }
             }
 
+            $scope.supCategoryType = {
+                chart: {
+                    type: 'column',
+                    plotBackgroundColor: '#FAFAFA',
+                    backgroundColor: '#FAFAFA'
+                },
+                title: {
+                    text: 'Despesas por Importância'
+                },
+                xAxis: {
+                    categories: []
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Despesa Total'
+                    },
+                    stackLabels: {
+                        enabled: false,
+                        style: {
+                            fontWeight: 'bold',
+                            color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x}</b><br/>',
+                    pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function () {
+                                return $filter('currency')(this.y)
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Supérfluo',
+                    data: []
+                }, {
+                    name: 'Essencial',
+                    data: []
+                }],
+                credits: {enabled: false},
+                loading: false
+            }
+
             $scope.incomeAndExpenses = {
                 chart: {
                     type: 'spline',
                     plotBackgroundColor: '#FAFAFA',
                     backgroundColor: '#FAFAFA'
-//                      width: 850
                 },
                 title: {
                     text: 'Entradas e Saídas'
@@ -71,49 +139,43 @@ define(['./module'
                                 (this.series.name == 'Variação Gastos' ? $filter('number')(this.y, 2) + '%' : $filter('currency')(this.y)) + '<br/>'
                     }
                 },
-                    plotOptions: {
-                        column: {
-                            grouping: false,
-                            shadow: false,
-                            borderWidth: 0,
-                            dataLabels: {
-                                enabled: true,
-                                formatter: function () {
-                                    return $filter('currency')(this.y)
-                                }
+                plotOptions: {
+                    column: {
+                        grouping: false,
+                        shadow: false,
+                        borderWidth: 0,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function () {
+                                return $filter('currency')(this.y)
                             }
                         }
-                    },
+                    }
+                },
                 series: [ {
                     name: 'Ganhos',
                     type: 'column',
                     data: [],
                     color: Constants.GENERAL.GRAPH_COLORS[1],
-        pointPadding: 0.3,
-//        pointPlacement: -0.2
+                    pointPadding: 0.3,
                 },
                 {
                     name: 'Despesas',
                     type: 'column',
-//                    yAxis: 1,
                     data: [],
                     color: Constants.GENERAL.GRAPH_COLORS[4],
-        pointPadding: 0.4,
-//        pointPlacement: -0.2
+                    pointPadding: 0.4,
                 },
                 {
                     name: 'Média Gastos',
                     type: 'spline',
-//                    yAxis: 1,
                     data: [],
-//                    color: $scope.productColors[2]
                 },
                 {
                     name: 'Variação Gastos',
                     type: 'spline',
                     yAxis: 1,
                     data: [],
-//                    color: $scope.productColors[3]
                 }
                 ],
                 credits: {enabled: false},

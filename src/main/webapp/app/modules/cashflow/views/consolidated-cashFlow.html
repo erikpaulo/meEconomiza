@@ -1,7 +1,13 @@
 <section ng-controller="CashFlowController" ng-cloak>
-    <div layout="row">
+    <div layout="row" layout-padding>
         <div layout="column" layout-padding>
             <highchart id="incomeAndExpenses" config="incomeAndExpenses" style="display:block;"></highchart>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-padding>
+        <div layout="column" flex="50">
+            <highchart id="supCategoryType" config="supCategoryType"></highchart>
         </div>
     </div>
 </section>

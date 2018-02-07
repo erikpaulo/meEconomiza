@@ -5,6 +5,7 @@ import com.softb.savefy.account.service.AccountsService;
 import com.softb.savefy.account.service.CheckingAccountService;
 import com.softb.savefy.cashflow.model.ConsolidatedCashFlowYear;
 import com.softb.savefy.categorization.model.Category;
+import com.softb.savefy.categorization.model.SubCategory;
 import com.softb.savefy.utils.AppMaths;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,12 +45,17 @@ public class CashFlowService {
                 add(year.getPerMonthIncome(), entry);
             } else if (entry.getSubCategory().getCategory().getType().equals(Category.Type.EXP)) {
                 add(year.getPerMonthExpense(), entry);
+
+                if(entry.getSubCategory().getType().equals(SubCategory.Type.S)){
+                    add(year.getPerMonthExpSuperfluous(), entry);
+                } else if(entry.getSubCategory().getType().equals(SubCategory.Type.E)){
+                    add(year.getPerMonthExpEssential(), entry);
+                }
             }
         }
 
         Double incVariation, incAverage, expVariation, expAverage;
         Double income, expense, totalIncome=0.0, totalExpense=0.0, prevIncome=0.0, prevExpense=0.0;
-        int incCount=0, expCount=0;
         for (int i=0;i<12;i++){
             income = year.getPerMonthIncome().get(i);
             totalIncome += income;
