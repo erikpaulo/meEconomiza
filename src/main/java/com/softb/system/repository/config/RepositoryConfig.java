@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 		,"com.softb.savefy.account.repository"
 		,"com.softb.savefy.categorization.repository"
 		,"com.softb.savefy.patrimony.repository"
+		,"com.softb.savefy.cashflow.repository"
 		,"com.softb.savefy.preferences.repository"
 })
 @EntityScan(basePackages = { 
@@ -26,6 +27,7 @@ import java.net.URISyntaxException;
 		,"com.softb.savefy.account.model"
 		,"com.softb.savefy.categorization.model"
 		,"com.softb.savefy.patrimony.model"
+		,"com.softb.savefy.cashflow.model"
 		,"com.softb.savefy.preferences.model"
 })
 public class RepositoryConfig  {

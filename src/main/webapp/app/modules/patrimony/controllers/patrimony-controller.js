@@ -93,7 +93,7 @@ define(['./module'
 
                 if ((index>0 && indexBase>0) || (index<0 && indexBase<0)){
                     percent = (index / Math.abs(indexBase)) * 100;
-                } 
+                }
 
                 return percent
             }

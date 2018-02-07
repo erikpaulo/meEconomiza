@@ -22,4 +22,7 @@ public interface AccountEntryRepository extends JpaRepository<AccountEntry, Inte
     @Query("select ae from AccountEntry ae where ae.type = 'STK' and ae.quantity > 0 and ae.operation = '0'")
     List<AccountEntry> listAllActiveStocks() throws DataAccessException;
 
+    @Query("select ae from AccountEntry ae where (ae.type = 'CCA' or ae.type = 'CKA') and ae.date between :start and :end and groupId = :groupId")
+    List<AccountEntry> listAllTransferableBetween(@Param("start") Date start, @Param("end") Date end, @Param("groupId") Integer groupId) throws DataAccessException;
+
 }

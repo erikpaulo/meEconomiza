@@ -19,6 +19,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
         ,"com.softb.savefy.account.service"
         ,"com.softb.savefy.categorization.service"
         ,"com.softb.savefy.patrimony.service"
+        ,"com.softb.savefy.cashflow.service"
         ,"com.softb.savefy.preferences.services"
 })
 @Import(value={RepositoryConfig.class, LocaleConfig.class})

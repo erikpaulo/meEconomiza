@@ -82,6 +82,17 @@
           "modules/patrimony/controllers/patrimony-controller"
           ,"modules/shared/services/app-filters"
         ]
+      },
+      {
+        "id": "consolidatedCF",
+        "name":"Fluxo de Caixa Consolidado",
+        "originalPath": "/cashFlow/consolidated",
+        "templateUrl": "modules/cashflow/views/consolidated-cashFlow.html",
+        "visible": true,
+        "dependencies": [
+          "modules/cashflow/controllers/cashFlow-controller"
+          ,"modules/shared/services/app-filters"
+        ]
       }
     ]
   },

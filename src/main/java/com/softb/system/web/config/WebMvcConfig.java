@@ -35,6 +35,7 @@ import java.util.*;
 		,"com.softb.system.security.web"
 		,"com.softb.savefy.account.web"
 		,"com.softb.savefy.patrimony.web"
+		,"com.softb.savefy.cashflow.web"
 		,"com.softb.savefy.categorization.web"
 		,"com.softb.savefy.preferences.web"
 })

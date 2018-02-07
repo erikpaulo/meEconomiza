@@ -8,10 +8,7 @@ import com.softb.system.errorhandler.exception.SystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class, put together all services user can do with checking account (and similar) accounts.
@@ -80,6 +77,17 @@ public class CheckingAccountService extends AbstractAccountService {
             }
         }
         return (CheckingAccountEntry) save(entry, groupId);
+    }
+
+    /**
+     * Return all CCA and CKA entries between this two dates
+     * @param start
+     * @param end
+     * @param groupId
+     * @return
+     */
+    public List<CheckingAccountEntry> getAllBetween(Date start, Date end, Integer groupId){
+        return (List<CheckingAccountEntry>)(List<?>) accountEntryRepository.listAllTransferableBetween(start, end, groupId);
     }
 
     /**

@@ -53,4 +53,10 @@ public final class AppDate {
 
         return cal.getTime();
     }
+
+    public static boolean between(Date date, Calendar monthStart, Calendar monthEnd) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return monthStart.compareTo(cal)>=0 && monthEnd.compareTo(cal)<=0;
+    }
 }

@@ -98,6 +98,9 @@ define(['./module'], function (app) {
 	                    name: 'Venda'
 	                }
 	            }
+	        },
+	        GENERAL: {
+	            GRAPH_COLORS: ['#263238', '#455A64', '#607D8B', '#90A4AE', '#CFD8DC', '#9E9E9E', '#E0E0E0']
 	        }
 	    }
 	});
