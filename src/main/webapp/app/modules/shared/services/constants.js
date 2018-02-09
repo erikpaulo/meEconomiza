@@ -16,6 +16,10 @@ define(['./module'], function (app) {
 	                    id: 'INV',
 	                    name: 'Conta Investmento'
 	                },
+	                BENEFITS_ACCOUNT: {
+	                    id: 'BFA',
+	                    name: 'Conta de Benefícios'
+	                },
 	                STOCK_PORTFOLIO: {
 	                    id: 'STK',
 	                    name: 'Carteira de Ações'

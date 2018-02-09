@@ -5,6 +5,7 @@ define(['./module'
         ,'../../categorization/services/subcategory-resources'
         ,'./account-CKA-controller'
         ,'./account-INV-controller'
+        ,'./account-BFA-controller'
         ,'./account-STK-controller'], function (app) {
 
 	app.controller('AccountController', ['$scope', '$location', '$mdDialog', '$routeParams', 'AccountResource', 'SubCategoryResource', 'Constants', 'Utils',
@@ -63,7 +64,7 @@ define(['./module'
                     return $filter('filter')($scope.subCategories, query);
                 }
 
-                if ($scope.newAccount.type == 'CCA'){
+                if ($scope.newAccount.type == 'CCA' || $scope.newAccount.type == 'BFA'){
                     SubCategory.listAll(function (subCategories){
                         $scope.subCategories = subCategories;
                     });

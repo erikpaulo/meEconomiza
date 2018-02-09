@@ -1,0 +1,58 @@
+<div layout="column" flex="100" ng-controller="AccountBFAController">
+    <div layout="row" layout-padding layout-align="center center"  md-colors="{color: 'blue-grey-600'}">
+        <div layout="column" flex="33" flex-xs="50">
+            <div layout="row" layout-align="start center">
+                <img hide-xs ng-if="account.type" ng-src="resources/static/images/{{account.type}}-icon.png" style="height: 42px; width: 42px;"/>
+                <span hide-xs class="md-headline md-padding">{{account.name}}</span>
+                <span hide-gt-xs class="md-subhead md-padding">{{account.name}}</span>
+            </div>
+        </div>
+        <div layout="column" flex hide-xs>
+        </div>
+        <div layout="column" flex="33" flex-xs="50">
+            <div layout="row" layout-align="end center">
+                <span hide-xs class="md-display-1" my-currency="account.balance"></span>
+                <span hide-gt-xs class="md-title"  my-currency="account.balance"></span>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-align="center center">
+        <div layout="column" flex="60" flex-xs="100">
+            <div layout="row" layout-align="center center">
+                <div layout="column" flex="90" ng-if="account.entries.length<=0">
+                    <h6 style="color: #7A7A7A;font-style: italic;">Não existem lançamentos realizados no período.</h6>
+                </div>
+                <table layout="column" flex="100" class="table-striped" style="margin:10px;" ng-if="account.entries.length>0">
+                    <thead>
+                    <tr layout="row">
+                        <th flex="15" flex-xs="33">Data</th>
+                        <th flex="40" hide-xs>Categoria</th>
+                        <th flex="15" flex-xs="33">Valor</th>
+                        <th flex="15" hide-xs>Saldo</th>
+                        <th flex="15" flex-xs="33"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr layout="row" ng-repeat="item in account.entries"  layout-align="center center" class="c-hover">
+                        <td flex="15" flex-xs="33">{{ item.date | date: 'dd/MM/yyyy' }}</td>
+                        <td flex="40" hide-xs>{{ item.subCategory.fullName }}</td>
+                        <td flex="15" flex-xs="33">{{ item.amount | currency }}</td>
+                        <td flex="15" hide-xs my-currency="item.balance"></td>
+                        <td flex="15" flex-xs="33">
+                            <div layout="row">
+                                <md-button class="md-icon-button" ng-click="remove(item)" aria-label="Remover">
+                                    <md-icon class="material-icons step md-18">highlight_off</md-icon>
+                                </md-button>
+                                <md-button class="md-icon-button" ng-click="edit(item)" aria-label="Remover">
+                                    <md-icon class="material-icons step md-18">edit</md-icon>
+                                </md-button>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

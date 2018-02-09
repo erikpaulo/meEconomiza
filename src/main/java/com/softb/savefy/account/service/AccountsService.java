@@ -39,6 +39,9 @@ public class AccountsService {
     @Inject
     private StockAccountService stockAccountService;
 
+    @Inject
+    private BenefitsAccountService benefitsAccountService;
+
     /**
      * Return all current active user accounts. Calculate the account balance for presentation purposes
      * @param groupId
@@ -57,6 +60,8 @@ public class AccountsService {
                 creditCardAccountService.calcAccountBalance(account);
             } else if (account.getType().equals(Account.Type.STK)){
                 stockAccountService.calcAccountBalance(account);
+            } else if (account.getType().equals(Account.Type.BFA)){
+                benefitsAccountService.calcAccountBalance(account);
             }
         }
 
@@ -99,7 +104,8 @@ public class AccountsService {
         List<Account> accounts = accountRepository.findAllActive(groupId);
         for (Account account: accounts) {
             if (account.getType().equals(Account.Type.CKA)
-                || account.getType().equals(Account.Type.CCA)){
+                || account.getType().equals(Account.Type.CCA)
+                || account.getType().equals(Account.Type.BFA)){
                 returnList.add(account);
             }
         }

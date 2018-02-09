@@ -66,7 +66,7 @@ public abstract class Account extends BaseEntity<Integer> implements Serializabl
 
     public enum Type {
         CKA ( "Conta Corrente" ), INV ( "Conta Investimento" ), CCA ( "Cartão de Crédito" ),
-        STK ( "Carteira de Ações" );
+        STK ( "Carteira de Ações" ), BFA ( "Conta de Benefício" );
         private String name;
 
         Type(String name) {

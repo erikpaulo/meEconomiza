@@ -118,7 +118,7 @@ public class ConciliationService {
         conciliation = conciliationRepository.save(conciliation);
 
         Integer sign = 1;
-        if (account.getType().equals(Account.Type.CCA)){
+        if (account.getType().equals(Account.Type.CCA) || account.getType().equals(Account.Type.BFA)){
             sign = -1;
         }
 
@@ -131,9 +131,15 @@ public class ConciliationService {
             char delimiter = defineDelimiter(reader);
 
             for(CSVRecord record : CSVFormat.EXCEL.withDelimiter(delimiter).parse(reader).getRecords()) {
+                Double value = nf.parse(record.get(2)).doubleValue() * sign;
+
+                if (isBenefitIncome(account, record)){
+                    value = -value;
+                }
+
                 entryToImport = new ConciliationEntry(  DateUtils.parseDate(record.get(0)+"T03:00:00", dateFormat),
                                                         record.get(1), categoryPredictionService.getCategoryForDescription(record.get(1), groupId),
-                                                        null, nf.parse(record.get(2)).doubleValue() * sign, false, false, false,
+                                                        null, value, false, false, false,
                                                         conciliation.getId(), groupId);
 
                 checkConflicts(account.getId(), entryToImport, groupId);
@@ -144,6 +150,12 @@ public class ConciliationService {
         }
 
         return conciliation;
+    }
+
+    private Boolean isBenefitIncome(Account account, CSVRecord record) {
+        String description = record.get(1);
+
+        return account.getType().equals(Account.Type.BFA) && ((BenefitsAccount)account).getBenefitDescription().equals(description);
     }
 
     public void checkInstallment(Conciliation conciliation, Integer groupId){

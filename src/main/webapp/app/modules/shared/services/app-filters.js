@@ -7,7 +7,8 @@ define(['./module'], function (app) {
             INV: 'Conta Investimento',
             CCA: 'Cartão de Crédito',
             LOA: 'Financiamento',
-            STK: 'Carteira de Ações'
+            STK: 'Carteira de Ações',
+            BFA: 'Conta de Benefícios'
         }
         return function (input) {
             return (typeNameHash[input] ? typeNameHash[input] : 'Not Found');
