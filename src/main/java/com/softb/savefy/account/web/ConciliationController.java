@@ -53,8 +53,8 @@ public class ConciliationController extends AbstractRestController<Account, Inte
         // Treat file data, creating a conciliation structure
         Conciliation conciliation = conciliationService.uploadEntries(id, request, response, getGroupId());
 
-        conciliation = conciliationService.save(conciliation, getGroupId());
-        conciliationService.checkInstallment(conciliation, getGroupId());
+//        conciliation = conciliationService.save(conciliation, getGroupId());
+//        conciliationService.checkInstallment(conciliation, getGroupId());
 
         // Save the draft and return.
         return conciliation;

@@ -113,6 +113,7 @@ public class ConciliationService {
         String[] dateFormat = {"dd/MM/yyyy'T'HH:mm:ss"};
         NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt","BR"));
 
+        UserPreferences userPreferences = userPreferencesService.get(groupId);
 
         Conciliation conciliation = new Conciliation(Calendar.getInstance().getTime(), account.getId(), new ArrayList<>(), false, groupId);
         conciliation = conciliationRepository.save(conciliation);
@@ -142,6 +143,8 @@ public class ConciliationService {
                                                         null, value, false, false, false,
                                                         conciliation.getId(), groupId);
 
+                if (account.getType().equals(Account.Type.CCA)) checkInstallmentEntry(entryToImport, userPreferences);
+
                 checkConflicts(account.getId(), entryToImport, groupId);
 
                 conciliation.getEntries().add(entryToImport);
@@ -158,41 +161,41 @@ public class ConciliationService {
         return account.getType().equals(Account.Type.BFA) && ((BenefitsAccount)account).getBenefitDescription().equals(description);
     }
 
-    public void checkInstallment(Conciliation conciliation, Integer groupId){
-        UserPreferences userPreferences = userPreferencesService.get(groupId);
-        Account account = checkingAccountService.get(conciliation.getAccountId(), groupId);
-
-        if (account.getType().equals(Account.Type.CCA)
-                && (userPreferences.getUpdateInstallmentDate() == null || userPreferences.getUpdateInstallmentDate())){
-            for (ConciliationEntry entry: conciliation.getEntries()) {
-                checkInstallmentEntry(entry, userPreferences);
-            }
-        }
-    }
+//    public void checkInstallment(Conciliation conciliation, Integer groupId){
+//        UserPreferences userPreferences = userPreferencesService.get(groupId);
+//        Account account = checkingAccountService.get(conciliation.getAccountId(), groupId);
+//
+//        if (account.getType().equals(Account.Type.CCA)
+//                && (userPreferences.getUpdateInstallmentDate() == null || userPreferences.getUpdateInstallmentDate())){
+//            for (ConciliationEntry entry: conciliation.getEntries()) {
+//                checkInstallmentEntry(entry, userPreferences);
+//            }
+//        }
+//    }
 
     private void checkInstallmentEntry(ConciliationEntry entryToImport, UserPreferences userPreferences) {
 
-        String description = entryToImport.getDescription();
-        if (description.matches(".*[\\d{2}/\\d{2}]")) {
-            entryToImport.setInstallment(true);
+        if ( userPreferences.getUpdateInstallmentDate() == null || userPreferences.getUpdateInstallmentDate() ){
+            String description = entryToImport.getDescription();
+            if (description.matches(".*[\\d{2}/\\d{2}]")) {
+                entryToImport.setInstallment(true);
 
-            if (userPreferences.getUpdateInstallmentDate() != null && userPreferences.getUpdateInstallmentDate()){
-                Pattern pattern = Pattern.compile("\\d{2}/\\d{2}");
-                Matcher matcher = pattern.matcher(description);
+                if (userPreferences.getUpdateInstallmentDate() != null && userPreferences.getUpdateInstallmentDate()){
+                    Pattern pattern = Pattern.compile("\\d{2}/\\d{2}");
+                    Matcher matcher = pattern.matcher(description);
 
-                if (matcher.find()) {
-                    String installmentInfo = matcher.group();
-                    String currentInstallment = installmentInfo.split("/")[0];
+                    if (matcher.find()) {
+                        String installmentInfo = matcher.group();
+                        String currentInstallment = installmentInfo.split("/")[0];
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(entryToImport.getDate());
-                    cal.add( Calendar.MONTH, Integer.parseInt(currentInstallment)-1 );
-                    entryToImport.setDate(cal.getTime());
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(entryToImport.getDate());
+                        cal.add( Calendar.MONTH, Integer.parseInt(currentInstallment)-1 );
+                        entryToImport.setDate(cal.getTime());
+                    }
                 }
-
             }
         }
-
     }
 
     private void checkConflicts(Integer accountId, ConciliationEntry entryToImport, Integer groupId) {
