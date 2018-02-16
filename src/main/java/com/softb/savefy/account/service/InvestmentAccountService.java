@@ -170,7 +170,8 @@ public class InvestmentAccountService extends AbstractAccountService {
         for (InvestmentAccountEntry entry: account.getEntries()) {
             if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                 entry.setQuoteLastValue(price.getValue());
-//                calcEstimatedGains(account, entry);
+
+                updateLastUpdate(account.getId(), groupId);
             }
         }
         accountRepository.save(account);
