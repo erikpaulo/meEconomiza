@@ -4,6 +4,7 @@ define(['./module'
         ,'../../shared/services/constants'
         ,'../../categorization/services/subcategory-resources'
         ,'./account-CKA-controller'
+        ,'./account-CCA-controller'
         ,'./account-INV-controller'
         ,'./account-BFA-controller'
         ,'./account-STK-controller'], function (app) {

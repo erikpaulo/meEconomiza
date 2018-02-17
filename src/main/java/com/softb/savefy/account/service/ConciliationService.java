@@ -231,10 +231,7 @@ public class ConciliationService {
                 // Update categorization for future predictions;
                 categoryPredictionService.register(entry.getDescription(), entry.getSubCategory(), groupId);
 
-                // Create account stocks
-                CheckingAccountEntry accEntry = new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
-                                                                         conciliation.getAccountId(), null, null, groupId, 0.0, account.getType());
-                accEntry = accountEntryRepository.save(accEntry);
+                CheckingAccountEntry accEntry = createEntryForAccountType(conciliation, groupId, account, entry);
 
                 entry.setAccountEntry(accEntry);
             }
@@ -258,6 +255,22 @@ public class ConciliationService {
         // Finally, save this conciliation.
         conciliation.setImported(true);
         return save(conciliation, groupId);
+    }
+
+    private CheckingAccountEntry createEntryForAccountType(Conciliation conciliation, Integer groupId, CheckingAccount account, ConciliationEntry entry) {
+        CheckingAccountEntry accEntry = null;
+
+        if (account.getType().equals(Account.Type.CKA)){
+            accEntry = accountEntryRepository.save(new CheckingAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
+                                                    conciliation.getAccountId(), null, null, groupId, 0.0, account.getType()));
+        } else if (account.getType().equals(Account.Type.CCA)){
+            accEntry = accountEntryRepository.save(new CreditCardAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
+                    conciliation.getAccountId(), null, null, groupId, 0.0, account.getType()));
+        } else if (account.getType().equals(Account.Type.BFA)){
+            accEntry = accountEntryRepository.save(new BenefitsAccountEntry(entry.getDate(), entry.getSubCategory(), entry.getAmount(), false,
+                    conciliation.getAccountId(), null, null, groupId, 0.0, account.getType()));
+        }
+        return accEntry;
     }
 
     /**

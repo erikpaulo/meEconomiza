@@ -4,7 +4,7 @@ define(['./module'
         ,'../../shared/services/utils-service'
         ,'../../categorization/services/subcategory-resources'], function (app) {
 
-	app.controller('AccountCKAController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'SubCategoryResource', 'Utils',
+	app.controller('AccountCCAController', ['$scope', '$filter', '$mdDialog', 'AccountResource', 'AccountEntryResource', 'SubCategoryResource', 'Utils',
         function($scope, $filter, $mdDialog, Account, AccountEntry, SubCategory, Constants, Utils) {
             $scope.appContext.contextMenu.addAction(
                 {icon: 'add', tooltip: 'Adicionar Lançamento', onClick: function() {
@@ -15,7 +15,7 @@ define(['./module'
             $scope.accountsToTransfer;
             Account.listAllForTransferable(function (data){
                 $scope.accountsToTransfer = data;
-            });`
+            });
 
             SubCategory.listAll(function (subCategories){
                 $scope.subCategories = subCategories;
@@ -38,7 +38,7 @@ define(['./module'
                 }).then(function(newEntry){
                     if (newEntry){
                         var accountEntry = new AccountEntry(newEntry);
-                        accountEntry.type = 'CKA';
+                        accountEntry.type = 'CCA';
                         accountEntry.accountId = $scope.account.id;
 
                         if (entry){
@@ -72,7 +72,7 @@ define(['./module'
 
             $scope.remove = function(entry){
                 var accountEntry = new AccountEntry(entry);
-                accountEntry.type = 'CKA';
+                accountEntry.type = 'CCA';
                 accountEntry.$remove(function(){
                     for (var i in $scope.account.entries){
                         if($scope.account.entries[i].id == entry.id){
