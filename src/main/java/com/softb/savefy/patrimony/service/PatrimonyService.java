@@ -108,7 +108,7 @@ public class PatrimonyService {
                 pctIncreasedBalance = (pEntry.getBalance()>0?AppMaths.round((increasedBalance / pEntry.getBalance())*100, 2) : 0.0);
 
                 increasedProfit = profit - pEntry.getProfit();
-                pctIncreasedProfit = (pEntry.getProfit()>0?AppMaths.round((profit-pEntry.getProfit()) / pEntry.getProfit()*100, 2) : 0.0);
+                pctIncreasedProfit = (pEntry.getBalance()>0?AppMaths.round(increasedProfit / pEntry.getBalance()*100, 2) : 0.0);
             }
 
             totalBalance += balance;
@@ -143,7 +143,7 @@ public class PatrimonyService {
             totalIncreasedBalance = totalBalance - pPatrimony.getBalance();
             totalIncreasedProfit  = totalProfit - pPatrimony.getProfit();
             pctTotalIncreasedBalance = (pPatrimony.getBalance()>0 ? (totalIncreasedBalance / pPatrimony.getBalance())*100 : 0.0);
-            pctTotalIncreasedProfit = (pPatrimony.getProfit() > 0 ? (totalIncreasedProfit / pPatrimony.getProfit())*100 : 0.0);
+            pctTotalIncreasedProfit = (pPatrimony.getBalance() > 0 ? (totalIncreasedProfit / pPatrimony.getBalance())*100 : 0.0);
         }
 
 
