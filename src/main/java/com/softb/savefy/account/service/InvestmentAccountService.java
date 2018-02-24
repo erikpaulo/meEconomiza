@@ -171,10 +171,9 @@ public class InvestmentAccountService extends AbstractAccountService {
             if (entry.getOperation().equals(InvestmentAccountEntry.Operation.PURCHASE)){
                 entry.setQuoteLastValue(price.getValue());
 
-                updateLastUpdate(account.getId(), groupId);
             }
         }
-        accountRepository.save(account);
+        updateLastUpdate(account.getId(), groupId);
     }
 
     private InvestmentAccountEntry saveIRLawEntry(InvestmentAccount account, InvestmentAccountEntry entry, Integer groupId){
