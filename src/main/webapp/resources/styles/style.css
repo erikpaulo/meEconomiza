@@ -276,12 +276,12 @@ md-tabs.md-no-animation md-tab-content {
 
 /********** >>> STOCK <<< ***********/
 .operation-gain {
-    background: #5C6BC0 !important;
-    color: white !important;
+    /*background: #5C6BC0 !important;*/
+    color: #5C6BC0 !important;
 }
 
 .operation-loss {
-    background: #EF5350 !important;
-    color: white !important;
+    /*background: #EF5350 !important;*/
+    color: #EF5350 !important;
 }
 
