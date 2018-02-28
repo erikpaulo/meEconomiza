@@ -273,3 +273,15 @@ md-progress-linear{
 md-tabs.md-no-animation md-tab-content {
     transition: none;
 }
+
+/********** >>> STOCK <<< ***********/
+.operation-gain {
+    background: #5C6BC0 !important;
+    color: white !important;
+}
+
+.operation-loss {
+    background: #EF5350 !important;
+    color: white !important;
+}
+
