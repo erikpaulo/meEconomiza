@@ -61,16 +61,6 @@ define(['./module'
                     $scope.patrimonyEvolutionChart.series[2].data.push(history.balance)
                     $scope.patrimonyEvolutionChart.xAxis.categories.push($filter('date')(history.date, "MMM/yy", 'UTC').toUpperCase())
                 });
-                $scope.portfolioEvolutionChart.series[0].data.push($scope.patrimony.increasedProfit)
-                $scope.portfolioEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedProfit)
-                $scope.portfolioEvolutionChart.series[2].data.push(getCDI($scope.patrimony.date))
-                $scope.portfolioEvolutionChart.series[3].data.push(getIBovespa($scope.patrimony.date))
-                $scope.portfolioEvolutionChart.xAxis.categories.push('Hoje')
-
-                $scope.patrimonyEvolutionChart.series[0].data.push($scope.patrimony.increasedBalance)
-                $scope.patrimonyEvolutionChart.series[1].data.push($scope.patrimony.pctIncreasedBalance)
-                $scope.patrimonyEvolutionChart.series[2].data.push($scope.patrimony.balance)
-                $scope.patrimonyEvolutionChart.xAxis.categories.push('Hoje')
             }
 
             $scope.baseline = function(){
