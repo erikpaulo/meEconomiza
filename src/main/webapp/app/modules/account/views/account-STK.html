@@ -46,6 +46,24 @@
         </div>
     </div>
     <md-divider></md-divider>
+    <div layout="row" class="stock-summary" layout-wrap style="padding: 10px 0px 10px 0px;margin-left: -1px;">
+        <div layout="column" class="box md-padding" ng-repeat="(code, stock) in activeStocks">
+            <md-divider></md-divider>
+            <div layout="row" class="title">
+                <div layout="column" flex="50" layout-align="center start">{{code}}</div>
+                <div layout="column" flex="50" layout-align="center end">{{stock.lp | currency}}</div>
+            </div>
+            <div layout="row" class="content" ng-class="{loss: stock.gp<0, gain: stock.gp>=0}" style="margin-top:5px;">
+                <div layout="column" class="percent" layout-align="end start" flex>
+                    <span>{{abs(stock.pgp) | number:2}}%</span>
+                </div>
+                <div layout="column" class="value" layout-align="end end" flex="30">
+                    <span>{{abs(stock.gp) | currency}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
     <div layout="row" class="md-padding">
         <div layout="column" flex="100">
             <div layout="row" layout-align="center center" layout-wrap>

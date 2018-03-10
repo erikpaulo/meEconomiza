@@ -19,6 +19,8 @@ define(['./module'
                 }}
             );
 
+            $scope.abs = Utils.abs;
+
             $scope.$watch('account', function(newValue, oldValue){
                 updateBalance();
             });

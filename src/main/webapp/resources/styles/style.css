@@ -285,3 +285,43 @@ md-tabs.md-no-animation md-tab-content {
     color: #EF5350 !important;
 }
 
+.stock-summary {
+    background: #1c2030;
+}
+
+.stock-summary .box {
+    min-width: 180px;
+    border-left: 1px solid grey;
+    font-family: Trebuchet MS,Tahoma,Arial,sans-serif;
+    padding: 5px 18px 5px 18px;
+}
+
+.stock-summary box:not(:first-child) {
+    min-width: 180px;
+    font-family: Trebuchet MS,Tahoma,Arial,sans-serif;
+    padding: 5px 18px 5px 18px;
+}
+
+.stock-summary .box .title {
+    color: #e1ecf2;
+    font-size: 12px;
+}
+
+.stock-summary .box .content.gain {
+    color: #3cbc98;
+}
+
+.stock-summary .box .content.loss {
+    color: #ff4a68;
+}
+
+.stock-summary .box .content .percent {
+    font-size: 22px;
+    line-height: 26px;
+}
+
+.stock-summary .box .content .value {
+    font-size: 12px;
+}
+
+

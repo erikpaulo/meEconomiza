@@ -10,6 +10,10 @@ define(['./module'], function (app) {
 	            number = number.replace(/[^0-9\.]+/g,".");
 
 	            return Number(number * (isNegative ? -1 : 1));
+	        },
+
+	        abs: function(number){
+	            return Math.abs(number);
 	        }
 	    }
 	});
