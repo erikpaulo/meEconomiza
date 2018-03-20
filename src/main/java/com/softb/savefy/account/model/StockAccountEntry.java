@@ -1,7 +1,9 @@
 package com.softb.savefy.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
@@ -9,6 +11,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Classe que representa um papel de ação
@@ -17,12 +20,26 @@ import java.io.Serializable;
  */
 @Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @DiscriminatorValue("STK")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StockAccountEntry extends AccountEntry implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+
+	public StockAccountEntry(Date date, String code, Operation operation, Double quantity, Double originalPrice, Double brokerage, Integer accountId, Integer groupId){
+		this.date = date;
+		this.code = code;
+		this.operation = operation;
+		this.quantity = quantity;
+		this.originalPrice = originalPrice;
+		this.brokerage = brokerage;
+		this.accountId = accountId;
+		this.groupId = groupId;
+		this.type = Account.Type.STK;
+	}
 
 //	// DEFINE THE DATE, INDEPENDENT OF THE LIQUIDITY TYPE
 //	@OneToMany(fetch = FetchType.LAZY)
@@ -81,6 +98,7 @@ public class StockAccountEntry extends AccountEntry implements Serializable {
 	// PERCENT NET PROFITABILITY
 	@Column(name = "PERCENT_NET_PROFITABILITY")
 	protected Double percentNetProfitability;
+
 
 	public enum Operation {
 		PURCHASE ( "Compra" ), SALE ( "Venda" );

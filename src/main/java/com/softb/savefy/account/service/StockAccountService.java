@@ -5,6 +5,8 @@ import com.softb.savefy.account.repository.AccountEntryRepository;
 import com.softb.savefy.account.repository.AccountRepository;
 import com.softb.savefy.account.repository.QuoteSaleRepository;
 import com.softb.savefy.account.repository.StockSaleProfitRepository;
+import com.softb.savefy.account.web.resource.Stock;
+import com.softb.savefy.account.web.resource.StockOperation;
 import com.softb.savefy.utils.AppDate;
 import com.softb.savefy.utils.AppMaths;
 import com.softb.system.errorhandler.exception.BusinessException;
@@ -74,6 +76,30 @@ public class StockAccountService extends AbstractAccountService {
         sale.setGroupId(groupId);
         sale.setIncomeTax(-sale.getIncomeTax());
         return stockSaleProfitRepository.save(sale);
+    }
+
+    /**
+     *
+     * @param operation
+     */
+    public void registerStockOperation(StockOperation operation, Integer groupId){
+        Double brokerageTax = 0.00032157;
+        Double brokerTax = 0.87;
+
+        StockAccount portifolio = (StockAccount) accountRepository.findOne(operation.getAccountId(), groupId);
+
+        for (Stock asset: operation.getAssets()) {
+            Double brokerage = (asset.getQuantity() * asset.getOriginalPrice() * brokerageTax) + (brokerTax);
+            StockAccountEntry stock = new StockAccountEntry(operation.getDate(), asset.getCode(), asset.getOperation(), Double.parseDouble(asset.getQuantity().toString()),
+                                                           asset.getOriginalPrice(), brokerage, operation.getAccountId(), groupId);
+
+            if (asset.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
+                buyStock(portifolio, stock, groupId);
+            } else {
+                stock.setLastPrice(stock.getOriginalPrice());
+                sellStock(portifolio, stock, groupId);
+            }
+        }
     }
 
     /**
@@ -187,24 +213,6 @@ public class StockAccountService extends AbstractAccountService {
         accountEntryRepository.delete(entry);
     }
 
-
-    /**
-     * Save an entry, checking if it belongs to current user.
-     * @param stock
-     * @return
-     */
-    public StockAccountEntry saveEntry(StockAccountEntry stock, Integer groupId){
-        StockAccount stockPortfolio = (StockAccount) accountRepository.findOne(stock.getAccountId(), groupId);
-
-        if (stock.getOperation().equals(StockAccountEntry.Operation.PURCHASE)){
-            stock = buyStock(stockPortfolio, stock, groupId);
-        } else if (stock.getOperation().equals(StockAccountEntry.Operation.SALE)) {
-            stock = sellStock(stockPortfolio, stock, groupId);
-        }
-
-        return stock;
-    }
-
     /**
      * Atualiza a posição corrente desse papel. Geralmente invocado após atualização do ultimo preço do papel
      * @param entry
@@ -235,20 +243,7 @@ public class StockAccountService extends AbstractAccountService {
         }
         calcGains(stock);
 
-        createLiquidationEntry(stockPortfolio, stock, groupId);
-
         return (StockAccountEntry) save(stock, groupId);
-    }
-
-    private void createLiquidationEntry(StockAccount stockPortfolio, StockAccountEntry stock, Integer groupId) {
-        Integer signal = (stock.getOperation().equals(StockAccountEntry.Operation.PURCHASE) ? -1 : 1);
-
-        CheckingAccount brokerAccount = stockPortfolio.getBrokerAccount();
-        Date liquidationDate = AppDate.addBusinessDays(stock.getDate(),3);
-        Double total = signal * ( stock.getAmount() + ((-signal) * stock.getBrokerage()) );
-        CheckingAccountEntry entry = new CheckingAccountEntry(liquidationDate, stockPortfolio.getDefaultSubcategory(), total, false,
-                                                              brokerAccount.getId(),null, null, groupId, 0.0, Account.Type.CKA);
-        checkingAccountService.updateEntry(entry, groupId);
     }
 
     @Transactional
@@ -262,8 +257,8 @@ public class StockAccountService extends AbstractAccountService {
             }
         });
 
-        createLiquidationEntry(stockPortfolio, stock, groupId);
-
+        stock.setLastPrice(stock.getOriginalPrice());
+        stock.setAmount(stock.getQuantity() * stock.getLastPrice());
         stock = (StockAccountEntry) save(stock, groupId);
 
         Double quantityToSell = stock.getQuantity();

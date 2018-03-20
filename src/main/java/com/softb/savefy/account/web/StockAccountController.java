@@ -5,6 +5,7 @@ import com.softb.savefy.account.model.StockAccount;
 import com.softb.savefy.account.model.StockAccountEntry;
 import com.softb.savefy.account.model.StockSaleProfit;
 import com.softb.savefy.account.service.StockAccountService;
+import com.softb.savefy.account.web.resource.StockOperation;
 import com.softb.system.errorhandler.exception.BusinessException;
 import com.softb.system.errorhandler.exception.FormValidationError;
 import com.softb.system.rest.AbstractRestController;
@@ -116,17 +117,15 @@ public class StockAccountController extends AbstractRestController<Account, Inte
 
     /**
      * Create an entry
-     * @param entry
+     * @param operation
      * @return
      * @throws FormValidationError
      */
     @RequestMapping(value = "/{accountId}/entry", method = RequestMethod.POST)
-    @ResponseBody public StockAccountEntry createStock(@RequestBody StockAccountEntry entry) throws FormValidationError {
-        entry.setGroupId(getGroupId());
-        entry.setLastPrice(entry.getOriginalPrice());
+    public void createStock(@RequestBody StockOperation operation) throws FormValidationError {
 
-        validate(OBJECT_ENTRY_NAME, entry);
-        return stockAccountService.saveEntry(entry, getGroupId());
+//        validate(OBJECT_ENTRY_NAME, entry);
+        stockAccountService.registerStockOperation(operation, getGroupId());
     }
 
     /**

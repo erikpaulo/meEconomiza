@@ -1,4 +1,4 @@
-<md-dialog flex="30" flex-xs="90">
+<md-dialog flex="50" flex-xs="90">
     <form name="entryForm" ng-submit="submit()">
         <md-toolbar layout="row" layout-align="center center" class="header">
             <div class="md-toolbar-tools">
@@ -10,57 +10,75 @@
             </div>
         </md-toolbar>
         <md-dialog-content class="md-padding">
-            <div layout="row" layout-alig="center center" class="md-padding">
+            <div layout="row" layout-alig="center center" style="margin-bottom:20px">
                 <div layout="column" flex="45">
-                    <md-input-container class="c-no-margin">
-                        <label>Operação</label>
-                        <md-select name="operation" ng-model="editEntry.operation" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)" ng-change="updateTotal()">
-                            <md-option ng-repeat="(key, operation) in operations" ng-value="operation.id">
-                                {{operation.name}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                </div>
-                <div layout="column" flex="45" flex-offset="10">
                     <md-datepicker name="date" ng-model="editEntry.date" md-placeholder="Data" required style="margin-bottom: 18px;"></md-datepicker>
                 </div>
-            </div>
-            <div layout="row" layout-align="center center" class="md-padding">
-                <div layout="column" flex="45">
-                    <md-input-container class="md-block c-no-margin">
-                        <label>Papel</label>
-                        <input name="code" ng-model="editEntry.code" required>
-                    </md-input-container>
-                </div>
-                <div layout="column" flex="45" flex-offset="10">
-                    <md-input-container class="md-block c-no-margin">
-                        <label>Quantidade</label>
-                        <input name="quantity" ng-model="editEntry.quantity" type="number" required ng-change="updateTotal()">
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row" layout-align="center center" class="md-padding">
-                <div layout="column" flex="45">
-                    <md-input-container class="md-block c-no-margin">
-                        <label>Preço</label>
-                        <input name="originalPrice" ng-model="editEntry.originalPrice" type="text" required format="number" ng-change="updateTotal()">
-                    </md-input-container>
-                </div>
-                <div layout="column" flex="45" flex-offset="10">
-                    <md-input-container class="md-block c-no-margin">
-                        <label>Taxas</label>
-                        <input name="brokerage" ng-model="editEntry.brokerage" type="text" required format="number" ng-change="updateTotal()">
-                    </md-input-container>
-                </div>
-            </div>
-            <div layout="row" layout-align="center center" class="md-padding">
-                <div layout="column" flex="45">
+                <div layout="column" flex></div>
+                <div layout="column" flex="30">
                     <md-input-container class="md-block c-no-margin">
                         <label>Total</label>
                         <input name="amount" ng-model="total" type="text" disabled format="number">
                     </md-input-container>
                 </div>
+                <!--<div layout="column" flex="20" flex-offset="15">-->
+                    <!--<md-input-container class="md-block c-no-margin">-->
+                        <!--<label>Emolumentos</label>-->
+                        <!--<input name="tax" ng-model="editEntry.tax" type="text" required format="number" ng-change="updateTotal()">-->
+                    <!--</md-input-container>-->
+                <!--</div>-->
             </div>
+            <div layout="row">
+                <div layout="column" flex>
+                    <div layout="row" ng-repeat="asset in editEntry.assets">
+                        <div layout="column" flex="20">
+                            <md-input-container class="c-no-margin">
+                                <label>Operação</label>
+                                <md-select name="operation" ng-model="asset.operation" ng-disabled="editEntry.twinEntryId !=null && (editEntry.id > editEntry.twinEntryId)" ng-change="updateTotal()">
+                                    <md-option ng-repeat="(key, operation) in operations" ng-value="operation.id">
+                                        {{operation.name}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                        <div layout="column" flex="20">
+                            <md-input-container class="md-block c-no-margin">
+                                <label>Papel</label>
+                                <input name="code" ng-model="asset.code" required>
+                            </md-input-container>
+                        </div>
+                        <div layout="column" flex="20">
+                            <md-input-container class="md-block c-no-margin">
+                                <label>Quantidade</label>
+                                <input name="quantity" ng-model="asset.quantity" type="number" required ng-change="updateTotal()">
+                            </md-input-container>
+                        </div>
+                        <div layout="column" flex="20">
+                            <md-input-container class="md-block c-no-margin">
+                                <label>Taxas</label>
+                                <input name="brokerage" disabled ng-model="asset.brokerage" type="text" required format="number" ng-change="updateTotal()">
+                            </md-input-container>
+                        </div>
+                        <div layout="column" flex="20">
+                            <md-input-container class="md-block c-no-margin">
+                                <label>Preço</label>
+                                <input name="originalPrice" ng-model="asset.originalPrice" type="text" required format="number" ng-change="updateTotal()">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+                <div layout="column" flex="5">
+                    <md-button class="md-icon-button" aria-label="add" ng-click="add()">
+                        <md-icon class="material-icons">add_circle_outline</md-icon>
+                    </md-button>
+                </div>
+            </div>
+            <div layout="row" layout-align="end center" style="margin-top:15px">
+            </div>
+            <!--<div layout="row" layout-align="center center" class="md-padding">-->
+            <!--</div>-->
+            <!--<div layout="row" layout-align="center center" class="md-padding">-->
+            <!--</div>-->
         </md-dialog-content>
         <md-dialog-actions layout="row" layout-align="end center">
             <md-button class="" ng-click="cancel()" ng-show="!entryForm.$pristine">Cancelar</md-button>

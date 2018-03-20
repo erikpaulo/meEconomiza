@@ -135,19 +135,37 @@ define(['./module'
 
             function DialogStockController($scope, $mdDialog, Constants, Utils) {
                 $scope.operations = Constants.ACCOUNT_ENTRY.STOCK_OPERATION;
+                $scope.editEntry = {assets:[{}]}
 
                 $scope.total = 0.0;
                 $scope.updateTotal = function(){
-                    if ($scope.editEntry.quantity && $scope.editEntry.originalPrice && $scope.editEntry.brokerage){
-                        $scope.editEntry.amount = ($scope.editEntry.quantity * Utils.currencyToNumber($scope.editEntry.originalPrice));
+                    $scope.total = 0;
+//                    $scope.total += ($scope.editEntry.tax != undefined ? Utils.currencyToNumber($scope.editEntry.tax) : 0)
+//                    $scope.total += ($scope.editEntry.brokerage != undefined ? Utils.currencyToNumber($scope.editEntry.brokerage) : 0 );
 
-                        $scope.total = $scope.editEntry.amount;
-                        if ($scope.editEntry.operation == "SALE"){
-                            $scope.total -= Utils.currencyToNumber($scope.editEntry.brokerage);
-                        } else {
-                            $scope.total += Utils.currencyToNumber($scope.editEntry.brokerage);
+                    angular.forEach($scope.editEntry.assets, function(asset){
+                        if (asset.operation != undefined){
+                            var signal = -1;
+
+                            if (asset.operation == 'SALE') {
+                                signal = 1;
+                            }
+
+                            if (asset.quantity != null && asset.originalPrice != null){
+                                var brokerageTax = 0.00032157;
+                                var brokerTax = 0.87;
+
+                                asset.brokerage = (asset.quantity * Utils.currencyToNumber(asset.originalPrice) * brokerageTax) + (brokerTax)
+
+                                $scope.total += (asset.quantity * Utils.currencyToNumber(asset.originalPrice) * signal) - asset.brokerage;
+                            }
+
                         }
-                    }
+                    });
+                }
+
+                $scope.add = function(){
+                    $scope.editEntry.assets.push({});
                 }
 
                 $scope.hide = function() {
@@ -157,9 +175,13 @@ define(['./module'
                     $mdDialog.cancel();
                 };
                 $scope.submit = function() {
-                    $scope.editEntry.amount = Utils.currencyToNumber($scope.editEntry.amount);
-                    $scope.editEntry.originalPrice = Utils.currencyToNumber($scope.editEntry.originalPrice);
                     $scope.editEntry.brokerage = Utils.currencyToNumber($scope.editEntry.brokerage);
+                    $scope.editEntry.tax = Utils.currencyToNumber($scope.editEntry.tax);
+
+                    angular.forEach($scope.editEntry.assets, function(asset){
+                        asset.amount = Utils.currencyToNumber(asset.amount);
+                        asset.originalPrice = Utils.currencyToNumber(asset.originalPrice);
+                    });
                     $mdDialog.hide($scope.editEntry);
                 };
             }

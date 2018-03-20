@@ -64,37 +64,37 @@
         </div>
     </div>
     <md-divider></md-divider>
-    <div layout="row" class="md-padding">
-        <div layout="column" flex="100">
-            <div layout="row" layout-align="center center" layout-wrap>
-                <md-card ng-repeat="(code, stock) in activeStocks"
-                         class="border-radius-5 flat"
-                         style="font: 12px MontserratLight,Arial,sans-; min-width:220px"
-                         layout="column">
-                    <md-card-header class="md-body-2" layout="row">
-                        <div layout="column" flex layout-align="center start">
-                            <span class="md-subhead">{{code}}</span>
-                            <span class="md-caption" style="margin: -10px -54px 0px 8px;">({{stock.weight | number:0}}%)</span></div>
-                        <div layout="column" flex="25" layout-align="start center">
-                            <img  ng-src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" style="max-height:16px;" alt="logo"/>
-                        </div>
-                    </md-card-header>
-                    <md-card-content>
-                        <div layout="row" style="margin-bottom:4px">
-                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.pgp | number:2}}%</div>
-                            <md-divider></md-divider>
-                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.gp | currency}}</div>
-                        </div>
-                        <div layout="row">
-                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center"><strong>{{stock.lp | currency}}</strong></div>
-                            <md-divider></md-divider>
-                            <div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.cp | currency}}</div>
-                        </div>
-                    </md-card-content>
-                </md-card>
-            </div>
-        </div>
-    </div>
+    <!--<div layout="row" class="md-padding">-->
+        <!--<div layout="column" flex="100">-->
+            <!--<div layout="row" layout-align="center center" layout-wrap>-->
+                <!--<md-card ng-repeat="(code, stock) in activeStocks"-->
+                         <!--class="border-radius-5 flat"-->
+                         <!--style="font: 12px MontserratLight,Arial,sans-; min-width:220px"-->
+                         <!--layout="column">-->
+                    <!--<md-card-header class="md-body-2" layout="row">-->
+                        <!--<div layout="column" flex layout-align="center start">-->
+                            <!--<span class="md-subhead">{{code}}</span>-->
+                            <!--<span class="md-caption" style="margin: -10px -54px 0px 8px;">({{stock.weight | number:0}}%)</span></div>-->
+                        <!--<div layout="column" flex="25" layout-align="start center">-->
+                            <!--<img  ng-src="https://novopit.clear.com.br/Content/Icons/{{code.substring(0, 4)}}.png" style="max-height:16px;" alt="logo"/>-->
+                        <!--</div>-->
+                    <!--</md-card-header>-->
+                    <!--<md-card-content>-->
+                        <!--<div layout="row" style="margin-bottom:4px">-->
+                            <!--<div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.pgp | number:2}}%</div>-->
+                            <!--<md-divider></md-divider>-->
+                            <!--<div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.gp | currency}}</div>-->
+                        <!--</div>-->
+                        <!--<div layout="row">-->
+                            <!--<div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center"><strong>{{stock.lp | currency}}</strong></div>-->
+                            <!--<md-divider></md-divider>-->
+                            <!--<div layout="column" flex="50" class="md-caption" md-colors="{color: 'blue-grey-400'}" layout-align="center center">{{stock.cp | currency}}</div>-->
+                        <!--</div>-->
+                    <!--</md-card-content>-->
+                <!--</md-card>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
     <md-divider></md-divider>
     <div layout="row" layout-align="center center" class="md-padding">
         <div layout="column" flex="90">
