@@ -23,5 +23,6 @@ public class Stock implements Serializable {
     protected String code;
     protected Integer quantity;
     protected Double originalPrice;
+    protected Double brokerage;
 
 }

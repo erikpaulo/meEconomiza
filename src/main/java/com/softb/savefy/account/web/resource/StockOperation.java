@@ -22,8 +22,6 @@ public class StockOperation implements Serializable {
 
 	protected Integer accountId;
     protected Date date;
-    protected Double brokerage;
-    protected Double tax;
     protected List<Stock> assets;
     protected String type;
 
