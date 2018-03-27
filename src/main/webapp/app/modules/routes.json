@@ -84,6 +84,17 @@
         ]
       },
       {
+        "id": "portfolio",
+        "name":"Carteira",
+        "originalPath": "/portfolio",
+        "templateUrl": "modules/portfolio/views/portfolio.html",
+        "visible": true,
+        "dependencies": [
+          "modules/portfolio/controllers/portfolio-controller"
+          ,"modules/shared/services/app-filters"
+        ]
+      },
+      {
         "id": "consolidatedCF",
         "name":"Fluxo de Caixa Consolidado",
         "originalPath": "/cashFlow/consolidated",

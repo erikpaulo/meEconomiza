@@ -1,0 +1,142 @@
+<section ng-controller="PatrimonyController" ng-cloak>
+    <div layout="row" layout-align="end center">
+        <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
+            <span class="md-subhead">Patrimônio Total</span>
+            <div layout="row" md-colors="{color: 'blue-grey-700'}">
+                <div layout="column" layout-align="center center">
+                    <span class="md-body-2">{{patrimony.balance | currency}}</span>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Total</span>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div layout="row">
+                        <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.increasedBalance | currency}}</span>
+                        <span class="md-body-2">({{patrimony.pctIncreasedBalance | number:2}}%)</span>
+                    </div>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Variação</span>
+                </div>
+            </div>
+        </div>
+        <md-divider></md-divider>
+        <div layout="column" class="md-padding" layout-align="center center" flex-offset="5">
+            <span class="md-subhead">Patrimônio Investido</span>
+            <div layout="row" md-colors="{color: 'blue-grey-700'}">
+                <div layout="column" layout-align="center center">
+                    <span class="md-body-2">{{patrimony.balanceInvested | currency}}</span>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Total</span>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <div layout="row">
+                        <span class="md-body-2" style="margin: 0px 5px 0px 25px;">{{patrimony.profit | currency}}</span>
+                        <span class="md-body-2">({{patrimony.pctIncreasedProfit | number:2}}%)</span>
+                    </div>
+                    <span class="md-caption" md-colors="{color: 'blue-grey-300'}">Lucro</span>
+                </div>
+            </div>
+        </div>
+        <div layout="column" flex></div>
+        <div layout="column"  layout-align="center start" flex="2">
+            <div layout="row">
+                <md-datepicker ng-model="patrimony.date" md-open-on-focus="true" md-current-view="month" md-hide-icons="true"></md-datepicker>
+                <md-button ng-click="baseline(baselineDate)">Gerar Baseline</md-button>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <!--<div layout="row" layout-padding>-->
+        <!--<div layout="column" layout-padding>-->
+            <!--<highchart id="patrimonyEvolution" config="patrimonyEvolutionChart" style="display:block;"></highchart>-->
+        <!--</div>-->
+    <!--</div>-->
+    <md-divider></md-divider>
+    <div layout="row" style="background:white" layout-padding>
+        <div layout="column" flex="100">
+            <div layout="row" layout-padding>
+                <div layout="column" flex="35" layout-align="center center">
+                    <highchart id="distribution" config="distributionChart"></highchart>
+                </div>
+                <div layout="column" flex="65">
+                    <highchart id="portfolioEvolution" config="portfolioEvolutionChart"></highchart>
+                </div>
+            </div>
+            <div layout="row" layout-padding>
+                <div layout="column" flex="35" layout-align="center center">
+                    <highchart id="risk" config="riskChart"></highchart>
+                </div>
+                <div layout="column" flex="65">
+                    <highchart id="liquidity" config="liquidityChart"></highchart>
+                </div>
+            </div>
+        </div>
+    </div>
+    <md-divider></md-divider>
+    <div layout="row" layout-padding>
+        <div layout="column" flex="100">
+            <div layout="row" layout-padding layout-align="center center">
+
+                <div layout="column" flex="90">
+                    <div layout="row" class="md-title" style="margin-top: 15px">
+                        <div layout="column" flex="5">
+                        </div>
+                        <div layout="column" flex="30" layout-align="center start">Ativo</div>
+                        <div layout="column" flex="15" layout-align="center center">Instituição</div>
+                        <div layout="column" flex="10" layout-align="center center">Lucro Total</div>
+                        <div layout="column" flex="15" layout-align="center center">Ultimo Mês</div>
+                        <div layout="column" flex="10" layout-align="center center">Aporte</div>
+                        <div layout="column" flex="15" layout-align="center center">Saldo</div>
+                        <div layout="column" flex="5" layout-align="center center"></div>
+                    </div>
+                    <div layout="row" ng-repeat="entry in patrimony.entries" style="margin-top: 15px">
+                        <div layout="column" flex="100">
+                            <div layout="row" class="md-body-1">
+                                <div layout="column" flex="5">
+                                    <img ng-src="resources/static/images/{{entry.assetType}}-icon.png"
+                                         ng-click="detail(entry)" md-colors="{background: 'blue-grey-700'}"
+                                         style="cursor:pointer"
+                                         class="icon-theme-42"/>
+                                </div>
+                                <div layout="column" flex="30" layout-align="center start">{{entry.name}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.institution}}</div>
+                                <div layout="column" flex="10" layout-align="center center">{{entry.profit | currency}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.increasedProfit | currency}} ({{entry.pctIncreasedProfit| number: 2}}%)</div>
+                                <div layout="column" flex="10" layout-align="center center">{{entry.increasedBalance - entry.increasedProfit | currency}}</div>
+                                <div layout="column" flex="15" layout-align="center center">{{entry.balance | currency}}</div>
+                                <div layout="column" flex="5">
+                                    <md-button class="md-icon-button" ng-click="open(entry)" aria-label="Detalhes">
+                                        <md-icon class="material-icons step md-18">keyboard_arrow_down</md-icon>
+                                    </md-button>
+                                </div>
+                            </div>
+                            <md-divider style="margin-top:10px" ng-if="entry.open"></md-divider>
+                            <div layout="row" layout-align="center center" ng-show="entry.open">
+                                <table layout="column" flex="80" class="table-striped" style="margin:10px;">
+                                    <thead>
+                                        <tr layout="row">
+                                            <th flex="10">Mês</th>
+                                            <th flex="15">Lucro</th>
+                                            <th flex="15">Variação (R$)</th>
+                                            <th flex="15">Variação (%)</th>
+                                            <th flex="15">% do CDI</th>
+                                            <th flex="15">% do IBovespa</th>
+                                            <th flex="15">Posição</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr layout="row" ng-repeat="eHistory in entry.history"  layout-align="center center" class="c-hover">
+                                            <td flex="10">{{ eHistory.date | date: 'MMM/yyyy' : 'UTC' }}</td>
+                                            <td flex="15">{{ eHistory.profit | currency }}</td>
+                                            <td flex="15">{{ eHistory.increasedProfit | currency }}</td>
+                                            <td flex="15">{{ eHistory.pctIncreasedProfit | number:2 }}%</td>
+                                            <td flex="15">{{ calcPercent(eHistory.pctIncreasedProfit, patrimony.benchmarkMap[eHistory.date].cdi) | number:2 }}%</td>
+                                            <td flex="15">{{ calcPercent(eHistory.pctIncreasedProfit, patrimony.benchmarkMap[eHistory.date].ibovespa) | number:2 }}%</td>
+                                            <td flex="15" my-currency="eHistory.balance"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
