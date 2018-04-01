@@ -99,10 +99,8 @@ public class PatrimonyService {
                 }
             });
 
-            PatrimonyEntry pEntry = null;
-            if (hEntries != null && hEntries.size()>0){
-                pEntry = hEntries.get(hEntries.size()-1);
-            }
+            PatrimonyEntry pEntry = getPrevious(prevMonth.getTime(), account, groupId);
+
             if (pEntry != null) {
                 increasedBalance = account.getBalance() - pEntry.getBalance();
                 pctIncreasedBalance = (pEntry.getBalance()>0?AppMaths.round((increasedBalance / pEntry.getBalance())*100, 2) : 0.0);
@@ -135,10 +133,11 @@ public class PatrimonyService {
             }
         });
 
-        Patrimony pPatrimony = null;
-        if (history != null && history.size()>0){
-            pPatrimony = history.get(history.size()-1);
-        }
+//        Patrimony pPatrimony = null;
+//        if (history != null && history.size()>0){
+//            pPatrimony = history.get(history.size()-1);
+//        }
+        Patrimony pPatrimony = getPrevious(prevMonth.getTime(), groupId);
         if (pPatrimony != null){
             totalIncreasedBalance = totalBalance - pPatrimony.getBalance();
             totalIncreasedProfit  = totalProfit - pPatrimony.getProfit();
@@ -164,6 +163,16 @@ public class PatrimonyService {
         patrimony.setHistory(history);
 
         return patrimony;
+    }
+
+    private PatrimonyEntry getPrevious(Date month, Account account, Integer groupId) {
+        PatrimonyEntry pEntry =  patrimonyEntryRepository.findByDateAccount(month, account.getId(), groupId);
+        return pEntry;
+    }
+
+    private Patrimony getPrevious(Date month, Integer groupId) {
+        Patrimony pPatrimony =  patrimonyRepository.findByDate(month, groupId);
+        return pPatrimony;
     }
 
     private Map<Date, Benchmark> getBenchmarkMap(Date month) {

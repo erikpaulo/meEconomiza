@@ -2,6 +2,10 @@
 * Localhost  -- \i /Users/eriklacerda/Dev-Projects/savefy/postgresdb/helper/db-import-local.sql
 */
 
+COPY USER_GROUP FROM '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/dump/USER_GROUP.csv' DELIMITER ',' CSV;
+COPY USER_ACCOUNT FROM '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/dump/user_account.csv' DELIMITER ',' CSV;
+COPY USER_ROLE FROM '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/dump/user_role.csv' DELIMITER ',' CSV;
+
 COPY INSTITUTION FROM '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/data/system/db-postgres-load-institution.csv' DELIMITER ',' CSV;
 COPY SANITIZE_PATTERN FROM '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/data/system/db-postgres-load-sanitize-pattern.csv' DELIMITER ',' CSV;
 copy USER_PREFERENCES from '/Users/eriklacerda/Dev-Projects/savefy/postgresdb/dump/USER_PREFERENCES.csv' WITH (DELIMITER ',', NULL '');
