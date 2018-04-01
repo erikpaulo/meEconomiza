@@ -31,12 +31,6 @@
                 <input name="startBalance" ng-model="newAccount.startBalance" type="text" required format="number">
             </md-input-container>
         </div>
-        <div layout="row" flex="100">
-            <md-input-container flex="50">
-                <label>Descrição de entrada do benefício</label>
-                <input name="description" ng-model="newAccount.benefitDescription" required md-maxlength="50">
-            </md-input-container>
-        </div>
     </md-dialog-content>
     <md-dialog-actions layout="row" layout-align="end center">
         <md-button class="md-accent" ng-click="cancel()">Cancelar</md-button>
