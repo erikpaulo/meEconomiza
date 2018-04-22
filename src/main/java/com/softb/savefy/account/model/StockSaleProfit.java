@@ -26,10 +26,6 @@ public class StockSaleProfit extends BaseEntity<Integer> implements Serializable
 	@NotNull
 	protected Date date;
 
-	@Column(name = "ACCOUNT_ID")
-	@NotNull
-	protected Integer accountId;
-
 	@Column(name = "TYPE")
 	@NotNull
 	protected StockSaleProfit.Type type;

@@ -62,7 +62,7 @@ define(['./module'
                     clickOutsideToClose:true
                 }).then(function(payment){
                     var stockSaleProfit = new StockSaleProfit(payment);
-                    stockSaleProfit.accountId = $scope.account.id;
+//                    stockSaleProfit.accountId = $scope.account.id;
 
                     stockSaleProfit.$save(function(e){
                         getAccountDetail()
@@ -140,8 +140,6 @@ define(['./module'
                 $scope.total = 0.0;
                 $scope.updateTotal = function(){
                     $scope.total = 0;
-//                    $scope.total += ($scope.editEntry.tax != undefined ? Utils.currencyToNumber($scope.editEntry.tax) : 0)
-//                    $scope.total += ($scope.editEntry.brokerage != undefined ? Utils.currencyToNumber($scope.editEntry.brokerage) : 0 );
 
                     angular.forEach($scope.editEntry.assets, function(asset){
                         if (asset.operation != undefined){

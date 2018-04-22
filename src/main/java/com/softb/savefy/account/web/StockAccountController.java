@@ -62,7 +62,7 @@ public class StockAccountController extends AbstractRestController<Account, Inte
      * @return
      * @throws FormValidationError
      */
-    @RequestMapping(value = "/{id}/saleProfit", method = RequestMethod.POST)
+    @RequestMapping(value = "/saleProfit", method = RequestMethod.POST)
     @ResponseBody public StockSaleProfit registerProfitTaxPayment(@RequestBody StockSaleProfit payment) throws FormValidationError {
         return stockAccountService.registerStockProfitTaxPayment(payment, getGroupId());
     }
@@ -73,7 +73,7 @@ public class StockAccountController extends AbstractRestController<Account, Inte
      * @return
      * @throws FormValidationError
      */
-    @RequestMapping(value = "/{id}/saleProfit/{profitId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "saleProfit/{profitId}", method = RequestMethod.DELETE)
     @ResponseBody public void removeTaxPayment(@PathVariable Integer profitId) throws FormValidationError {
         stockAccountService.removeTaxPayment(profitId, getGroupId());
     }

@@ -44,8 +44,9 @@ public class StockAccount extends Account implements Serializable {
     @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
     protected List<StockAccountEntry> stocks;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
+//    @OneToMany(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "USER_GROUP_ID", referencedColumnName = "ID")
+    @Transient
     protected List<StockSaleProfit> monthlyProfit;
 
     @Transient

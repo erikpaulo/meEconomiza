@@ -122,9 +122,30 @@ public class StockAccountService extends AbstractAccountService {
      */
     public StockAccount getAccountDetailed(Integer id, Integer groupId){
         StockAccount account = (StockAccount)get(id, groupId);
+        loadMontlyProfit(groupId, account);
 
         calcAccountBalance(account);
         return account;
+    }
+
+    private void loadMontlyProfit(Integer groupId, StockAccount stockPortfolio) {
+        stockPortfolio.setMonthlyProfit(stockSaleProfitRepository.findAllByUser(groupId));
+
+        // Sort
+        Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
+            public int compare(StockSaleProfit o1, StockSaleProfit o2) {
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        Double profitBalance = 0.0, itBalance = 0.0;
+        for (StockSaleProfit monthProfit: stockPortfolio.getMonthlyProfit()) {
+            profitBalance += monthProfit.getProfit();
+            itBalance += monthProfit.getIncomeTax();
+
+            monthProfit.setProfitBalance(profitBalance);
+            monthProfit.setItBalance(itBalance);
+        }
     }
 
     /**
@@ -136,6 +157,10 @@ public class StockAccountService extends AbstractAccountService {
         Double grossBalance = 0.0, netBalance = 0.0, grossProfit = 0.0, netProfit = 0.0, originalValue = 0.0;
         StockAccount stockPortfolio = (StockAccount) account;
 
+//        if (stockPortfolio.getMonthlyProfit() == null){
+//            loadMontlyProfit(stockPortfolio.getGroupId(), stockPortfolio);
+//        }
+
         if (stockPortfolio.getStocks() != null){
             for (StockAccountEntry entry: ((StockAccount) account).getStocks()) {
                 if (entry.getOperation().equals(StockAccountEntry.Operation.PURCHASE) && entry.getQuantity() > 0){
@@ -146,22 +171,6 @@ public class StockAccountService extends AbstractAccountService {
                 grossProfit += entry.getGrossProfitability();
                 netProfit += entry.getNetProfitability();
                 originalValue += entry.getAmount();
-            }
-
-            // Sort
-            Collections.sort(stockPortfolio.getMonthlyProfit(), new Comparator<StockSaleProfit>(){
-                public int compare(StockSaleProfit o1, StockSaleProfit o2) {
-                    return o1.getDate().compareTo(o2.getDate());
-                }
-            });
-
-            Double profitBalance = 0.0, itBalance = 0.0;
-            for (StockSaleProfit monthProfit: stockPortfolio.getMonthlyProfit()) {
-                profitBalance += monthProfit.getProfit();
-                itBalance += monthProfit.getIncomeTax();
-
-                monthProfit.setProfitBalance(profitBalance);
-                monthProfit.setItBalance(itBalance);
             }
         }
 
@@ -327,9 +336,9 @@ public class StockAccountService extends AbstractAccountService {
         Date date = AppDate.getMonthDate(stock.getDate());
         Double incomeTaxRange=0.0;
 
-        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateAccount(date, stock.getAccountId(), groupId);
+        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateUser(date, groupId);
         if (monthlyProfit == null){
-            monthlyProfit = new StockSaleProfit(date, stock.getAccountId(), StockSaleProfit.Type.PROFIT, 0.0, 0.0, 0.0, groupId,
+            monthlyProfit = new StockSaleProfit(date, StockSaleProfit.Type.PROFIT, 0.0, 0.0, 0.0, groupId,
                                                   0.0, 0.0);
         }
         monthlyProfit.setNegotiated(monthlyProfit.getNegotiated() + stock.getCurrentValue());
@@ -347,7 +356,7 @@ public class StockAccountService extends AbstractAccountService {
         Date date = AppDate.getMonthDate(stock.getDate());
         Double incomeTaxRange=0.0;
 
-        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateAccount(date, stock.getAccountId(), groupId);
+        StockSaleProfit monthlyProfit = stockSaleProfitRepository.findProfitByDateUser(date, groupId);
         monthlyProfit.setNegotiated(monthlyProfit.getNegotiated() - stock.getCurrentValue());
         monthlyProfit.setProfit(monthlyProfit.getProfit() - stock.getNetProfitability());
 
